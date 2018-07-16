@@ -23,7 +23,7 @@ Returns:
 On Success - 200 - Array of all task objects
 On Failure - send correct error code and "false" as the data body
 
-#post updatetask
+#put task
 Expects:
 * A task object with key:val pairs which will be updated
 use the "id" to find the task in our db
@@ -51,7 +51,7 @@ Returns:
 On Success - 200 - Array of the blocker objects a given task has
 On Failure - send correct error code and "false" as the data body
 
-#post updateblocker
+#put blocker
 Expects:
 * A blocker object with key:val pairs which will be updated
  use the "id" to find the blocker in our db
