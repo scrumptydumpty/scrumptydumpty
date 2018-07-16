@@ -1,0 +1,104 @@
+-- ---
+-- HOW TO USE 
+-- PIPE THIS FILE INTO YOUR MYSQL DATABASE TO CLEAN THE DB AND TABLES
+--
+--
+
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+DROP DATABASE IF EXISTS `sprints`;
+
+-- ---
+-- Table 'users'
+-- 
+-- ---
+
+USE sprints;
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `username` MEDIUMTEXT NOT NULL,
+  `password` MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE users AUTO_INCREMENT = 1000;
+
+-- ---
+-- Table 'tasks'
+-- 
+-- ---
+
+
+
+DROP TABLE IF EXISTS `tasks`;
+		
+CREATE TABLE `tasks` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `title` MEDIUMTEXT NOT NULL,
+  `description` MEDIUMTEXT NOT NULL,
+  `user_id` INTEGER NOT NULL,
+  `status_code` INTEGER NOT NULL,
+  `eta` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `priority_code` INTEGER NOT NULL,
+  `difficulty` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE tasks AUTO_INCREMENT = 1000;
+
+-- ---
+-- Table 'blockers'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `blockers`;
+		
+CREATE TABLE `blockers` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `title` MEDIUMTEXT NOT NULL,
+  `description` MEDIUMTEXT NOT NULL,
+  `task_id` INTEGER NOT NULL,
+  `status_code` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE blockers AUTO_INCREMENT = 1000;
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `tasks` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
+ALTER TABLE `blockers` ADD FOREIGN KEY (task_id) REFERENCES `tasks` (`id`);
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `users` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `tasks` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `blockers` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ---
+-- Test Data
+-- ---
+
+-- INSERT INTO `users` (`id`,`username`,`password`) VALUES
+-- ('','','');
+-- INSERT INTO `tasks` (`id`,`title`,`description`,`user_id`,`status_code`,`eta`,`priority_code`,`difficulty`) VALUES
+-- ('','','','','','','','');
+-- INSERT INTO `blockers` (`id`,`title`,`description`,`task_id`,`status_code`) VALUES
+-- ('','','','','');
