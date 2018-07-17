@@ -9,12 +9,15 @@ import Navbar from "./Components/Navbar.jsx";
 import Login from "./Components/Login.jsx";
 import Register from "./Components/Register.jsx";
 import Button from "@material-ui/core/Button";
+import Sprint from "./Components/Sprint.jsx";
+import api from "./api"
+
 
 const Home = () => (
   <div>
     <h2>Home Page LOLOL</h2>
   </div>
-)
+);
 
 
 const Topic = ({ match }) => (
@@ -51,19 +54,38 @@ const Topics = ({ match }) => (
   </div>
 )
 
-const App = () => (
+class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {tasks:[]}
+
+    api.getTasks()
+    .then(tasks=>this.setState({tasks}));
+  }
+  
+  
+  
+  
+  
+render(){
+  console.log(this.state)
+  return(
   <Router>
     <div>
       <Navbar />
 
       <hr />
       <Button variant="contained" color="primary">
-        Hello World
-    </Button>
+        View Sprint
+      </Button>
+      <Sprint tasks={this.state.tasks}/>
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      {/* <Route path="/sprint" component={Sprint} /> */}
     </div>
-  </Router>
-)
+    </Router>
+  );
+}
+}
 render(<App />,document.getElementById("app"));

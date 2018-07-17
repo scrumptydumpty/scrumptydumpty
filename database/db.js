@@ -9,8 +9,27 @@ const self = module.exports = {
       .then(tasks => tasks[0]);
 
   },
+  // returns all tasks, adding the blockers each task has to the task object
   getTasks:()=>{
-    return knex('tasks');
+    return knex('tasks')
+    .then(tasks=>{
+      
+      let pchain = Promise.resolve();
+
+      // loop over each task, retrieve the blockers the task has, 
+      // then add the array of blockers to the task
+      tasks.forEach(task=>{
+        pchain = pchain.then(()=>
+        self.getBlockers(task.id)
+        .then(blockers=>{
+          task['blockers'] = blockers
+        }))
+      });
+
+
+      return pchain.then(()=>tasks);
+
+    });
   },
   updateTask: ({id, title, description, user_id, status_code, eta, priority_code, difficulty}) => {
     

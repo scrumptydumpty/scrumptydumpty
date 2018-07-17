@@ -6,7 +6,9 @@ module.exports = {
   },
   getTasks: () => {
 
-    return axios.get('/tasks');
+    return axios.get('/tasks')
+    .then(result=>result.data)
+    .catch((err)=>{console.log(err); return []});
   },
   updateTask: (newVersion) => {
 
