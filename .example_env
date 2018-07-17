@@ -1,5 +1,5 @@
 PORT=1337
 DBUSERNAME=student
 DBPASSWORD=student
-DBHOST=locahost
+DBHOST=localhost
 DBNAME=test

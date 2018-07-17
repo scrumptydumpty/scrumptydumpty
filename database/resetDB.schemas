@@ -48,11 +48,11 @@ CREATE TABLE `tasks` (
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` MEDIUMTEXT NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
-  `user_id` INTEGER NOT NULL,
-  `status_code` INTEGER NOT NULL,
+  `user_id` INTEGER DEFAULT NULL,
+  `status_code` INTEGER DEFAULT 0,
   `eta` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `priority_code` INTEGER NOT NULL,
-  `difficulty` INTEGER NOT NULL,
+  `priority_code` INTEGER DEFAULT 0,
+  `difficulty` INTEGER DEFAULT 0,
   PRIMARY KEY (`id`)
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE `blockers` (
   `title` MEDIUMTEXT NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
   `task_id` INTEGER NOT NULL,
-  `status_code` INTEGER NOT NULL,
+  `status_code` INTEGER DEFAULT 0,
   PRIMARY KEY (`id`)
 );
 
