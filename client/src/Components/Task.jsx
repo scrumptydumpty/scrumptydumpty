@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {StatusCode} from "../../../lib/shared";
 import Blockers from "./Blockers.jsx";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 class Task extends React.Component {
   
@@ -18,11 +20,14 @@ class Task extends React.Component {
     const task = this.state.task;
     console.log('task',task)
     return (
-      <div><b>
-        <div>Title: {task.title}</div>
-        <div>Description: {task.title}</div>
-        <div>Status: {Object.keys(StatusCode).find(x=>StatusCode[x]===task.status_code)}</div></b>
+      <div>
+        <Card>
+        <CardContent>
+        <div>{task.title}</div>
+        <div>Status: {Object.keys(StatusCode).find(x=>StatusCode[x]===task.status_code)}</div>
         <div>Blockers: <Blockers blockers={task.blockers} /></div>
+        </CardContent>
+        </Card>
       </div>
     );
   }

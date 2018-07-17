@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {StatusCode} from "../../../lib/shared";
 import Tasks from "./Tasks.jsx";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper"
 
 class Sprint extends React.Component {
   
@@ -22,18 +24,29 @@ class Sprint extends React.Component {
     //console.log(notStarted,inProgress,complete)
     return (
       <div>
-        <div>NOT STARTED TASKS
+        <Paper>
+        <Grid container spacing={24} justify="center">
+          
+          <Grid item xs={4}>
+            NOT STARTED TASKS
           <Tasks tasks={notStarted} />
-        
-        </div>
-        <div>
-          IN PROGRESS TASKS
+           
+          </Grid>
+            <Grid item xs={4}>
+           
+              IN PROGRESS TASKS
           <Tasks tasks={inProgress} />
-        </div>
-        <div>
-          COMPLETED TASKS
+         
+          </Grid>
+            <Grid item xs={4}>
+         
+            COMPLETED Tasks
          <Tasks tasks={complete} />
-        </div>
+  
+          </Grid>
+        
+        </Grid>
+        </Paper>
       </div>
     );
   }
