@@ -2,7 +2,9 @@ const axios = require('axios');
 module.exports = {
 
   addTask: (title, description) => {
-    return axios.post('/task', {title, description});
+    return axios.post('/task', {title, description})
+    .then(result=>result.data)
+    .catch((err)=>{console.log(err); return false});
   },
   getTasks: () => {
 
@@ -13,8 +15,7 @@ module.exports = {
   updateTask: (newVersion) => {
 
     const id = newVersion.id;
-
-
+    
   },
   addBlocker: ({ task_id, title, description }) => {
 

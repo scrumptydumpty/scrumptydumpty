@@ -51,7 +51,6 @@ class Task extends React.Component {
         <Card 
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
-        zDepth={this.state.shadow}
         style={style}>
         <CardContent style={{padding:'5px', textAlign:'center'}}>
         <div>{task.title}</div>
