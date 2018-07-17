@@ -15,12 +15,11 @@ class Blockers extends React.Component {
 
   render() {
     const blockers = this.state.blockers;
-    console.log('blockers', blockers);
     if(blockers.length===0) 
     return (<div></div>);
 
     return (
-      <div>
+      <div style={ {pointerEvents: 'none'}}>
         {blockers.map(blocker=><Blocker key={"blocker:"+blocker.id} blocker={blocker} />)}
       </div>
     );
