@@ -23,6 +23,8 @@ constructor(props){
   this.onSubmit = this.onSubmit.bind(this)
   this.titleChange = this.titleChange.bind(this);
   this.descriptionChange = this.descriptionChange.bind(this)
+  this.prioirtyChange = this.priorityChange.bind(this)
+  this.difficultyChange = this.difficultyChange.bind(this)
 }
 
 titleChange(e){
@@ -33,7 +35,12 @@ titleChange(e){
 descriptionChange(e){
   this.setState({description:e.target.value})
 }
-
+priorityChange(e){
+  this.setState({priority:e.target.value})
+}
+difficultyChange(e){
+  this.setState({difficulty:e.target.value})
+}
 onSubmit(e){
 e.preventDefault();
 
@@ -49,7 +56,29 @@ api.addTask(this.state.title,this.state.description)
 
     this.onClose(true)
   })
+
 }
+
+
+onDelete(e){
+  e.preventDefault();
+  
+  console.log('trying to delete') 
+  // api.addTask(this.state.title,this.state.description)
+  //   .then((res) => {
+  //     if(!res){
+  //       let displayMessage = document.getElementById('deleteMessage');
+  //       displayMessage.innerHTML = 'Error in submission';
+  //       setTimeout( ()=> displayMessage = '', 2000)
+  //       return;
+  //     }
+  
+      // this.onClose(true)
+    // })
+  
+  }
+
+
 
   render() {
 
@@ -67,9 +96,24 @@ api.addTask(this.state.title,this.state.description)
           <InputLabel htmlFor="description">Description</InputLabel>
           <Input id="description" value={this.state.description} onChange={this.descriptionChange} />
         </FormControl>
-        </div><div style={{'textAlign':'center'}}>
+        <FormControl >
+          <InputLabel htmlFor="priority">Priority</InputLabel>
+          <Input id="priority" value={this.state.priority} onChange={this.priority} />
+        </FormControl>
+        <FormControl >
+          <InputLabel htmlFor="difficulty">Difficulty</InputLabel>
+          <Input id="difficulty" value={this.state.difficulty} onChange={this.difficulty} />
+        </FormControl>
+        </div>
+        <div style={{'textAlign':'center'}}>
           <Button type="submit">Submit</Button>
           </div><div id = 'message'></div>
+          <div style={{'textAlign':'center'}}>
+          <Button type="submit">Delete</Button>
+          </div><div id = 'deleteMessage'></div>
+          <div style={{'textAlign':'center'}}>
+          <Button type="submit">Add Blocker</Button>
+          </div><div id = 'blockerMessage'></div>
         </form>
         </div>
     );
