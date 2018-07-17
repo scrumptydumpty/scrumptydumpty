@@ -4,19 +4,18 @@ import {
   BrowserRouter as Router,
   Route,
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
+import Navbar from "./Components/Navbar.jsx";
+import Login from "./Components/Login.jsx";
+import Register from "./Components/Register.jsx";
+import Button from "@material-ui/core/Button";
 
 const Home = () => (
   <div>
-    <h2>Home</h2>
+    <h2>Home Page LOLOL</h2>
   </div>
 )
 
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-)
 
 const Topic = ({ match }) => (
   <div>
@@ -55,17 +54,15 @@ const Topics = ({ match }) => (
 const App = () => (
   <Router>
     <div>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/topics">Topics</Link></li>
-      </ul>
+      <Navbar />
 
       <hr />
-
+      <Button variant="contained" color="primary">
+        Hello World
+    </Button>
       <Route exact path="/" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/topics" component={Topics} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
     </div>
   </Router>
 )

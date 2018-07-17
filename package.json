@@ -8,7 +8,8 @@
     "react-dev": "webpack --config ./webpack.config.js -d --watch",
     "server": "nodemon ./server/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run react-dev\"",
-    "start": "webpack && node ./server/server.js"
+    "start": "webpack && node ./server/server.js",
+    "resetdb":"mysql -u student -pstudent < ./database/resetDB.schemas"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,8 @@
   },
   "homepage": "https://github.com/scrumptydumpty/scrumpty#readme",
   "dependencies": {
+    "@material-ui/core": "^1.4.0",
+    "@material-ui/icons": "^1.1.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
