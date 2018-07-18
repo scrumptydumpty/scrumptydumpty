@@ -44,7 +44,7 @@ module.exports = {
   login: (username, password) => {
 
     return axios.post('/login', { username, password })
-      .then(resp => resp.data)
+      .then(resp => {console.log(resp); return resp.data})
       .catch(err => { console.log(err); return false; })
 
   },
