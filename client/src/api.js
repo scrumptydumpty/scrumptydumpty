@@ -35,6 +35,15 @@ module.exports = {
   addUser: (username, password) => {
 
     return axios.post('/user',{username,password})
+    .then(resp=>resp.data)
+    .catch(err=>{console.log(err); return false;})
+
+  },
+  login: (username, password) => {
+
+    return axios.post('/login', { username, password })
+      .then(resp => resp.data)
+      .catch(err => { console.log(err); return false; })
 
   },
   getUsers: () => {

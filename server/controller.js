@@ -51,6 +51,8 @@ module.exports = {
     return db.getUsers();
   },
   loginCorrect: ({username,password}) => {
+    if (!username || !password) throw ('Invalid Credentials')
+    if (username==='' || password==='') throw ('Invalid Credentials')
     return db.userHasPassword(username,password);
   },
   updateUser : ({username,oldpassword,newpassword}) =>{
@@ -66,6 +68,14 @@ module.exports = {
       {throw('Invalid Password')} 
       return db.updateUser(username, newpassword);
     })
+  },
+  getUserById:(id)=>{
+    return db.getUserById(id)
+    .then(user=>user!==undefined? user : null)
+  },
+  getUserByName: (username) => {
+    return db.getUserByName(username)
+      .then(user =>user !== undefined ? user : null)
   }
 
 };

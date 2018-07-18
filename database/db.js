@@ -102,6 +102,14 @@ const self = module.exports = {
     .then(arr=>knex('users').where('id',arr[0].id).update({username,password}))
       .then(()=>knex('users').where('username', username).select())
       .then(users=>users[0]); 
+  },
+  getUserByName:(username)=>{
+    return knex('users').where('username',username).select()
+    .then(users=>users[0]);
+  },
+  getUserById:(id)=>{
+    return knex('users').where('id', id).select()
+      .then(users => users[0]);
   }
 
 };
