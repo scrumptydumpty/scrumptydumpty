@@ -4,8 +4,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const { Strategy } = require('passport-local');
-const controller = require('./controller');
-
+const tasks = require('./routes/tasks')
+const blockers = require('./routes/blockers');
+const users = require('./routes/users');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
 const port = process.env.PORT || 1337;
 
 
@@ -47,103 +50,14 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 
 app.use(passport.initialize());
 app.use(passport.session());
-// TASK ENDPOINTS
-app.post('/task', (req, res) => {
-  console.log('adding task');
-  controller.addTask(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
 
-app.get('/tasks', (req, res) => {
-  console.log('fetching tasks');
-  controller.getTasks()
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
+// ENDPOINTS
+app.use('/tasks', tasks);
+app.use('/blockers', blockers);
+app.use('/users', users);
+app.use('/login', login);
+app.use('/logout', logout);
 
-app.put('/task', (req, res) => {
-  console.log('updating task');
-  console.log(req.body)
-  controller.updateTask(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-// BLOCKER ENDPOINTS
-
-app.post('/blocker', (req, res) => {
-  console.log('adding blocker');
-  controller.addBlocker(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-app.get('/blockers', (req, res) => {
-  console.log('fetching blockers');
-  controller.getBlockers(req.query.id)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-app.put('/blocker', (req, res) => {
-  console.log('updating blocker');
-  controller.updateBlocker(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-
-// USER ENDPOINTS
-
-app.post('/user', (req, res) => {
-  console.log('adding user');
-  controller.addUser(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-
-app.put('/user', (req, res) => {
-  console.log('updating user');
-  controller.updateUser(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
-});
-
-app.get('/users', (req, res) => {
-  console.log('fetching users');
-  controller
-    .getUsers()
-    .then((result) => {
-      console.log('success');
-      return res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send(false);
-    });
-});
-
-app.post('/login',
-  (req, res, next) => {
-    console.log('logging in user');
-    passport.authenticate('local', (err, user, info) => {
-      if (err || !user) { console.log('failure to login'); res.status(400).send('Invalid Login'); return; }
-      req.logIn(user, (err) => {
-        if (err) { return next(err); }
-        console.log('login successful');
-        res.status(200).send(user);
-      });
-    })(req, res, next);
-  });
-
-app.get('/logout',
-  (req, res) => {
-    console.log('logging out user');
-    req.logout();
-    res.redirect('/');
-  });
 
 app.get('/test', (req, res) => {
   console.log(req);
