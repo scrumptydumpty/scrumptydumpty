@@ -21,3 +21,5 @@ router.put('/', (req, res)=>{
       .then((result) => { console.log("success"); return res.send(result) })
       .catch((err) => { console.log(err); return res.send(false) });
 })
+
+module.exports = router;
