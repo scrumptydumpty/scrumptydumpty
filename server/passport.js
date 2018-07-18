@@ -1,17 +1,17 @@
 const passport = require('passport');
-const { Strategy } = require("passport-local");
-const controller = require("./controller");
+const { Strategy } = require('passport-local');
+const controller = require('./controller');
 
 passport.use(
   new Strategy((username, password, done) => {
-    controller.loginCorrect({ username, password }).then(valid => {
+    controller.loginCorrect({ username, password }).then((valid) => {
       if (!valid) {
-        done("Invalid Credentials", null);
+        done('Invalid Credentials', null);
       } else {
         controller.getUserByName(username).then(user => done(null, user));
       }
     });
-  })
+  }),
 );
 
 passport.serializeUser((user, cb) => {
@@ -19,12 +19,12 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
-  controller.getUserById(id).then(user => {
+  controller.getUserById(id).then((user) => {
     if (!user) {
-      cb("Err During Deserialization");
+      cb('Err During Deserialization');
     } else {
       cb(null, user);
     }
   });
 });
-module.exports = {passport}
+module.exports = { passport };
