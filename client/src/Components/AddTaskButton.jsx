@@ -2,33 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
 import Blockers from './Blockers.jsx';
 import { StatusCode, PRIORITY_COLOR } from '../../../lib/shared';
-import EditTaskForm from './EditTaskForm.jsx';
 
 
-const TaskInfo = ({ task }) => (
-  <div>
-    <CardContent style={{ padding: '5px', textAlign: 'center' }}>
-      <div>
-        {task.title}
-      </div>
-      <div>
-Status:
-        {' '}
-        {Object.keys(StatusCode).find(x => StatusCode[x] === task.status_code)}
-      </div>
-      <div>
-Blockers:
-        {' '}
-        <Blockers blockers={task.blockers} />
-      </div>
-    </CardContent>
 
-  </div>
-);
-
-class Task extends React.Component {
+class AddTaskButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = { task: props.task, shadow: 1, editing: false };
@@ -85,7 +68,7 @@ class Task extends React.Component {
             onDoubleClick={this.handleDoubleClick}
             style={style}
           >
-            <EditTaskForm task={this.state.task} />
+            <AddTaskForm task={this.state.task} />
           </Card>
         </div>
       );
@@ -93,17 +76,14 @@ class Task extends React.Component {
 
     return (
       <div>
-        <Card
-          onMouseOver={this.onMouseOver}
-          onMouseOut={this.onMouseOut}
-          onDoubleClick={this.handleDoubleClick}
-          style={style}
-        >
-          <TaskInfo task={this.state.task} />
+        <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
+          <Button variant="fab" aria-label="Add" style={addButtonStyle}>
+      <AddIcon />
+    </Button>
         </Card>
       </div>
     );
   }
 }
 
-export default Task;
+export default AddTaskButton;

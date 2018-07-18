@@ -1,14 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {StatusCode} from "../../../lib/shared";
 import Tasks from "./Tasks.jsx";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button"
-import AddIcon from "@material-ui/icons/Add"
-import Icon from "@material-ui/core/Icon";
-import { Dialog } from "@material-ui/core";
-import AddTask from "./AddTask.jsx"
 import api from "../api";
 
 
@@ -64,13 +58,9 @@ class Sprint extends React.Component {
             NOT STARTED TASKS
           <Tasks tasks={notStarted} />
           <Grid container style={{textAlign: 'center'}}>
-           <Button variant="fab" aria-label="Add" style={addButtonStyle} onClick={this.handleClickOpen}><AddIcon /></Button>
-           <Dialog 
-          open={this.state.open}
-          onClose={this.handleClose}
-          ><AddTask 
-          handleClose = {this.handleClose}
-          /></Dialog>
+           
+           Add shit
+           
            </Grid>
           </Grid>
             <Grid item xs={4}>

@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { StatusCode } from "../../../lib/shared";
-import Task from "./Task.jsx"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { StatusCode } from '../../../lib/shared';
+import Task from './Task.jsx';
 
 class Tasks extends React.Component {
   constructor(props) {
@@ -15,13 +15,12 @@ class Tasks extends React.Component {
 
   render() {
     const tasks = this.state.tasks;
-    console.log('tasks', tasks);
-    if(tasks.length===0) 
-    return (<div></div>);
+    if (tasks.length === 0)
+      {return (<div></div>);}
 
     return (
       <div>
-        {tasks.map(task=><Task key={"task:"+task.id} task={task} />)}
+        {tasks.map(task => <Task key={'task:' + task.id} task={task} />)}
       </div>
     );
   }
