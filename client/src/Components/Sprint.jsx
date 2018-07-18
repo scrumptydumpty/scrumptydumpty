@@ -1,15 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {StatusCode} from "../../../lib/shared";
 import Tasks from "./Tasks.jsx";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button"
-import AddIcon from "@material-ui/icons/Add"
-import Icon from "@material-ui/core/Icon";
-import { Dialog } from "@material-ui/core";
-import AddTask from "./AddTask.jsx"
 import api from "../api";
+import AddTaskButton from "./AddTaskButton.jsx"
 
 
 class Sprint extends React.Component {
@@ -19,6 +14,14 @@ class Sprint extends React.Component {
     this.state = {'tasks':props.tasks, 'open':false}
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.closeEdits = this.closeEdits.bind(this);
+    this.reload = this.reload.bind(this);
+  }
+
+  closeEdits(e){
+    //e.preventDefault();
+    //console.log('click')
+    
   }
 
   componentWillReceiveProps({tasks}){
@@ -32,6 +35,11 @@ class Sprint extends React.Component {
     });
   }
 
+  reload(){
+    api.getTasks()
+      .then(tasks => { this.setState({ tasks }) });
+  }
+
   handleClose (shouldReload = false) {
    
     this.setState({
@@ -39,8 +47,7 @@ class Sprint extends React.Component {
     });
     if(shouldReload){
   
-      api.getTasks()
-    .then(tasks=>{this.setState({tasks})});
+     this.reload();
     }
   }
 
@@ -56,40 +63,27 @@ class Sprint extends React.Component {
       , backgroundColor:'white'
     }
     //console.log(notStarted,inProgress,complete)
-    return (
-      <div>
+    return <div onClick={this.closeEdits}>
         <Paper>
-        <Grid container spacing={24} justify="center">
-          <Grid item xs={4}>
-            NOT STARTED TASKS
-          <Tasks tasks={notStarted} />
-          <Grid container style={{textAlign: 'center'}}>
-           <Button variant="fab" aria-label="Add" style={addButtonStyle} onClick={this.handleClickOpen}><AddIcon /></Button>
-           <Dialog 
-          open={this.state.open}
-          onClose={this.handleClose}
-          ><AddTask 
-          handleClose = {this.handleClose}
-          /></Dialog>
-           </Grid>
-          </Grid>
+          <Grid container spacing={24} justify="center">
             <Grid item xs={4}>
-           
+              NOT STARTED TASKS
+              <Tasks reload={this.reload} tasks={notStarted} />
+              <Grid container style={{ textAlign: "center" }}>
+              <AddTaskButton reload={this.reload} />
+              </Grid>
+            </Grid>
+            <Grid item xs={4}>
               IN PROGRESS TASKS
-          <Tasks tasks={inProgress} />
-         
-          </Grid>
+              <Tasks reload={this.reload} tasks={inProgress} />
+            </Grid>
             <Grid item xs={4}>
-         
-            COMPLETED Tasks
-         <Tasks tasks={complete} />
-  
+              COMPLETED Tasks
+              <Tasks reload={this.reload} tasks={complete} />
+            </Grid>
           </Grid>
-        
-        </Grid>
         </Paper>
-      </div>
-    );
+      </div>;
   }
 }
 
