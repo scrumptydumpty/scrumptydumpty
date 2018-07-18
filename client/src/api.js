@@ -14,7 +14,7 @@ module.exports = {
   },
   updateTask: (newVersion) => {
     console.log(newVersion);
-    return axios.put('/task',newVersion)
+    return axios.put('/tasks',newVersion)
     .then(result => result.data)
     .catch((err) => { console.log(err); return false});
     

@@ -23,7 +23,7 @@ passport.use(new Strategy(
             .then(user => done(null, user));
         }
       });
-  }),
+  })
 ));
 
 
