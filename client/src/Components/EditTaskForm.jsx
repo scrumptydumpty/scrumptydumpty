@@ -23,43 +23,50 @@ const dropdownMenuOptions = [{ label: 'Low', value: 0 },
   { label: 'High', value: 2 },
   { label: 'Critical', value: 3 }];
 
+
+const statusCodeMenu = [{ label: 'Not Started', value: 0 },
+{ label: 'In Progress', value: 1 },
+{ label: 'Complete', value: 2 }];
+
 class EditTaskForm extends React.Component {
   constructor(props) {
     super(props);
     const { id,
-      title, description, priority_code, difficulty, eta,
+      title, description, priority_code, difficulty, eta,status_code
     } = props.task;
 
     this.state = { id,
-      title, description, priority_code, difficulty, eta,
+      title, description, priority_code, difficulty, eta, status_code
     };
 
     this.titleChange = this.titleChange.bind(this);
     this.descriptionChange = this.descriptionChange.bind(this);
     this.priorityChange = this.priorityChange.bind(this);
     this.difficultyChange = this.difficultyChange.bind(this);
+    this.statusChange = this.statusChange.bind(this);
     this.etaChange = this.etaChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.closeTask = props.closeTask;
+    this.reload = props.reload;
   }
 
   onDelete(e) {
     e.preventDefault();
-   
     const id = this.state.id;
-    api.updateTask({ id, status_code: 3 }).then(res => console.log(res));
+    api.updateTask({ id, status_code: 3 }).then(res => { this.closeTask(); this.reload() });
   }
 
   onSubmit(e) {
     e.preventDefault();
     console.log(this.state.task);
     const {id,
-      title, description, priority_code, difficulty,
+      title, description, priority_code, difficulty, status_code
     } = this.state;
 
     api.updateTask({id,
-      title, description, priority_code, difficulty,
-    }).then(res => console.log(res));
+      title, description, priority_code, difficulty, status_code
+    }).then(res => {this.closeTask(); this.reload()});
   }
 
   titleChange(e) {
@@ -76,6 +83,10 @@ class EditTaskForm extends React.Component {
     e.preventDefault();
     this.setState({ priority_code: e.target.value });
   }
+  statusChange(e) {
+    e.preventDefault();
+    this.setState({ status_code: e.target.value });
+  }
 
   difficultyChange(e) {
     e.preventDefault();
@@ -88,9 +99,8 @@ class EditTaskForm extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <CardContent style={{ padding: '5px', textAlign: 'center' }}>
+    return <div>
+        <CardContent style={{ padding: "5px", textAlign: "center" }}>
           <form onSubmit={this.onSubmit}>
             <div>
               <TextField required id="title" label="Title" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
@@ -113,21 +123,22 @@ class EditTaskForm extends React.Component {
               ))}
             </TextField>
 
-            <div style={{ textAlign: 'center' }}>
-              <Button type="submit">
-Save
-              </Button>
-              <Button onClick={this.onDelete}>
-Delete
-              </Button>
-              <Button>
-Add Blocker
-              </Button>
+            <TextField id="status_code" select label="Status" value={this.state.status_code} onChange={this.statusChange} defaultValue={this.state.status_code} margin="normal">
+              {statusCodeMenu.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <div style={{ textAlign: "center" }}>
+              <Button type="submit">Save</Button>
+              <Button onClick={this.onDelete}>Delete</Button>
+              <Button>Add Blocker</Button>
             </div>
           </form>
         </CardContent>
-      </div>
-    );
+      </div>;
   }
 }
 

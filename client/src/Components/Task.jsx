@@ -35,6 +35,12 @@ class Task extends React.Component {
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
+    this.reload = props.reload;
+    this.closeTask = this.closeTask.bind(this);
+  }
+
+  closeTask() {
+    this.setState({ editing: false })
   }
 
   componentWillReceiveProps({ task }) {
@@ -54,10 +60,9 @@ class Task extends React.Component {
   }
 
   handleDoubleClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ editing: !this.state.editing });
+   
+      this.setState({ editing: !this.state.editing});
+    
   }
 
 
@@ -77,18 +82,11 @@ class Task extends React.Component {
     }
 
     if (this.state.editing) {
-      return (
-        <div>
-          <Card
-            onMouseOver={this.onMouseOver}
-            onMouseOut={this.onMouseOut}
-            onDoubleClick={this.handleDoubleClick}
-            style={style}
-          >
-            <EditTaskForm task={this.state.task} />
+      return <div>
+          <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
+            <EditTaskForm reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
           </Card>
-        </div>
-      );
+        </div>;
     }
 
     return (

@@ -8,20 +8,23 @@ import AddIcon from '@material-ui/icons/Add';
 import Icon from '@material-ui/core/Icon';
 import Blockers from './Blockers.jsx';
 import { StatusCode, PRIORITY_COLOR } from '../../../lib/shared';
+import AddTaskForm from './AddTaskForm.jsx'
 
 
 
 class AddTaskButton extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { task: props.task, shadow: 1, editing: false };
+    this.state = { shadow: 1, editing: false };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
-    this.handleDoubleClick = this.handleDoubleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.reload = props.reload;
+    this.closeTask = this.closeTask.bind(this);
   }
 
-  componentWillReceiveProps({ task }) {
-    this.setState({ task });
+  closeTask(){
+    this.setState({editing:false})
   }
 
   onMouseOver(e) {
@@ -36,23 +39,23 @@ class AddTaskButton extends React.Component {
     this.setState({ shadow: 1 });
   }
 
-  handleDoubleClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ editing: !this.state.editing });
+  handleClick(e) {
+    if(!this.state.editing){
+      this.setState({ editing: true });
+    }
+    
   }
 
 
   render() {
     const { task } = this.state;
-    const borderColor = PRIORITY_COLOR[task.priority_code];
+   
 
     const style = {
       borderRadius: '10px',
       margin: '10px',
-      borderLeft: '2px solid',
-      borderLeftColor: borderColor,
+     
+     
 
     };
     if (this.state.shadow === 3) {
@@ -60,29 +63,20 @@ class AddTaskButton extends React.Component {
     }
 
     if (this.state.editing) {
-      return (
-        <div>
-          <Card
-            onMouseOver={this.onMouseOver}
-            onMouseOut={this.onMouseOut}
-            onDoubleClick={this.handleDoubleClick}
-            style={style}
-          >
-            <AddTaskForm task={this.state.task} />
+      return <div>
+          <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.handleClick} style={style}>
+            <AddTaskForm closeTask={this.closeTask} reload={this.reload} />
           </Card>
-        </div>
-      );
+        </div>;
     }
 
-    return (
-      <div>
-        <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-          <Button variant="fab" aria-label="Add" style={addButtonStyle}>
-      <AddIcon />
-    </Button>
+    return <div>
+        <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.handleClick} style={style}>
+          <Button variant="fab" aria-label="Add">
+            <AddIcon />
+          </Button>
         </Card>
-      </div>
-    );
+      </div>;
   }
 }
 

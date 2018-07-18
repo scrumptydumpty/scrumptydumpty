@@ -1,7 +1,7 @@
 const axios = require('axios');
 module.exports = {
 
-  addTask: (title, description) => {
+  addTask: ({title, description, difficulty, priority_code}) => {
     return axios.post('/task', {title, description})
     .then(result=>result.data)
     .catch((err)=>{console.log(err); return false});
