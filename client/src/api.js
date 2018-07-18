@@ -2,7 +2,7 @@ const axios = require('axios');
 module.exports = {
 
   addTask: (title, description) => {
-    return axios.post('/task', {title, description})
+    return axios.post('/tasks', {title, description})
     .then(result=>result.data)
     .catch((err)=>{console.log(err); return false});
   },
@@ -19,7 +19,7 @@ module.exports = {
   },
   addBlocker: ({ task_id, title, description }) => {
 
-    return axios.post('/blocker', { task_id, title, description });
+    return axios.post('/blockers', { task_id, title, description });
 
   },
   getBlockers: (task_id) => {
@@ -34,7 +34,7 @@ module.exports = {
   },
   addUser: (username, password) => {
 
-    return axios.post('/user',{username,password})
+    return axios.post('/users',{username,password})
     .then(resp=>resp.data)
     .catch(err=>{console.log(err); return false;})
 
