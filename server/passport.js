@@ -1,16 +1,19 @@
 const passport = require('passport');
 const { Strategy } = require("passport-local");
 const controller = require("./controller");
+const bcrypt = require('bcrypt');
 
 passport.use(
   new Strategy((username, password, done) => {
-    controller.loginCorrect({ username, password }).then(valid => {
-      if (!valid) {
-        done("Invalid Credentials", null);
-      } else {
-        controller.getUserByName(username).then(user => done(null, user));
-      }
-    });
+    controller.getUserByName(username)
+      .then(user => {
+        if (bcrypt.compareSync(password, user.password)) {
+          return done(null, user);
+        } else {
+          return done("Invalid Credentials", null)
+        }
+      })
+      .catch(err => console.log(err));
   })
 );
 
