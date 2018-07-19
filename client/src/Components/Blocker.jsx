@@ -1,19 +1,16 @@
-
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { StatusCode } from '../../../lib/shared';
 import { COLOR } from '../../../lib/shared';
+
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-
 console.log(COLOR.red);
 class Blocker extends React.Component {
-
   constructor(props) {
     super(props);
-
     this.state = { blocker: props.blocker, hovering: false };
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
@@ -41,6 +38,7 @@ class Blocker extends React.Component {
   render() {
     const blocker = this.state.blocker;
     const style = { borderRadius: '10px', margin: '5px', backgroundColor: COLOR.red };
+
     if(this.state.hovering) {
       style.backgroundColor = COLOR.green;
     }

@@ -1,64 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
-const api = require("../api");
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
-class Login extends React.Component{
+const api = require('../api');
+
+class Login extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { username: '', password: '' };
+    super(props);
+    this.state = { username: '', password: '', errormessage: '' };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateUser = props.updateUser;
+    console.log('props', props);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const username = this.state.username
-    const password = this.state.password
+    const username = this.state.username;
+    const password = this.state.password;
     console.log(username, password);
     api.login(username, password)
-      .then((res) =>{
-        if(!res){
-          const emsg = document.getElementById('loginformmessage');
-          emsg.innerHTML = 'Invalid Credentials';
+      .then((res) => {
+        if (!res) {
+          console.log('invalid credentials');
+          this.setState({ errormessage: 'Invalid Credentials' });
           setTimeout(() => {
-            emsg.innerHTML = '';
+            this.setState({ errormessage: '' });
           }, 2000);
           return;
         }
-        console.log('login successful!')
-       
-      })
-      
-
-
-
+        console.log('login successful!');
+        this.updateUser();
+      });
   }
-
 
 
   handleUsernameChange(e) {
     e.preventDefault();
-    this.setState({ username: e.target.value })
+    this.setState({ username: e.target.value });
   }
 
   handlePasswordChange(e) {
     e.preventDefault();
-    this.setState({ password: e.target.value })
+    this.setState({ password: e.target.value });
   }
 
 
-
-
   render() {
-    return (<div>
-      <form id="loginform" onSubmit={this.handleSubmit}>
-        <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
-        <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
-        <input type="submit" />
-      </form>
-      <div id="loginformmessage"></div>
-    </div>
+    console.log(this.state);
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <form onSubmit={this.handleSubmit}>
+
+          <div>
+            <TextField required id="username" label="Username" defaultValue={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
+          </div>
+          <div>
+            <TextField required type="password" id="password" label="Password" defaultValue={this.state.password} margin="normal" onChange={this.handlePasswordChange} />
+          </div>
+          <div id="loginformmessage" style={{ height: '20px' }}>
+            {this.state.errormessage}
+            {' '}
+          </div>
+          <div>
+            <Button type="submit">
+              Login
+            </Button>
+          </div>
+        </form>
+
+
+      </div>
     );
   }
 }

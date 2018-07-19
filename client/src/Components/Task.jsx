@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
@@ -40,7 +39,7 @@ class Task extends React.Component {
   }
 
   closeTask() {
-    this.setState({ editing: false })
+    this.setState({ editing: false });
   }
 
   componentWillReceiveProps({ task }) {
@@ -58,9 +57,7 @@ class Task extends React.Component {
   }
 
   handleDoubleClick(e) {
-   
-      this.setState({ editing: !this.state.editing});
-    
+    this.setState({ editing: !this.state.editing }, () => this.reload());
   }
 
 
@@ -80,11 +77,13 @@ class Task extends React.Component {
     }
 
     if (this.state.editing) {
-      return <div>
+      return (
+        <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
             <EditTaskForm reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
           </Card>
-        </div>;
+        </div>
+      );
     }
 
     return (

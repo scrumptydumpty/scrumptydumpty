@@ -1,64 +1,76 @@
-import React from "react";
-import { Link } from "react-router-dom";
-const api = require('../api')
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
-class Register extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = { username: '', password: '' };
+const api = require('../api');
+
+class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: '', password: '', errormessage: '' };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateUser = props.updateUser;
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const username = this.state.username
-    const password = this.state.password
+    const username = this.state.username;
+    const password = this.state.password;
     console.log(username, password);
-    api.addUser(username, password)
-      .then((res) => {
-        if (!res) {
-          const emsg = document.getElementById('registerformmessage');
-          emsg.innerHTML = 'Username Taken';
-          setTimeout(() => {
-            emsg.innerHTML = '';
-          }, 2000);
-          return;
-        }
-        console.log('user created!')
-
-      })
-
-
+    api.addUser(username, password).then((res) => {
+      if (!res) {
+        this.setState({ errormessage: 'User Already Exists' });
+        setTimeout(() => {
+          this.setState({ errormessage: '' });
+        }, 2000);
+        return;
+      }
+      console.log('register successful!');
+      this.updateUser();
+    });
   }
-  
 
 
-handleUsernameChange(e){
-  e.preventDefault();
-  this.setState({ username: e.target.value })
+  handleUsernameChange(e) {
+    e.preventDefault();
+    this.setState({ username: e.target.value });
+  }
+
+  handlePasswordChange(e) {
+    e.preventDefault();
+    this.setState({ password: e.target.value });
+  }
+
+
+  render() {
+    console.log(this.state);
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <form onSubmit={this.handleSubmit}>
+
+          <div>
+            <TextField required id="username" label="Username" defaultValue={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
+          </div>
+          <div>
+            <TextField required type="password" id="password" label="Password" defaultValue={this.state.password} margin="normal" onChange={this.handlePasswordChange} />
+          </div>
+          <div id="registerformmessage" style={{ height: '20px' }}>
+            {this.state.errormessage}
+            {' '}
+          </div>
+          <div>
+            <Button type="submit">
+Register
+            </Button>
+          </div>
+        </form>
+
+
+      </div>
+    );
+  }
 }
 
-handlePasswordChange(e){
-  e.preventDefault();
-  this.setState({ password: e.target.value })
-}
-
-
-
-
-render(){
-  return (<div>
-    <form id="registerform" onSubmit={this.handleSubmit}>
-      <input type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
-      <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-      <input type="submit" />
-    </form>
-    <div id="registerformmessage"></div>
-  </div>
-  );
-}
-}
-  
 export default Register;

@@ -2,45 +2,14 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const passport = require('passport');
-const { Strategy } = require('passport-local');
-const tasks = require('./routes/tasks')
+const { passport } = require('./passport');
+const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
 const users = require('./routes/users');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
+
 const port = process.env.PORT || 1337;
-
-
-passport.use(new Strategy(
-  ((username, password, done) => {
-    controller.loginCorrect({ username, password })
-      .then((valid) => {
-        if (!valid) {
-          done('Invalid Credentials', null);
-        } else {
-          controller.getUserByName(username)
-            .then(user => done(null, user));
-        }
-      });
-  })
-));
-
-
-passport.serializeUser((user, cb) => {
-  cb(null, user.id);
-});
-
-passport.deserializeUser((id, cb) => {
-  controller.getUserById(id)
-    .then((user) => {
-      if (!user) {
-        cb('Err During Deserialization');
-      } else {
-        cb(null, user);
-      }
-    });
-});
 
 
 // SETUP
@@ -62,6 +31,17 @@ app.use('/logout', logout);
 app.get('/test', (req, res) => {
   console.log(req);
   res.send();
+});
+
+// sends a user object to the requester if one exists
+app.get('/verify', (req, res) => {
+  if (req.user) {
+    console.log('user is verified');
+    res.send(req.user);
+  } else {
+    console.log('user is not verified');
+    res.send(false);
+  }
 });
 
 
