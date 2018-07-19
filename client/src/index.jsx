@@ -15,9 +15,7 @@ import api from './api';
 
 const Home = () => (
   <div>
-    <h2>
-Home Page LOLOL
-    </h2>
+    <h2 />
   </div>
 );
 
@@ -69,7 +67,7 @@ Home Page LOLOL
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: [], user: null };
+    this.state = { tasks: [], user: null, sprintId: false };
 
     api.getTasks()
       .then(tasks => this.setState({ tasks }));
@@ -92,20 +90,17 @@ class App extends React.Component {
     console.log(this.state);
     return (
       <Router>
-  <div>
+        <div>
           <Navbar user={this.state.user} />
-
           <hr />
-          <Button variant="contained" color="primary">
-            View Sprint
-          </Button>
+
           <Sprint updateUser={this.updateUser} tasks={this.state.tasks} />
           <Route exact path="/" component={Home} />
-          <Route path="/login" render={() => <Login updateUser={this.updateUser} />} />
-          <Route path="/register" render={() => <Register updateUser={this.updateUser} />} />
+          <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
+          <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />
           {/* <Route path="/sprint" component={Sprint} /> */}
         </div>
-</Router>
+      </Router>
     );
   }
 }
