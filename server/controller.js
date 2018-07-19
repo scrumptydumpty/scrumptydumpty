@@ -59,12 +59,24 @@ module.exports = {
     .then((hasPassword) => {
       if (!hasPassword) { throw ('Invalid Password'); }
       return db.updateUser(username, newpassword);
-    }),
+    })
+  },
+  getUserById:(id)=>{
+    return db.getUserById(id)
+    .then(user=>user!==undefined? user : null)
+  },
+  getUserByName: (username) => {
+    return db.getUserByName(username)
+      .then(user =>user !== undefined ? user : null)
+  },
 
-  getUserById: id => db.getUserById(id)
-    .then(user => (user !== undefined ? user : null)),
+  isLoggedIn: (req, res, next) => {
+    if (req.session.passport) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
+  }
 
-  getUserByName: username => db.getUserByName(username)
-    .then(user => (user !== undefined ? user : null)),
 
 };
