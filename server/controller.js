@@ -76,6 +76,14 @@ module.exports = {
   getUserByName: (username) => {
     return db.getUserByName(username)
       .then(user =>user !== undefined ? user : null)
+  },
+
+  isLoggedIn: (req, res, next) => {
+    if (req.session.passport) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
   }
 
 };
