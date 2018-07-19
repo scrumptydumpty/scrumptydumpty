@@ -10,15 +10,24 @@
 -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- SET FOREIGN_KEY_CHECKS=0;
 
+<<<<<<< Updated upstream
 DROP DATABASE IF EXISTS sprints;
 CREATE DATABASE sprints;
+=======
+ DROP DATABASE IF EXISTS sprints;
+ CREATE DATABASE sprints;
+>>>>>>> Stashed changes
 
 -- ---
 -- Table 'users'
 -- 
 -- ---
 
+<<<<<<< Updated upstream
 USE sprints;
+=======
+USE `sprints`;
+>>>>>>> Stashed changes
 
 DROP TABLE IF EXISTS `users`;
 

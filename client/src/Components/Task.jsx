@@ -48,14 +48,12 @@ class Task extends React.Component {
   }
 
   onMouseOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    console.log('Task Over');
     this.setState({ shadow: 3 });
   }
 
   onMouseOut(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    console.log('Task Out');
     this.setState({ shadow: 1 });
   }
 

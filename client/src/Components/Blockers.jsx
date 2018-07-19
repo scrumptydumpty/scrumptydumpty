@@ -19,8 +19,8 @@ class Blockers extends React.Component {
     return (<div></div>);
 
     return (
-      <div style={ {pointerEvents: 'none'}}>
-        {blockers.map(blocker=><Blocker key={"blocker:"+blocker.id} blocker={blocker} />)}
+      <div>
+        {blockers.map(blocker => <Blocker key={'blocker:' + blocker.id} blocker={blocker} />)}
       </div>
     );
   }
