@@ -59,8 +59,8 @@ module.exports = {
     .then((hasPassword) => {
       if (!hasPassword) { throw ('Invalid Password'); }
       return db.updateUser(username, newpassword);
-    })
-  },
+    }),
+
   getUserById:(id)=>{
     return db.getUserById(id)
     .then(user=>user!==undefined? user : null)
@@ -77,6 +77,4 @@ module.exports = {
       res.redirect('/login');
     }
   }
-
-
 };
