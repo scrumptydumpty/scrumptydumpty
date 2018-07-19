@@ -11,7 +11,7 @@ passport.use(
         controller.getUserByName(username).then(user => done(null, user));
       }
     });
-  }),
+  })
 );
 
 passport.serializeUser((user, cb) => {
