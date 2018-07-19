@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import api from '../api';
+import AddBlockerForm from './AddBlockerForm.jsx';
 
 
 const dropdownMenuOptions = [{ label: 'Low', value: 0 },
@@ -103,7 +104,7 @@ class EditTaskForm extends React.Component {
   render() {
     return (
       <div>
-        <CardContent style={{ padding: '5px', textAlign: 'center' }}>
+  <CardContent style={{ padding: '5px', textAlign: 'center' }}>
           <form onSubmit={this.onSubmit}>
             <div>
               <TextField required id="title" label="Title" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
@@ -136,18 +137,16 @@ class EditTaskForm extends React.Component {
 
             <div style={{ textAlign: 'center' }}>
               <Button type="submit">
-                Save
-              </Button>
+Save
+</Button>
               <Button onClick={this.onDelete}>
-                Delete
-              </Button>
-              <Button>
-                Add Blocker
-              </Button>
+Delete Task
+</Button>
             </div>
           </form>
+          <AddBlockerForm task_id={this.state.id} />
         </CardContent>
-      </div>
+</div>
     );
   }
 }

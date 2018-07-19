@@ -59,7 +59,7 @@ class Task extends React.Component {
   }
 
   handleDoubleClick(e) {
-    this.setState({ editing: !this.state.editing });
+    this.setState({ editing: !this.state.editing }, () => this.reload());
   }
 
 
