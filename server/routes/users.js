@@ -1,12 +1,16 @@
 const express = require('express');
 const controller = require('../controller');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
-router.post('/', (req, res)=>{
+router.post('/', (req, res) => {
     console.log('adding user')
-    controller.addUser(req.body)
-        .then((result) => { console.log("success"); return res.send(result) })
-        .catch((err) => { console.log(err); return res.send(false) });
+    bcrypt.hash(req.body.password, 10)
+        .then(hash => {
+            controller.addUser({ username: req.body.username, password: hash })
+                .then((result) => { console.log("success"); return res.send(result) })
+                .catch((err) => { console.log(err); return res.send(false) });
+        });
 });
 
 router.get('/', (req, res)=>{
