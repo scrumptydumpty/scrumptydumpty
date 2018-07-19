@@ -1,7 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { StatusCode } from "../../../lib/shared";
-import Blocker from "./Blocker.jsx"
+import React from 'react';
+import Blocker from './Blocker.jsx';
 
 class Blockers extends React.Component {
   constructor(props) {
@@ -15,12 +13,14 @@ class Blockers extends React.Component {
 
   render() {
     const blockers = this.state.blockers;
-    if(blockers.length===0) 
-    return (<div></div>);
+    if (blockers.length === 0)
+      {return (<div></div>);}
 
     return (
-      <div style={ {pointerEvents: 'none'}}>
-        {blockers.map(blocker=><Blocker key={"blocker:"+blocker.id} blocker={blocker} />)}
+
+      <div>
+
+        {blockers.map(blocker => <Blocker key={'blocker:' + blocker.id} blocker={blocker} />)}
       </div>
     );
   }

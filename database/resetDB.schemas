@@ -10,21 +10,58 @@
 -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- SET FOREIGN_KEY_CHECKS=0;
 
-DROP DATABASE IF EXISTS sprints;
-CREATE DATABASE sprints;
+
+-- DROP DATABASE IF EXISTS sprints;
+-- CREATE DATABASE sprints;
+
 
 -- ---
 -- Table 'users'
 -- 
 -- ---
 
-USE sprints;
+USE heroku_8a8425fd66d074c;
+
+
+DROP TABLE IF EXISTS `blockers`;
+		
+CREATE TABLE `blockers` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `title` TEXT NOT NULL,
+  `description` TEXT NOT NULL,
+  `task_id` INTEGER NOT NULL,
+  `status_code` INTEGER DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE blockers AUTO_INCREMENT = 1000;
+
+DROP TABLE IF EXISTS `tasks`;
+
+CREATE TABLE `tasks` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `title` TEXT NOT NULL,
+  `description` TEXT NOT NULL,
+  `user_id` INTEGER DEFAULT NULL,
+  `status_code` INTEGER DEFAULT 0,
+  `eta`TIMESTAMP NULL DEFAULT NULL,
+  `priority_code` INTEGER DEFAULT 0,
+  `difficulty` INTEGER DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE tasks AUTO_INCREMENT = 1000;
+		
 
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `username` TEXT NOT NULL,
   `password` TEXT NOT NULL,
@@ -40,50 +77,20 @@ ALTER TABLE users AUTO_INCREMENT = 1000;
 
 
 
-DROP TABLE IF EXISTS `tasks`;
-		
-CREATE TABLE `tasks` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `title` TEXT NOT NULL,
-  `description` TEXT NOT NULL,
-  `user_id` INTEGER DEFAULT NULL,
-  `status_code` INTEGER DEFAULT 0,
-  `eta` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `priority_code` INTEGER DEFAULT 0,
-  `difficulty` INTEGER DEFAULT 0,
-  PRIMARY KEY (`id`)
-);
-
-ALTER TABLE tasks AUTO_INCREMENT = 1000;
-
 -- ---
 -- Table 'blockers'
 -- 
 -- ---
 
-DROP TABLE IF EXISTS `blockers`;
-		
-CREATE TABLE `blockers` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `title` TEXT NOT NULL,
-  `description` TEXT NOT NULL,
-  `task_id` INTEGER NOT NULL,
-  `status_code` INTEGER DEFAULT 0,
-  PRIMARY KEY (`id`)
-);
 
-ALTER TABLE blockers AUTO_INCREMENT = 1000;
+
 
 -- ---
 -- Foreign Keys 
 -- ---
 
-ALTER TABLE `tasks` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
-ALTER TABLE `blockers` ADD FOREIGN KEY (task_id) REFERENCES `tasks` (`id`);
+-- ALTER TABLE `tasks` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
+-- ALTER TABLE `blockers` ADD FOREIGN KEY (task_id) REFERENCES `tasks` (`id`);
 
 -- ---
 -- Table Properties

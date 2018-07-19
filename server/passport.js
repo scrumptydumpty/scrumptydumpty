@@ -22,12 +22,12 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
-  controller.getUserById(id).then(user => {
+  controller.getUserById(id).then((user) => {
     if (!user) {
-      cb("Err During Deserialization");
+      cb('Err During Deserialization');
     } else {
       cb(null, user);
     }
   });
 });
-module.exports = {passport}
+module.exports = { passport };
