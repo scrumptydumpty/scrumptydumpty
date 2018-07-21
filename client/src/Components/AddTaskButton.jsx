@@ -8,13 +8,17 @@ import AddTaskForm from './AddTaskForm.jsx';
 class AddTaskButton extends React.Component {
   constructor(props) {
     super(props);
-    this.sprint_id = props.sprint_id;
-    this.state = { shadow: 1, editing: false };
+    
+    this.state = { shadow: 1, editing: false, sprint_id:props.sprint_id };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.reload = props.reload;
     this.closeTask = this.closeTask.bind(this);
+  }
+
+  componentWillReceiveProps({ sprint_id }) {
+    this.setState({ sprint_id })
   }
 
   closeTask() {
@@ -58,7 +62,7 @@ class AddTaskButton extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.handleClick} style={style}>
-            <AddTaskForm sprint_id = {this.sprint_id} closeTask={this.closeTask} reload={this.reload} />
+            <AddTaskForm sprint_id = {this.state.sprint_id} closeTask={this.closeTask} reload={this.reload} />
           </Card>
         </div>
       );

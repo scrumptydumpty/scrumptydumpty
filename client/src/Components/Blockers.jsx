@@ -13,7 +13,7 @@ class Blockers extends React.Component {
   }
 
   render() {
-    console.log(this.state.blockers);
+ 
     const blockers = this.state.blockers.filter(x => !x.status_code);
     if (blockers.length === 0) { return (<div />); }
 

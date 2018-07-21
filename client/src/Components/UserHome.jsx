@@ -26,7 +26,7 @@ updateSprintList(){
 
   api.getSprints()
     .then(sprintList => {
-      console.log(sprintList)
+     
       this.setState({sprintList})
     })
 
@@ -53,7 +53,7 @@ updateSprintList(){
 
   render() {
 
-    console.log(this.state)
+    
 
     let interior = (
       <div>
@@ -64,7 +64,7 @@ updateSprintList(){
 
       </div>
     );
-    console.log(this);
+    
     if (this.state.status === 1) {
       interior = (
         <div>

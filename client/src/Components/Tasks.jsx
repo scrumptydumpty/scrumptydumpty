@@ -4,16 +4,16 @@ import Task from './Task.jsx';
 class Tasks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: props.tasks };
+    this.state = { sprint_id:props.sprint_id, tasks: props.tasks };
     this.reload = props.reload;
-    this.sprint_id = props.sprint_id 
-    console.log('sprint id',this.sprint_id)
-    
+
   }
 
-  componentWillReceiveProps({ tasks }) {
-    this.setState({ tasks });
+  componentWillReceiveProps({sprint_id, tasks}){
+    this.setState({ sprint_id, tasks })
   }
+
+
 
   render() {
     const tasks = this.state.tasks;
@@ -21,7 +21,7 @@ class Tasks extends React.Component {
 
     return (
       <div>
-        {tasks.map(task => <Task sprint_id={this.sprint_id} reload={this.reload} key={`task:${task.id}`} task={task} />)}
+        {tasks.map(task => <Task sprint_id={this.sprint_id} reload={this.state.reload} key={`task:${task.id}`} task={task} />)}
       </div>
     );
   }

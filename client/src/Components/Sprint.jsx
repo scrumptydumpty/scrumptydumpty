@@ -18,7 +18,18 @@ class Sprint extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.reload = this.reload.bind(this);
+  }
+
+  componentWillMount(){
     this.reload();
+  }
+
+  componentWillUpdate(nextProps){
+   
+    if (nextProps.match.params.id!==this.state.sprint_id){
+      this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload())
+      ;
+    }
   }
 
   closeEdits(e) {
@@ -36,7 +47,6 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    
     api.getTasks(this.state.sprint_id)
       .then((tasks) => { this.setState({ tasks }); });
   }
@@ -52,6 +62,8 @@ class Sprint extends React.Component {
 
 
   render() {
+    console.log('rendering id', this.state.sprint_id)
+    console.log(this.state.tasks)
     const tasks = this.state.tasks;
     const notStarted = tasks.filter(x => x.status_code === StatusCode.NotStarted);
     const inProgress = tasks.filter(x => x.status_code === StatusCode.InProgress);
