@@ -158,6 +158,14 @@ const self = module.exports = {
   // returns all tasks, adding the blockers each task has to the task object
 
   getSprints: owner_id =>
-    knex("sprints").where({ owner_id }).then(sprints => sprints.map(sprint=>sprint.id)) ,
+    knex("sprints").where({ owner_id }).then(sprints => sprints.map(sprint=>{return {id:sprint.id, title:sprint.title}})) ,
+
+  addUserToSprint: (user_id, sprint_id) =>{
+    return knex('sprintusers').insert({user_id,sprint_id})
+    .then(()=>{
+
+      return knex('sprints').where({id:sprint_id}).select().first();
+    })
+  }
 
 }

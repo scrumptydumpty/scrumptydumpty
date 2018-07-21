@@ -10,6 +10,7 @@ import Navbar from './Components/Navbar.jsx';
 import Login from './Components/Login.jsx';
 import Register from './Components/Register.jsx';
 import Sprint from './Components/Sprint.jsx';
+import UserHome from './Components/UserHome.jsx'
 import api from './api';
 
 
@@ -66,24 +67,15 @@ const Home = () => (
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: [],
+    this.state = {
        user: null,
-       sprintList: [],
-       sprint_id: false };
+       sprint_id: false};
 
     this.updateUser = this.updateUser.bind(this);
-    this.updateSprintList = this.updateSprintList.bind(this);
-    this.updateUser();
+    
+    //this.updateUser();
   }
 
-  updateSprintList(){
-
-    api.getSprints()
-    .then(resp=>{
-      console.log(resp)
-    })
-
-  }
 
   updateUser() {
     api.verify()
@@ -91,7 +83,7 @@ class App extends React.Component {
         console.log('verify response', user);
         if (user) {
           this.setState({ user });
-          this.updateSprintList();
+        
         }
       });
   }
@@ -101,8 +93,9 @@ class App extends React.Component {
 
     let main = (<div>Login yo, then pick a sprint</div>)
 
-    if(this.state.sprint_id){
-      main = <Sprint updateUser={this.updateUser} sprint_id={this.state.sprint_id} />
+    if(this.state.user){
+      // main = <Sprint updateUser={this.updateUser} sprint_id={this.state.sprint_id} />
+      main = <UserHome />
     }
     return (
       <Router>

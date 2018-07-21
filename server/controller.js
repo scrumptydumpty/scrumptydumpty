@@ -1,6 +1,6 @@
 const db = require('../database/db');
 
-module.exports = {
+const self = module.exports = {
   addTask: ({ title, description, sprint_id }) => {
     if (!title || title === "") throw "No Title";
     if (!description || description === "") throw "No description";
@@ -48,6 +48,7 @@ module.exports = {
     return db.userHasPassword(username, password);
   },
 
+
   updateUser: ({ username, oldpassword, newpassword }) =>
     db
       .userExists(username)
@@ -81,12 +82,30 @@ module.exports = {
     }
   },
 
-  addSprint: ({ title, owner_id }) => {
+  addSprint: ( title, owner_id ) => {
     if (!title || title === "") throw "No Title";
     if (!owner_id ) throw "No owner_id";
 
-    return db.addSprint(title, owner_id);
+    return db.addSprint(title, owner_id)
+    .then(sprint=>{
+      const user_id = owner_id;
+      const sprint_id = sprint.id;
+      return self.addUserToSprint(user_id, sprint_id)
+    });
   },
+
+  // add user to a sprint, if successful returns the sprint
+  addUserToSprint: (user_id, sprint_id) => {
+    if(!user_id || user_id ==='') throw "No User Given";
+    if(!sprint_id) throw "no sprint id given"
+
+    return db.addUserToSprint(user_id,sprint_id);
+
+
+  },
+
+
+
   getSprints: ({owner_id}) => db.getSprints(owner_id),
 
 };

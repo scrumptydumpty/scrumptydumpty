@@ -13,9 +13,17 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   console.log('fetching tasks');
-  controller.getTasks(req.query.sprint_id)
-    .then((result) => { console.log('success'); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
+  console.log(req.params)
+  controller
+    .getTasks(req.params.sprint_id)
+    .then(result => {
+      console.log("success");
+      return res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.send(false);
+    });
 });
 
 router.put('/', (req, res) => {

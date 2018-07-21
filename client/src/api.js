@@ -2,6 +2,10 @@ const axios = require('axios');
 
 module.exports = {
 
+  addSprint: (title) => axios.post('/sprints', { title })
+  .then(result=>result.data)
+  .catch(err=>{console.log(err); return false}),
+
   addTask: ({
     title, description, difficulty, priority_code,
   }) => axios.post('/tasks', { title, description })
@@ -24,7 +28,7 @@ module.exports = {
   addBlocker: ({ task_id, title, description }) => axios.post('/blockers', { task_id, title, description }),
 
   getSprints: () => axios.get('/sprints')
-  .then(resp=>resp.data)
+  .then(resp =>  resp.data)
   .catch((err)=>{console.log(err); return false}),
 
   getBlockers: task_id => axios.get('/blockers'),
