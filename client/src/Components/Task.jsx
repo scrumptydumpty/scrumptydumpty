@@ -6,7 +6,7 @@ import { StatusCode, PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
 
 
-const TaskInfo = ({ task }) => (
+const TaskInfo = ({ task, reload }) => (
   <div>
     <CardContent style={{ padding: '5px', textAlign: 'center' }}>
       <div>
@@ -20,7 +20,7 @@ Status:
       <div>
 Blockers:
         {' '}
-        <Blockers blockers={task.blockers} />
+        <Blockers reload={reload} blockers={task.blockers} />
       </div>
     </CardContent>
 
@@ -94,7 +94,7 @@ class Task extends React.Component {
           onDoubleClick={this.handleDoubleClick}
           style={style}
         >
-          <TaskInfo task={this.state.task} />
+          <TaskInfo task={this.state.task} reload={this.reload} />
         </Card>
       </div>
     );

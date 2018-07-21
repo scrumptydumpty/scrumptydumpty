@@ -41,4 +41,8 @@ module.exports = {
     .then(resp => resp.data)
     .catch((err) => { console.log(err); return false; }),
 
+  deleteBlocker: id => axios.put('/blockers', { id, status_code: 1 })
+    .then(resp => resp.data)
+    .catch((err) => { console.log(err); return false; }),
+
 };

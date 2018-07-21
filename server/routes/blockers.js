@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 });
 
 router.put('/', (req, res) => {
-  console.log('updating blocker');
+  console.log('updating blocker', req.body);
   controller.updateBlocker(req.body)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
