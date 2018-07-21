@@ -1,11 +1,11 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { StatusCode } from '../../../lib/shared';
-import { COLOR } from '../../../lib/shared';
-
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { StatusCode } from '../../../lib/shared';
+import { COLOR } from '../../../lib/shared';
+import api from '../api';
 
 console.log(COLOR.red);
 class Blocker extends React.Component {
@@ -15,7 +15,7 @@ class Blocker extends React.Component {
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-
+    this.reload = props.reload;
   }
 
   componentWillReceiveProps({ blocker }) {
@@ -32,33 +32,35 @@ class Blocker extends React.Component {
   }
 
   onClickHandler(e) {
-    console.log('Hello!'); ///call edit blocker form
+    console.log('Hello!'); // /call edit blocker form
+    api.deleteBlocker(this.state.blocker.id)
+      .then(res => this.reload());
   }
 
   render() {
     const blocker = this.state.blocker;
     const style = { borderRadius: '10px', margin: '5px', backgroundColor: COLOR.red };
 
-    if(this.state.hovering) {
+    if (this.state.hovering) {
       style.backgroundColor = COLOR.green;
     }
 
-    if(this.state.hovering) {
+    if (this.state.hovering) {
       return (
         <div onMouseLeave={this.onMouseOut}>
           <Card style={style}>
             <CardContent style={{ padding: '5px', textAlign: 'center' }}>
               <div>
                 {blocker.title}
-                <Button variant="contained" style={{float: 'right'}} onClick={this.onClickHandler}>
+                <Button id={this.state.blocker.id} variant="contained" style={{ float: 'right' }} onClick={this.onClickHandler}>
                   Delete
-                  <DeleteIcon/>
+                  <DeleteIcon />
                 </Button>
               </div>
               <div>
-Status: 
-            {' '}
-            {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
+Status:
+                {' '}
+                {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
               </div>
             </CardContent>
           </Card>
@@ -72,13 +74,13 @@ Status:
         <Card style={style} onMouseEnter={this.onMouseOver}>
           <CardContent style={{ padding: '5px', textAlign: 'center' }}>
             <div>
-            {blocker.title}
-                    </div>
+              {blocker.title}
+            </div>
             <div>
 Status:
-            {' '}
-            {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
-                    </div>
+              {' '}
+              {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
+            </div>
           </CardContent>
         </Card>
       </div>
