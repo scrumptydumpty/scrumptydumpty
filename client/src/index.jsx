@@ -15,7 +15,6 @@ import api from './api';
 
 const Home = () => (
   <div>
-    <h2 />
   </div>
 );
 
@@ -67,13 +66,23 @@ const Home = () => (
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: [], user: null, sprintId: false };
-
-    api.getTasks()
-      .then(tasks => this.setState({ tasks }));
+    this.state = { tasks: [],
+       user: null,
+       sprintList: [],
+       sprint_id: false };
 
     this.updateUser = this.updateUser.bind(this);
+    this.updateSprintList = this.updateSprintList.bind(this);
     this.updateUser();
+  }
+
+  updateSprintList(){
+
+    api.getSprints()
+    .then(resp=>{
+      console.log(resp)
+    })
+
   }
 
   updateUser() {
@@ -82,19 +91,25 @@ class App extends React.Component {
         console.log('verify response', user);
         if (user) {
           this.setState({ user });
+          this.updateSprintList();
         }
       });
   }
 
   render() {
     console.log(this.state);
+
+    let main = (<div>Login yo, then pick a sprint</div>)
+
+    if(this.state.sprint_id){
+      main = <Sprint updateUser={this.updateUser} sprint_id={this.state.sprint_id} />
+    }
     return (
       <Router>
         <div>
           <Navbar user={this.state.user} />
           <hr />
-
-          <Sprint updateUser={this.updateUser} tasks={this.state.tasks} />
+          {main}
           <Route exact path="/" component={Home} />
           <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
           <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />

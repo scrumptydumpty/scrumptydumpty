@@ -19,7 +19,7 @@ class Register extends React.Component {
     e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
-    console.log(username, password);
+    console.log('registering with', username, password);
     api.addUser(username, password).then((res) => {
       if (!res) {
         this.setState({ errormessage: 'User Already Exists' });
@@ -47,7 +47,6 @@ class Register extends React.Component {
 
 
   render() {
-    console.log(this.state);
     return (
       <div style={{ textAlign: 'center' }}>
         <form onSubmit={this.handleSubmit}>

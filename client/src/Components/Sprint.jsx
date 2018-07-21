@@ -10,11 +10,12 @@ import AddTaskButton from './AddTaskButton.jsx';
 class Sprint extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: props.tasks, open: false };
+    this.state = { sprint_id: null, open: false };
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.reload = this.reload.bind(this);
+    this.reload()
   }
 
   closeEdits(e) {
@@ -23,9 +24,6 @@ class Sprint extends React.Component {
 
   }
 
-  componentWillReceiveProps({ tasks }) {
-    this.setState({ tasks });
-  }
 
   handleClickOpen(e) {
     e.preventDefault();
@@ -35,7 +33,7 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    api.getTasks()
+    api.getTasks(this.state.sprint_id)
       .then((tasks) => { this.setState({ tasks }); });
   }
 

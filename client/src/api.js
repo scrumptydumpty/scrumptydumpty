@@ -8,7 +8,9 @@ module.exports = {
     .then(result => result.data)
     .catch((err) => { console.log(err); return false; }),
 
-  getTasks: () => axios.get('/tasks')
+  getTasks: (sprint_id) => axios.get('/tasks',{
+    query:{ sprint_id }
+  })
     .then(result => result.data)
     .catch((err) => { console.log(err); return []; }),
 
@@ -20,6 +22,10 @@ module.exports = {
   },
 
   addBlocker: ({ task_id, title, description }) => axios.post('/blockers', { task_id, title, description }),
+
+  getSprints: () => axios.get('/sprints')
+  .then(resp=>resp.data)
+  .catch((err)=>{console.log(err); return false}),
 
   getBlockers: task_id => axios.get('/blockers'),
 
