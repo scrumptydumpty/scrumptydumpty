@@ -5,6 +5,7 @@ const user = process.env.DBUSERNAME || 'student';
 const password = process.env.DBPASSWORD || 'student';
 const db = process.env.DBNAME || 'sprints';
 
+
 const knex = require('knex')({
   client: 'mysql2',
   connection: {
