@@ -7,7 +7,6 @@ import { StatusCode } from '../../../lib/shared';
 import { COLOR } from '../../../lib/shared';
 import api from '../api';
 
-console.log(COLOR.red);
 class Blocker extends React.Component {
   constructor(props) {
     super(props);
@@ -32,14 +31,15 @@ class Blocker extends React.Component {
   }
 
   onClickHandler(e) {
-    console.log('Hello!'); // /call edit blocker form
     api.deleteBlocker(this.state.blocker.id)
       .then(res => this.reload());
   }
 
   render() {
     const blocker = this.state.blocker;
-    const style = { borderRadius: '10px', margin: '5px', backgroundColor: COLOR.red };
+    const style = {
+      borderRadius: '10px', margin: 'auto', width: '80%', backgroundColor: COLOR.red, padding: '5px', textAlign: 'center', height: '20px',
+    };
 
     if (this.state.hovering) {
       style.backgroundColor = COLOR.green;
@@ -49,20 +49,24 @@ class Blocker extends React.Component {
       return (
         <div onMouseLeave={this.onMouseOut}>
           <Card style={style}>
-            <CardContent style={{ padding: '5px', textAlign: 'center' }}>
-              <div>
+            <CardContent style={{
+              height: '20px', padding: '0px', display: 'inline-block', width: '100%',
+            }}
+            >
+              <div sytle={{ position: 'fixed' }}>
                 {blocker.title}
-                <Button id={this.state.blocker.id} variant="contained" style={{ float: 'right' }} onClick={this.onClickHandler}>
-                  Delete
-                  <DeleteIcon />
-                </Button>
               </div>
-              <div>
-Status:
-                {' '}
-                {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
-              </div>
+              <Button
+                id={this.state.blocker.id}
+                style={{
+                  position: 'relative', float: 'right', top: '-20px', height: '5px', padding: '0', display: 'inline-block',
+                }}
+                onClick={this.onClickHandler}
+              >
+                <DeleteIcon />
+              </Button>
             </CardContent>
+
           </Card>
         </div>
       );
@@ -70,17 +74,9 @@ Status:
 
     return (
       <div>
-
         <Card style={style} onMouseEnter={this.onMouseOver}>
-          <CardContent style={{ padding: '5px', textAlign: 'center' }}>
-            <div>
-              {blocker.title}
-            </div>
-            <div>
-Status:
-              {' '}
-              {Object.keys(StatusCode).find(x => StatusCode[x] === blocker.status_code)}
-            </div>
+          <CardContent style={{ height: '20px', padding: '0px' }}>
+            {blocker.title}
           </CardContent>
         </Card>
       </div>
