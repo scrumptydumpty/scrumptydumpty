@@ -30,11 +30,11 @@ Blockers:
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { sprint_id: props.sprint_id, task: props.task, shadow: 1, editing: false };
+    this.state = { sprint_id: props.sprint_id, task: props.task, shadow: 1, editing: false ,reload:props.reload };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
-    this.reload = props.reload;
+  
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -42,8 +42,8 @@ class Task extends React.Component {
     this.setState({ editing: false });
   }
 
-  componentWillReceiveProps({ task , sprint_id}) {
-    this.setState({ task, sprint_id});
+  componentWillReceiveProps({ task , sprint_id, reload}) {
+    this.setState({ task, sprint_id,reload});
   }
 
   onMouseOver(e) {
@@ -57,7 +57,8 @@ class Task extends React.Component {
   }
 
   handleDoubleClick(e) {
-    this.setState({ editing: !this.state.editing }, () => this.reload());
+    console.log(this.state)
+    this.setState({ editing: !this.state.editing }, () => this.state.reload());
   }
 
 
@@ -80,12 +81,12 @@ class Task extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm sprint_id={this.state.sprint_id}  reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
+            <EditTaskForm sprint_id={this.state.sprint_id}  reload={this.state.reload} closeTask={this.closeTask} task={this.state.task} />
           </Card>
         </div>
       );
     }
-
+console.log(this.state)
     return (
       <div>
         <Card
@@ -94,7 +95,7 @@ class Task extends React.Component {
           onDoubleClick={this.handleDoubleClick}
           style={style}
         >
-          <TaskInfo task={this.state.task} reload={this.reload} />
+          <TaskInfo task={this.state.task} reload={this.state.reload} />
         </Card>
       </div>
     );
