@@ -7,16 +7,16 @@ module.exports = {
   .catch(err=>{console.log(err); return false}),
 
   addTask: ({
-    title, description, difficulty, priority_code,
-  }) => axios.post('/tasks', { title, description })
+    title, description, difficulty, priority_code, sprint_id
+  }) => axios.post('/tasks', { title, description , sprint_id })
     .then(result => result.data)
     .catch((err) => { console.log(err); return false; }),
 
-  getTasks: (sprint_id) => axios.get('/tasks',{
-    query:{ sprint_id }
+  getTasks: (sprint_id) => {console.log(sprint_id); return axios.get('/tasks',{
+    params:{ sprint_id }
   })
     .then(result => result.data)
-    .catch((err) => { console.log(err); return []; }),
+    .catch((err) => { console.log(err); return []; })},
 
   updateTask: (newVersion) => {
     console.log(newVersion);

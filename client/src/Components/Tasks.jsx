@@ -6,6 +6,9 @@ class Tasks extends React.Component {
     super(props);
     this.state = { tasks: props.tasks };
     this.reload = props.reload;
+    this.sprint_id = props.sprint_id 
+    console.log('sprint id',this.sprint_id)
+    
   }
 
   componentWillReceiveProps({ tasks }) {
@@ -18,7 +21,7 @@ class Tasks extends React.Component {
 
     return (
       <div>
-        {tasks.map(task => <Task reload={this.reload} key={`task:${task.id}`} task={task} />)}
+        {tasks.map(task => <Task sprint_id={this.sprint_id} reload={this.reload} key={`task:${task.id}`} task={task} />)}
       </div>
     );
   }

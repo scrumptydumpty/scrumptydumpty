@@ -35,6 +35,7 @@ class Task extends React.Component {
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
     this.reload = props.reload;
+    this.sprint_id = props.sprint_id;
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -80,7 +81,7 @@ class Task extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
+            <EditTaskForm sprint_id={this.sprint_id}  reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
           </Card>
         </div>
       );

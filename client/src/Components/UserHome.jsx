@@ -4,7 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import api from '../api';
-
+import { Link } from "react-router-dom";
 
 class UserHome extends React.Component {
   constructor(props) {
@@ -101,7 +101,7 @@ Failed to Save!
           </div>
         </form>
         {
-          this.state.sprintList.map((sprint,idx) => <div key={idx}>{sprint.title}</div>
+          this.state.sprintList.map((sprint, idx) => <div key={idx}><Link to={`/sprint/${sprint.id}`}>{sprint.title}</Link></div>
         )
         }
       </div>

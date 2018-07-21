@@ -19,6 +19,8 @@ class AddTaskForm extends React.Component {
       title: '', description: '', priority_code: 0, difficulty: 0,
     };
 
+    this.sprint_id = props.sprint_id;
+
     this.titleChange = this.titleChange.bind(this);
     this.descriptionChange = this.descriptionChange.bind(this);
     this.priorityChange = this.priorityChange.bind(this);
@@ -35,9 +37,9 @@ class AddTaskForm extends React.Component {
     const {
       title, description, priority_code, difficulty,
     } = this.state;
-
+    console.log(`adding task on sprint id ${this.sprint_id}`)
     api.addTask({
-      title, description, priority_code, difficulty,
+      title, description, priority_code, difficulty, sprint_id: this.sprint_id
     }).then((res) => { this.reload(); this.closeTask(); });
   }
 

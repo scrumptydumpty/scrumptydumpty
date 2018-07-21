@@ -20,6 +20,7 @@ const statusCodeMenu = [{ label: 'Not Started', value: 0 },
 class EditTaskForm extends React.Component {
   constructor(props) {
     super(props);
+    this.sprint_id = props.sprint_id;
     const {
       id,
       title, description, priority_code, difficulty, eta, status_code,
@@ -67,7 +68,7 @@ class EditTaskForm extends React.Component {
       description,
       priority_code,
       difficulty,
-      status_code,
+      status_code, sprint_id: this.sprint_id
     }).then((res) => { this.closeTask(); this.reload(); });
   }
 

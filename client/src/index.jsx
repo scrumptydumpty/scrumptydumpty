@@ -106,7 +106,7 @@ class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
           <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />
-          {/* <Route path="/sprint" component={Sprint} /> */}
+           <Route path="/sprint/:id" component={Sprint} />
         </div>
       </Router>
     );
