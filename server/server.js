@@ -7,7 +7,8 @@ const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
 const users = require('./routes/users');
 const login = require('./routes/login');
-const logout = require('./routes/logout');
+const logout = require("./routes/logout");
+const sprints = require("./routes/sprints");
 
 const port = process.env.PORT || 1337;
 
@@ -25,6 +26,8 @@ app.use('/tasks', tasks);
 app.use('/blockers', blockers);
 app.use('/users', users);
 app.use('/login', login);
+
+app.use("/sprints", sprints);
 app.use('/logout', logout);
 
 
@@ -37,7 +40,7 @@ app.get('/test', (req, res) => {
 app.get('/verify', (req, res) => {
   if (req.user) {
     console.log('user is verified');
-    res.send(req.user);
+    res.send({id:req.user.id, username:req.user.username});
   } else {
     console.log('user is not verified');
     res.send(false);

@@ -10,11 +10,26 @@ import AddTaskButton from './AddTaskButton.jsx';
 class Sprint extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: props.tasks, open: false };
+    const sprint_id = +props.match.params.id || null;
+    console.log('loading sprint', sprint_id)
+    this.state = { sprint_id , open: false , tasks:[]};
+    console.log(this.state)
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.reload = this.reload.bind(this);
+  }
+
+  componentWillMount(){
+    this.reload();
+  }
+
+  componentWillUpdate(nextProps){
+   
+    if (nextProps.match.params.id!==this.state.sprint_id){
+      this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload())
+      ;
+    }
   }
 
   closeEdits(e) {
@@ -23,9 +38,6 @@ class Sprint extends React.Component {
 
   }
 
-  componentWillReceiveProps({ tasks }) {
-    this.setState({ tasks });
-  }
 
   handleClickOpen(e) {
     e.preventDefault();
@@ -35,7 +47,7 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    api.getTasks()
+    api.getTasks(this.state.sprint_id)
       .then((tasks) => { this.setState({ tasks }); });
   }
 
@@ -50,6 +62,8 @@ class Sprint extends React.Component {
 
 
   render() {
+    console.log('rendering id', this.state.sprint_id)
+    console.log(this.state.tasks)
     const tasks = this.state.tasks;
     const notStarted = tasks.filter(x => x.status_code === StatusCode.NotStarted);
     const inProgress = tasks.filter(x => x.status_code === StatusCode.InProgress);
@@ -60,29 +74,27 @@ class Sprint extends React.Component {
       backgroundColor: 'white',
     };
     // console.log(notStarted,inProgress,complete)
-    return (
-      <div onClick={this.closeEdits}>
+    return <div onClick={this.closeEdits}>
         <Paper>
           <Grid container spacing={24} justify="center">
             <Grid item xs={4}>
               NOT STARTED TASKS
-              <Tasks reload={this.reload} tasks={notStarted} />
-              <Grid container style={{ textAlign: 'center' }}>
-                <AddTaskButton reload={this.reload} />
+              <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={notStarted} />
+              <Grid container style={{ textAlign: "center" }}>
+                <AddTaskButton sprint_id={this.state.sprint_id} reload={this.reload} />
               </Grid>
             </Grid>
             <Grid item xs={4}>
               IN PROGRESS TASKS
-              <Tasks reload={this.reload} tasks={inProgress} />
+              <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={inProgress} />
             </Grid>
             <Grid item xs={4}>
               COMPLETED Tasks
-              <Tasks reload={this.reload} tasks={complete} />
+              <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={complete} />
             </Grid>
           </Grid>
         </Paper>
-      </div>
-    );
+      </div>;
   }
 }
 

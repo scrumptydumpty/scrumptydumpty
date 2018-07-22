@@ -30,11 +30,11 @@ Blockers:
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { task: props.task, shadow: 1, editing: false };
+    this.state = { shadow: 1, editing: false  };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
-    this.reload = props.reload;
+  
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -42,27 +42,24 @@ class Task extends React.Component {
     this.setState({ editing: false });
   }
 
-  componentWillReceiveProps({ task }) {
-    this.setState({ task });
-  }
-
   onMouseOver(e) {
-    console.log('Task Over');
+  
     this.setState({ shadow: 3 });
   }
 
   onMouseOut(e) {
-    console.log('Task Out');
+
     this.setState({ shadow: 1 });
   }
 
   handleDoubleClick(e) {
-    this.setState({ editing: !this.state.editing }, () => this.reload());
+    console.log(this.state)
+    this.setState({ editing: !this.state.editing }, () => this.props.reload());
   }
 
 
   render() {
-    const { task } = this.state;
+    const { task } = this.props;
     const borderColor = PRIORITY_COLOR[task.priority_code];
 
     const style = {
@@ -80,7 +77,7 @@ class Task extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
+            <EditTaskForm sprint_id={this.props.sprint_id}  reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
           </Card>
         </div>
       );
@@ -94,7 +91,7 @@ class Task extends React.Component {
           onDoubleClick={this.handleDoubleClick}
           style={style}
         >
-          <TaskInfo task={this.state.task} reload={this.reload} />
+          <TaskInfo task={this.props.task} reload={this.props.reload} />
         </Card>
       </div>
     );

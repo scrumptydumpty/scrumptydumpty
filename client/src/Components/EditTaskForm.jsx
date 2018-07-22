@@ -20,6 +20,7 @@ const statusCodeMenu = [{ label: 'Not Started', value: 0 },
 class EditTaskForm extends React.Component {
   constructor(props) {
     super(props);
+   
     const {
       id,
       title, description, priority_code, difficulty, eta, status_code,
@@ -43,19 +44,17 @@ class EditTaskForm extends React.Component {
     this.etaChange = this.etaChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onDelete = this.onDelete.bind(this);
-    this.closeTask = props.closeTask;
-    this.reload = props.reload;
   }
 
   onDelete(e) {
     e.preventDefault();
     const id = this.state.id;
-    api.updateTask({ id, status_code: 3 }).then((res) => { this.closeTask(); this.reload(); });
+    api.updateTask({ id, status_code: 3 }).then((res) => { this.props.closeTask(); this.props.reload(); });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state.task);
+   
     const {
       id,
       title, description, priority_code, difficulty, status_code,
@@ -67,8 +66,8 @@ class EditTaskForm extends React.Component {
       description,
       priority_code,
       difficulty,
-      status_code,
-    }).then((res) => { this.closeTask(); this.reload(); });
+      status_code, sprint_id: this.props.sprint_id
+    }).then((res) => { this.props.closeTask(); this.props.reload(); });
   }
 
   titleChange(e) {
@@ -107,11 +106,11 @@ class EditTaskForm extends React.Component {
   <CardContent style={{ padding: '5px', textAlign: 'center' }}>
           <form onSubmit={this.onSubmit}>
             <div>
-              <TextField required id="title" label="Title" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
-              <TextField required id="description" label="Description" defaultValue={this.state.description} margin="normal" onChange={this.descriptionChange} />
+              <TextField required id="title" label="Title" margin="normal" value={this.state.title} onChange={this.titleChange} />
+              <TextField required id="description" label="Description" value={this.state.description} margin="normal" onChange={this.descriptionChange} />
             </div>
 
-            <TextField id="priority" select label="Priority" defaultValue={this.state.priority_code} value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
+            <TextField id="priority" select label="Priority"  value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
               {dropdownMenuOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -119,7 +118,7 @@ class EditTaskForm extends React.Component {
               ))}
             </TextField>
 
-            <TextField id="difficulty" select label="Difficulty" value={this.state.difficulty} onChange={this.difficultyChange} defaultValue={this.state.difficulty} margin="normal">
+            <TextField id="difficulty" select label="Difficulty" value={this.state.difficulty} onChange={this.difficultyChange} margin="normal">
               {dropdownMenuOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -127,7 +126,7 @@ class EditTaskForm extends React.Component {
               ))}
             </TextField>
 
-            <TextField id="status_code" select label="Status" value={this.state.status_code} onChange={this.statusChange} defaultValue={this.state.status_code} margin="normal">
+            <TextField id="status_code" select label="Status" value={this.state.status_code} onChange={this.statusChange} margin="normal">
               {statusCodeMenu.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}

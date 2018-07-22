@@ -13,25 +13,23 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
     this.history = props.history;
-    console.log('props', props);
+
   }
 
   handleSubmit(e) {
     e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
-    console.log(username, password);
+    console.log('logging in with', username, password);
     api.login(username, password)
       .then((res) => {
         if (!res) {
-          console.log('invalid credentials');
           this.setState({ errormessage: 'Invalid Credentials' });
           setTimeout(() => {
             this.setState({ errormessage: '' });
           }, 2000);
           return;
         }
-        console.log('login successful!');
         this.updateUser();
         this.history.push('/');
       });
@@ -50,7 +48,6 @@ class Login extends React.Component {
 
 
   render() {
-    console.log(this.state);
     return (
       <div style={{ textAlign: 'center' }}>
         <form onSubmit={this.handleSubmit}>
