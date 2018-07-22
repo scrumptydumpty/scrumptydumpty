@@ -30,7 +30,7 @@ Blockers:
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { sprint_id: props.sprint_id, task: props.task, shadow: 1, editing: false ,reload:props.reload };
+    this.state = { shadow: 1, editing: false  };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
@@ -40,10 +40,6 @@ class Task extends React.Component {
 
   closeTask() {
     this.setState({ editing: false });
-  }
-
-  componentWillReceiveProps({ task , sprint_id, reload}) {
-    this.setState({ task, sprint_id,reload});
   }
 
   onMouseOver(e) {
@@ -58,12 +54,12 @@ class Task extends React.Component {
 
   handleDoubleClick(e) {
     console.log(this.state)
-    this.setState({ editing: !this.state.editing }, () => this.state.reload());
+    this.setState({ editing: !this.state.editing }, () => this.props.reload());
   }
 
 
   render() {
-    const { task } = this.state;
+    const { task } = this.props;
     const borderColor = PRIORITY_COLOR[task.priority_code];
 
     const style = {
@@ -81,12 +77,12 @@ class Task extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm sprint_id={this.state.sprint_id}  reload={this.state.reload} closeTask={this.closeTask} task={this.state.task} />
+            <EditTaskForm sprint_id={this.props.sprint_id}  reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
           </Card>
         </div>
       );
     }
-console.log(this.state)
+
     return (
       <div>
         <Card
@@ -95,7 +91,7 @@ console.log(this.state)
           onDoubleClick={this.handleDoubleClick}
           style={style}
         >
-          <TaskInfo task={this.state.task} reload={this.state.reload} />
+          <TaskInfo task={this.props.task} reload={this.props.reload} />
         </Card>
       </div>
     );

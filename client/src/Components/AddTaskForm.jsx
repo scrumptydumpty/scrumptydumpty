@@ -16,7 +16,7 @@ class AddTaskForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '', description: '', priority_code: 0, difficulty: 0, sprint_id:props.sprint_id
+      title: '', description: '', priority_code: 0, difficulty: 0
     };
 
     this.titleChange = this.titleChange.bind(this);
@@ -24,26 +24,19 @@ class AddTaskForm extends React.Component {
     this.priorityChange = this.priorityChange.bind(this);
     this.difficultyChange = this.difficultyChange.bind(this);
     // this.etaChange = this.etaChange.bind(this);
-    this.reload = this.props.reload;
     this.onSubmit = this.onSubmit.bind(this);
-    this.closeTask = props.closeTask;
-  }
-
-
-  componentWillReceiveProps({ sprint_id }) {
-    this.setState({ sprint_id })
   }
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state.task);
+    console.log(this.props.task);
     const {
       title, description, priority_code, difficulty,
     } = this.state;
-    console.log(`adding task on sprint id ${this.state.sprint_id}`)
+    console.log(`adding task on sprint id ${this.props.sprint_id}`)
     api.addTask({
-      title, description, priority_code, difficulty, sprint_id: this.state.sprint_id
-    }).then((res) => { this.reload(); this.closeTask(); });
+      title, description, priority_code, difficulty, sprint_id: this.props.sprint_id
+    }).then((res) => { this.props.reload(); this.props.closeTask(); });
   }
 
   titleChange(e) {
@@ -76,7 +69,7 @@ class AddTaskForm extends React.Component {
               <TextField required id="description" label="Description" defaultValue={this.state.description} margin="normal" onChange={this.descriptionChange} />
             </div>
 
-            <TextField id="priority" select label="Priority" defaultValue={this.state.priority_code} value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
+            <TextField id="priority" select label="Priority" value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
               {dropdownMenuOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -84,7 +77,7 @@ class AddTaskForm extends React.Component {
               ))}
             </TextField>
 
-            <TextField id="difficulty" select label="Difficulty" value={this.state.difficulty} onChange={this.difficultyChange} defaultValue={this.state.difficulty} margin="normal">
+            <TextField id="difficulty" select label="Difficulty" value={this.state.difficulty} onChange={this.difficultyChange} margin="normal">
               {dropdownMenuOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
