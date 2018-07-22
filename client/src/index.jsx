@@ -101,8 +101,8 @@ class App extends React.Component {
       <Router>
         <div>
           <Navbar user={this.state.user} />
-          <hr />
-          {main}
+          <hr style={{marginBottom: '3.5em'}} />
+            {main}
           <Route exact path="/" component={Home} />
           <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
           <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />
