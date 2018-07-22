@@ -92,8 +92,7 @@ class App extends React.Component {
       <Router>
         <div>
           <Navbar user={this.state.user} />
-          <hr />
-
+          <hr style={{marginBottom: '3.5em'}} />
           <Sprint updateUser={this.updateUser} tasks={this.state.tasks} />
           <Route exact path="/" component={Home} />
           <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
