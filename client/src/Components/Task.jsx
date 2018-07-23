@@ -13,13 +13,6 @@ const TaskInfo = ({ task, reload }) => (
         {task.title}
       </div>
       <div>
-Status:
-        {' '}
-        {Object.keys(StatusCode).find(x => StatusCode[x] === task.status_code)}
-      </div>
-      <div>
-Blockers:
-        {' '}
         <Blockers reload={reload} blockers={task.blockers} />
       </div>
     </CardContent>
