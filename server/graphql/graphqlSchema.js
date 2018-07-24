@@ -25,15 +25,11 @@ const TaskType = new GraphQLObjectType({
         priority_code: {type: GraphQLInt},
         difficulty: {type: GraphQLInt},
         blockers: {
-            type: BlockerType,
+            type: new GraphQLList(BlockerType),
             resolve(parent, args) {
-                let result 
-                blockers.forEach((val)=>{
-                    if (parent.id === val.task_id) {
-                        result = val;
-                    }
-                })
-                return result;
+                return knex("blockers")
+                    .select()
+                    .where({"task_id": parent.id});
             }
         }
     })
