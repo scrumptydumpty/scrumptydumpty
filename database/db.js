@@ -215,5 +215,32 @@ const self = (module.exports = {
           .select()
           .first();
       });
-  }
+  },
+
+  getUsersInSprint : (sprint_id)=>
+  knex('sprintusers').where({sprint_id}).select().then((results)=>{
+    
+    let pChain = Promise.resolve();
+    let solution = []
+
+    results.forEach(result=>{
+      pChain = pChain.then(()=>{
+
+        return knex('users').where({id:result.user_id}).select().first().then(user=>{
+          solution.push(user.username);
+        })
+
+      })
+
+
+
+    })
+
+
+    return pChain.then( ()=>solution);
+
+
+
+
+  })
 });

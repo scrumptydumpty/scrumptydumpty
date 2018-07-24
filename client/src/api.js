@@ -63,4 +63,10 @@ module.exports = {
     .then(resp => resp.data)
     .catch((err) => { console.log(err); return false; }),
 
+  getUsersInSprint: sprint_id => axios.get('/users/sprint', {
+    params: { sprint_id }
+  })
+    .then(result => result.data)
+    .catch((err) => { console.log(err); return []; }), 
+
 };
