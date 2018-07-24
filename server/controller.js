@@ -1,46 +1,53 @@
 const db = require('../database/db');
 
-const self = module.exports = {
+const self = (module.exports = {
   addTask: ({ title, description, sprint_id }) => {
-    if (!title || title === "") throw "No Title";
-    if (!description || description === "") throw "No description";
-    if (!sprint_id ) throw "No sprint id";
+    if (!title || title === '') throw 'No Title';
+    if (!description || description === '') throw 'No description';
+    if (!sprint_id) throw 'No sprint id';
 
     return db.addTask(title, description, sprint_id);
   },
-  getTasks: (sprint_id) => db.getTasks( sprint_id),
+  getTasks: sprint_id => db.getTasks(sprint_id),
 
-  updateTask: newVersion => {
-    if (!newVersion.id) throw "No Task ID Given";
+  updateTask: (newVersion) => {
+    if (!newVersion.id) throw 'No Task ID Given';
     // filter out stuff?
     return db.updateTask(newVersion);
   },
 
-  getUsersInSprint : (sprint_id)=>{
-    if(!sprint_id) throw "no sprint id given"
+  isOwner: ({ owner_id, sprint_id }) => {
+    if (!owner_id) throw 'No owner ID Given';
+    if (!sprint_id) throw 'No sprint ID Given';
+    // filter out stuff?
+    return db.isOwner(owner_id, sprint_id);
+  },
+
+  getUsersInSprint: (sprint_id) => {
+    if (!sprint_id) throw 'no sprint id given';
     return db.getUsersInSprint(sprint_id);
   },
 
   addBlocker: ({ task_id, title, description }) => {
-    if (!task_id) throw "No task_id";
-    if (!title || title === "") throw "No Title";
-    if (!description || description === "") throw "No description";
+    if (!task_id) throw 'No task_id';
+    if (!title || title === '') throw 'No Title';
+    if (!description || description === '') throw 'No description';
 
     return db.addBlocker(task_id, title, description);
   },
-  getBlockers: task_id => {
-    if (!task_id) throw "No Test Id Given";
+  getBlockers: (task_id) => {
+    if (!task_id) throw 'No Test Id Given';
     return db.getBlockers(task_id);
   },
 
   updateBlocker: newVersion => db.updateBlocker(newVersion),
 
   addUser: ({ username, password }) => {
-    if (!password || password === "") throw "No Password Given";
-    if (!username || username === "") throw "No Username Given";
-    return db.userExists(username).then(exists => {
+    if (!password || password === '') throw 'No Password Given';
+    if (!username || username === '') throw 'No Username Given';
+    return db.userExists(username).then((exists) => {
       if (exists) {
-        throw "User already exists";
+        throw 'User already exists';
       }
       return db.addUser(username, password);
     });
@@ -48,71 +55,66 @@ const self = module.exports = {
   getUsers: () => db.getUsers(),
 
   loginCorrect: ({ username, password }) => {
-    if (!username || !password) throw "Invalid Credentials";
-    if (username === "" || password === "") throw "Invalid Credentials";
+    if (!username || !password) throw 'Invalid Credentials';
+    if (username === '' || password === '') throw 'Invalid Credentials';
     return db.userHasPassword(username, password);
   },
 
+  updateUser: ({ username, oldpassword, newpassword }) => db
+    .userExists(username)
+    .then((userExists) => {
+      if (!userExists) {
+        throw 'User does not exist';
+      }
+      return db.userHasPassword(username, oldpassword);
+    })
+    .then((hasPassword) => {
+      if (!hasPassword) {
+        throw 'Invalid Password';
+      }
+      return db.updateUser(username, newpassword);
+    }),
 
-  updateUser: ({ username, oldpassword, newpassword }) =>
-    db
-      .userExists(username)
-      .then(userExists => {
-        if (!userExists) {
-          throw "User does not exist";
-        }
-        return db.userHasPassword(username, oldpassword);
-      })
-      .then(hasPassword => {
-        if (!hasPassword) {
-          throw "Invalid Password";
-        }
-        return db.updateUser(username, newpassword);
-      }),
-
-  getUserById: id => {
-    return db.getUserById(id).then(user => (user !== undefined ? user : null));
-  },
-  getUserByName: username => {
-    return db
-      .getUserByName(username)
-      .then(user => (user !== undefined ? user : null));
-  },
+  getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
+  getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
 
   isLoggedIn: (req, res, next) => {
     if (req.session.passport) {
       next();
     } else {
-      res.redirect("/login");
+      res.redirect('/login');
     }
   },
 
-  addSprint: ( title, owner_id, username ) => {
-    if (!title || title === "") throw "No Title";
-    if (!owner_id ) throw "No owner_id";
+  addSprint: (title, owner_id, username) => {
+    if (!title || title === '') throw 'No Title';
+    if (!owner_id) throw 'No owner_id';
 
-    return db.addSprint(title, owner_id)
-    .then(sprint=>{
-      console.log(sprint)
+    return db.addSprint(title, owner_id).then((sprint) => {
+      console.log(sprint);
       const user_id = owner_id;
       const sprint_id = sprint.id;
-      return self.addUserToSprint({owner_id, username, sprint_id})
+      return self.addUserToSprint({ owner_id, username, sprint_id });
     });
   },
 
   // add user to a sprint, if successful returns the sprint
   addUserToSprint: ({ owner_id, username, sprint_id }) => {
-  if (!username || username === '') throw "No User Given";
-  if (!sprint_id) throw "no sprint id given";
-  if (!owner_id || owner_id === '') throw "no owner id given";
+    if (!username || username === '') throw 'No User Given';
+    if (!sprint_id) throw 'no sprint id given';
+    if (!owner_id || owner_id === '') throw 'no owner id given';
 
-  return db.addUserToSprint(owner_id,username,sprint_id);
-
-
+    return db.addUserToSprint(owner_id, username, sprint_id);
   },
 
+  removeUserFromSprint: ({ owner_id, user_id, sprint_id }) => {
+    if (!user_id || user_id === '') throw 'No User Given';
+    if (!sprint_id) throw 'no sprint id given';
+    if (!owner_id || owner_id === '') throw 'no owner id given';
+    if (user_id === owner_id) throw 'cannot remove self from sprint';
 
+    return db.removeUserFromSprint(owner_id, user_id, sprint_id);
+  },
 
   getSprints: ({ user_id }) => db.getSprints(user_id),
-
-};
+});

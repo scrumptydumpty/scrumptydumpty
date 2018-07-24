@@ -14,19 +14,19 @@ class App extends React.Component {
     super(props);
     this.state = {
       user: null,
-      sprint_id: false
+      sprint_id: false,
     };
     this.updateUser = this.updateUser.bind(this);
-    this.logout = this.logout.bind(this);  
+    this.logout = this.logout.bind(this);
   }
 
   logout() {
     api.logout()
-    .then(res=>{
-      if(res){
-        this.setState({user:null})
-      }
-    })
+      .then((res) => {
+        if (res) {
+          this.setState({ user: null });
+        }
+      });
   }
 
   updateUser() {
@@ -58,7 +58,7 @@ class App extends React.Component {
               <Register history={history} updateUser={this.updateUser} />
             )}
           />
-          <Route path="/sprint/:id" component={Sprint} />
+          <Route path="/sprint/:id" render={routeprops => <Sprint user={this.state.user} {...routeprops} />} />
         </div>
       </Router>
     );

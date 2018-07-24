@@ -5,30 +5,30 @@ import { StatusCode } from '../../../lib/shared';
 import Tasks from './Tasks.jsx';
 import api from '../api';
 import AddTaskButton from './AddTaskButton.jsx';
-import AddUserToSprintForm from'./AddUserToSprintForm.jsx';
+import AddUserToSprintForm from './AddUserToSprintForm.jsx';
 
 class Sprint extends React.Component {
   constructor(props) {
     super(props);
     const sprint_id = +props.match.params.id || null;
-    console.log('loading sprint', sprint_id)
-    this.state = { sprint_id , users:[], open: false , tasks:[]};
-    console.log(this.state)
+    console.log('loading sprint', sprint_id);
+    this.state = {
+      sprint_id, isOwner: false, open: false, tasks: [],
+    };
+    console.log(this.state);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.reload = this.reload.bind(this);
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.reload();
   }
 
-  componentWillUpdate(nextProps){
-   
-    if (nextProps.match.params.id!==this.state.sprint_id){
-      this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload())
-      ;
+  componentWillUpdate(nextProps) {
+    if (nextProps.match.params.id !== this.state.sprint_id) {
+      this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload());
     }
   }
 
@@ -47,11 +47,18 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    console.log(this.state,'state of sprint')
+    // console.log(this.state,'state of sprint')
     api.getTasks(this.state.sprint_id)
-      .then((tasks) => { this.setState({ tasks }); })
-      .then(()=>api.getUsersInSprint(this.state.sprint_id))
-      .then((users)=>this.setState({users}));
+      .then((tasks) => { this.setState({ tasks }); });
+
+    api.isOwner(this.state.sprint_id)
+      .then((res) => {
+        if (!res) {
+          this.setState({ isOwner: false });
+        } else {
+          this.setState({ isOwner: true });
+        }
+      });
   }
 
   handleClose(shouldReload = false) {
@@ -65,25 +72,31 @@ class Sprint extends React.Component {
 
 
   render() {
-    console.log('rendering id', this.state.sprint_id)
-    console.log(this.state)
+    // console.log('rendering id', this.state.sprint_id)
+    // console.log(this.state)
     const tasks = this.state.tasks;
     const notStarted = tasks.filter(x => x.status_code === StatusCode.NotStarted);
     const inProgress = tasks.filter(x => x.status_code === StatusCode.InProgress);
     const complete = tasks.filter(x => x.status_code === StatusCode.Complete);
+
+    let ownerMenu = <div />;
+    if (this.state.isOwner) {
+      ownerMenu = <AddUserToSprintForm sprint_id={this.state.sprint_id} />;
+    }
 
     const addButtonStyle = {
       margin: 'auto',
       backgroundColor: 'white',
     };
     // console.log(notStarted,inProgress,complete)
-    return <div onClick={this.closeEdits}>
+    return (
+      <div onClick={this.closeEdits}>
         <Paper>
           <Grid container spacing={24} justify="center">
             <Grid item xs={4}>
               <strong>Todo</strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={notStarted} />
-              <Grid container style={{ textAlign: "center" }}>
+              <Grid container style={{ textAlign: 'center' }}>
                 <AddTaskButton sprint_id={this.state.sprint_id} reload={this.reload} />
               </Grid>
             </Grid>
@@ -97,17 +110,9 @@ class Sprint extends React.Component {
             </Grid>
           </Grid>
         </Paper>
-      <AddUserToSprintForm sprint_id={this.state.sprint_id} />
-      <div>
-        USERS IN THIS SPRINT
-
-        </div>
-        <div>
-          {this.state.users.map((user,i)=>{
-            return <div key={i}>{user}</div>
-          })}
-          </div>
-      </div>;
+        {ownerMenu}
+      </div>
+    );
   }
 }
 
