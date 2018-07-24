@@ -10,7 +10,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user,logout }) => {
   return (
     <AppBar color="default">
       {user === null ? (
@@ -25,8 +25,7 @@ const Navbar = ({ user }) => {
           <Tab component={Link} to="/sprints" label="Your Sprints"> />
           </Tab>
           <Tab
-            component={Link}
-            to="/logout"
+            onClick={logout}
             label="Logout"
             href="#basic-tabs"
           />

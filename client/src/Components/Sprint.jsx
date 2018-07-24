@@ -5,7 +5,7 @@ import { StatusCode } from '../../../lib/shared';
 import Tasks from './Tasks.jsx';
 import api from '../api';
 import AddTaskButton from './AddTaskButton.jsx';
-
+import AddUserToSprintForm from'./AddUserToSprintForm.jsx';
 
 class Sprint extends React.Component {
   constructor(props) {
@@ -94,6 +94,7 @@ class Sprint extends React.Component {
             </Grid>
           </Grid>
         </Paper>
+      <AddUserToSprintForm sprint_id={this.state.sprint_id} />
       </div>;
   }
 }

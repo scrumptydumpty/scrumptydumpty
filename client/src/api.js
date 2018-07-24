@@ -2,6 +2,10 @@ const axios = require('axios');
 
 module.exports = {
 
+  addUserToSprint: ({ username, sprint_id }) => axios.put('/sprints', { username,sprint_id })
+    .then(result => result.data)
+    .catch(err => { console.log(err); return false }),
+
   addSprint: (title) => axios.post('/sprints', { title })
   .then(result=>result.data)
   .catch(err=>{console.log(err); return false}),
@@ -42,6 +46,10 @@ module.exports = {
     .catch((err) => { console.log(err); return false; }),
 
   login: (username, password) => axios.post('/login', { username, password })
+    .then((resp) => { console.log(resp); return resp.data; })
+    .catch((err) => { console.log(err); return false; }),
+
+  logout: () => axios.get('/logout')
     .then((resp) => { console.log(resp); return resp.data; })
     .catch((err) => { console.log(err); return false; }),
 

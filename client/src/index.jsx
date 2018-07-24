@@ -72,8 +72,18 @@ class App extends React.Component {
        sprint_id: false};
 
     this.updateUser = this.updateUser.bind(this);
+    this.logout = this.logout.bind(this);
     
-    //this.updateUser();
+  }
+
+  logout() {
+    api.logout()
+    .then(res=>{
+      if(res){
+        this.setState({user:null})
+      }
+    })
+
   }
 
 
@@ -83,7 +93,6 @@ class App extends React.Component {
         console.log('verify response', user);
         if (user) {
           this.setState({ user });
-        
         }
       });
   }
@@ -100,7 +109,7 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          <Navbar user={this.state.user} />
+          <Navbar user={this.state.user} logout={this.logout} />
           <hr style={{marginBottom: '3.5em'}} />
             {main}
           <Route exact path="/" component={Home} />
