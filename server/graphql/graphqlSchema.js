@@ -49,7 +49,7 @@ const BlockerType = new GraphQLObjectType({
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        task_id: {type: GraphQLID},
+        task_id: {type: GraphQLInt},
         status_code: {type: GraphQLInt}
     })
 })
@@ -64,7 +64,7 @@ const UserType = new GraphQLObjectType({
         updated_at: {type: GraphQLString},
         username: {type: GraphQLString},
         password: {type: GraphQLString},
-        owner_id: {type: GraphQLID}
+        owner_id: {type: GraphQLInt}
     })
 })
 
@@ -77,6 +77,32 @@ const SprintType = new GraphQLObjectType({
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString}
+    })
+})
+
+const SprintTasksType = new GraphQLObjectType({
+    name: 'SprintTask',
+    description: 'This is a sprint task object',
+
+    fields: () => ({
+        id: {type: GraphQLID},
+        created_at: {type: GraphQLString},
+        updated_at: {type: GraphQLString},
+        task_id: {type: GraphQLInt},
+        sprint_id: {type: GraphQLInt}
+    })
+})
+
+const SprintUsersType = new GraphQLObjectType({
+    name: 'SprintUser',
+    description: 'This is a sprint user object',
+
+    fields: () => ({
+        id: {type: GraphQLID},
+        created_at: {type: GraphQLString},
+        updated_at: {type: GraphQLString},
+        user_id: {type: GraphQLInt},
+        sprint_id: {type: GraphQLInt}
     })
 })
 
@@ -112,6 +138,12 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 //return users
                 return knex("users").select();
+            }
+        },
+        sprints: {
+            type: new GraphQLList(SprintType),
+            resolve(parent, args) {
+                return knex("sprints").select();
             }
         }
     }
