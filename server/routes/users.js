@@ -56,4 +56,20 @@ router.put('/', (req, res) => {
     .catch((err) => { console.log(err); return res.send(false); });
 });
 
+router.get('/sprint', (req,res)=>{
+// needs AUTH
+console.log('getting all users in sprint',req.query.sprint_id)
+  controller
+    .getUsersInSprint(req.query.sprint_id)
+    .then(result => {
+      console.log("success");
+      return res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.send(false);
+    });
+
+});
+
 module.exports = router;

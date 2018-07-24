@@ -16,6 +16,11 @@ const self = module.exports = {
     return db.updateTask(newVersion);
   },
 
+  getUsersInSprint : (sprint_id)=>{
+    if(!sprint_id) throw "no sprint id given"
+    return db.getUsersInSprint(sprint_id);
+  },
+
   addBlocker: ({ task_id, title, description }) => {
     if (!task_id) throw "No task_id";
     if (!title || title === "") throw "No Title";
