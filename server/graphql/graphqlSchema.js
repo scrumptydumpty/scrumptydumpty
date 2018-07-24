@@ -60,7 +60,20 @@ const UserType = new GraphQLObjectType({
         updated_at: {type: GraphQLString},
         username: {type: GraphQLString},
         password: {type: GraphQLString},
-        owner_id: {type: GraphQLInt}
+        sprintsIOwn: {
+            type: new GraphQLList(SprintType),
+            resolve(parent, args) {
+                return knex("sprints")
+                    .select()
+                    .where({"owner_id": parent.id})
+            }
+        },
+        // sprintsICanUse: {
+        //     type: new GraphQLList(SprintType),
+        //     resolve(parent, args) {
+        //         return knex("")
+        //     }
+        // }
     })
 })
 
