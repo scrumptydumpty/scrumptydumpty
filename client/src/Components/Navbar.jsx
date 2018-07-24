@@ -1,25 +1,20 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import api from "../api";
-import Menu from "@material-ui/core/Menu";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import { throws } from "assert";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import api from '../api';
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       sprintList: [],
-      sprint: ''
+      sprint: '',
     };
     this.updateSprintList = this.updateSprintList.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -32,19 +27,17 @@ class Navbar extends Component {
   }
 
   updateSprintList() {
-    api.getSprints().then(sprintList => {
+    api.getSprints().then((sprintList) => {
       this.setState({ sprintList });
     });
   }
 
-  handleChange (event) {
+  handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
-    console.log(this.state)
-  };
+  }
 
   render() {
     const { user, logout } = this.props;
-    const { sprintList } = this.state;
     return (
       <AppBar color="default">
         {user === null ? (
@@ -61,27 +54,29 @@ class Navbar extends Component {
         ) : (
           <Tabs>
             <Tab component={Link} textColor="primary" label="Scrumpty" to="/" />
-            <FormControl >
-              <InputLabel htmlFor="age-simple">Sprints</InputLabel>
+            <FormControl>
+              <InputLabel htmlFor="age-simple">
+Sprints
+                            </InputLabel>
               <Select
                 value={this.state.sprint}
                 onChange={this.handleChange}
                 inputProps={{
-                  name: "sprint",
-                  id: "sprint-select"
+                  name: 'sprint',
+                  id: 'sprint-select',
                 }}
               >
                 {this.state.sprintList.map(sprint => (
                   <MenuItem
-                  value={sprint.id}
-                  component={Link}
-                  label={sprint.title}
-                  to={`/sprint/${sprint.id}`}
+                    value={sprint.id}
+                    component={Link}
+                    label={sprint.title}
+                    to={`/sprint/${sprint.id}`}
                   >
-                  {sprint.title}
+                    {sprint.title}
                   </MenuItem>
                 ))}
-                
+
               </Select>
             </FormControl>
             <Tab

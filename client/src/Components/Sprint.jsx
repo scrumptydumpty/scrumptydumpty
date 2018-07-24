@@ -11,11 +11,9 @@ class Sprint extends React.Component {
   constructor(props) {
     super(props);
     const sprint_id = +props.match.params.id || null;
-    console.log('loading sprint', sprint_id);
     this.state = {
       sprint_id, isOwner: false, open: false, tasks: [],
     };
-    console.log(this.state);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
@@ -30,12 +28,6 @@ class Sprint extends React.Component {
     if (nextProps.match.params.id !== this.state.sprint_id) {
       this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload());
     }
-  }
-
-  closeEdits(e) {
-    // e.preventDefault();
-    // console.log('click')
-
   }
 
 
@@ -94,18 +86,24 @@ class Sprint extends React.Component {
         <Paper>
           <Grid container spacing={24} justify="center">
             <Grid item xs={4}>
-              <strong>Todo</strong>
+              <strong>
+Todo
+              </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={notStarted} />
               <Grid container style={{ textAlign: 'center' }}>
                 <AddTaskButton sprint_id={this.state.sprint_id} reload={this.reload} />
               </Grid>
             </Grid>
             <Grid item xs={4}>
-              <strong>In Progress</strong>
+              <strong>
+In Progress
+              </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={inProgress} />
             </Grid>
             <Grid item xs={4}>
-              <strong>Completed</strong>
+              <strong>
+Completed
+              </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={complete} />
             </Grid>
           </Grid>

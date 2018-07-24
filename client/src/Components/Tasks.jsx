@@ -2,8 +2,6 @@ import React from 'react';
 import Task from './Task.jsx';
 
 class Tasks extends React.Component {
-
-
   render() {
     const tasks = this.props.tasks;
     if (tasks.length === 0) { return (<div />); }

@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import api from '../api';
 
@@ -25,7 +24,7 @@ class AddUserToSprintForm extends React.Component {
 
   deleteUser(user_id) {
     const sprint_id = this.state.sprint_id;
-    console.log(sprint_id, user_id);
+
     this.setState({ status: 1 });
     api.removeUserFromSprint({ sprint_id, user_id })
       .then((res) => {
@@ -41,7 +40,6 @@ class AddUserToSprintForm extends React.Component {
 
 
   componentWillUpdate(nextProps) {
-    console.log(nextProps.sprint_id, this.state.sprint_id);
     if (nextProps.sprint_id !== this.state.sprint_id) {
       this.setState({ sprint_id: nextProps.sprint_id, users: [] }, () => this.reload());
     }

@@ -35,29 +35,23 @@ module.exports = {
       return false;
     }),
 
-  getTasks: (sprint_id) => {
-    console.log(sprint_id);
-    return axios
-      .get('/tasks', {
-        params: { sprint_id },
-      })
-      .then(result => result.data)
-      .catch((err) => {
-        console.log(err);
-        return [];
-      });
-  },
+  getTasks: sprint_id => axios
+    .get('/tasks', {
+      params: { sprint_id },
+    })
+    .then(result => result.data)
+    .catch((err) => {
+      console.log(err);
+      return [];
+    }),
 
-  updateTask: (newVersion) => {
-    console.log(newVersion);
-    return axios
-      .put('/tasks', newVersion)
-      .then(result => result.data)
-      .catch((err) => {
-        console.log(err);
-        return false;
-      });
-  },
+  updateTask: newVersion => axios
+    .put('/tasks', newVersion)
+    .then(result => result.data)
+    .catch((err) => {
+      console.log(err);
+      return false;
+    }),
 
   addBlocker: ({ task_id, title, description }) => axios.post('/blockers', { task_id, title, description }),
 
@@ -85,10 +79,7 @@ module.exports = {
 
   login: (username, password) => axios
     .post('/login', { username, password })
-    .then((resp) => {
-      console.log(resp);
-      return resp.data;
-    })
+    .then(resp => resp.data)
     .catch((err) => {
       console.log(err);
       return false;
@@ -96,10 +87,7 @@ module.exports = {
 
   logout: () => axios
     .get('/logout')
-    .then((resp) => {
-      console.log(resp);
-      return resp.data;
-    })
+    .then(resp => resp.data)
     .catch((err) => {
       console.log(err);
       return false;
