@@ -1,15 +1,13 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
 import api from '../api';
 
 
 class AddBlockerForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
     this.state = {
       task_id: props.task_id,
       title: '',
@@ -64,7 +62,7 @@ class AddBlockerForm extends React.Component {
 
       </div>
     );
-    console.log(this);
+
     if (this.state.status === 1) {
       interior = (
         <div>

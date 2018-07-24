@@ -1,13 +1,13 @@
-import React from "react";
-import { render } from "react-dom";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import Navbar from "./Components/Navbar.jsx";
-import Login from "./Components/Login.jsx";
-import Register from "./Components/Register.jsx";
-import Sprint from "./Components/Sprint.jsx";
+import React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Navbar from './Components/Navbar.jsx';
+import Login from './Components/Login.jsx';
+import Register from './Components/Register.jsx';
+import Sprint from './Components/Sprint.jsx';
 import Home from './Components/Home.jsx';
-import api from "./api";
+import api from './api';
 
 class App extends React.Component {
   constructor(props) {
@@ -32,7 +32,6 @@ class App extends React.Component {
   updateUser() {
     api.verify()
       .then((user) => {
-        console.log('verify response', user);
         if (user) {
           this.setState({ user });
         }
@@ -42,10 +41,10 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div style={{ fontFamily: "Roboto" }}>
+        <div style={{ fontFamily: 'Roboto' }}>
           <Navbar user={this.state.user} logout={this.logout} />
-          <hr style={{ marginBottom: "3.5em" }} />
-          <Route exact path="/" render={() => <Home user={this.state.user}/>} />
+          <hr style={{ marginBottom: '3.5em' }} />
+          <Route exact path="/" render={() => <Home user={this.state.user} />} />
           <Route
             path="/login"
             render={({ history }) => (
@@ -64,4 +63,4 @@ class App extends React.Component {
     );
   }
 }
-render(<App />, document.getElementById("app"));
+render(<App />, document.getElementById('app'));

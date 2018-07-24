@@ -20,7 +20,7 @@ const statusCodeMenu = [{ label: 'Not Started', value: 0 },
 class EditTaskForm extends React.Component {
   constructor(props) {
     super(props);
-   
+
     const {
       id,
       title, description, priority_code, difficulty, eta, status_code,
@@ -54,7 +54,7 @@ class EditTaskForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-   
+
     const {
       id,
       title, description, priority_code, difficulty, status_code,
@@ -66,7 +66,8 @@ class EditTaskForm extends React.Component {
       description,
       priority_code,
       difficulty,
-      status_code, sprint_id: this.props.sprint_id
+      status_code,
+      sprint_id: this.props.sprint_id,
     }).then((res) => { this.props.closeTask(); this.props.reload(); });
   }
 
@@ -103,49 +104,49 @@ class EditTaskForm extends React.Component {
   render() {
     return (
       <div>
-  <CardContent style={{ padding: '5px', textAlign: 'center' }}>
+        <CardContent style={{ padding: '5px', textAlign: 'center' }}>
           <form onSubmit={this.onSubmit}>
             <div>
               <TextField required id="title" label="Title" margin="normal" value={this.state.title} onChange={this.titleChange} />
               <TextField required id="description" label="Description" value={this.state.description} margin="normal" onChange={this.descriptionChange} />
             </div>
 
-            <TextField id="priority" select label="Priority"  value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
+            <TextField id="priority" select label="Priority" value={this.state.priority_code} onChange={this.priorityChange} margin="normal">
               {dropdownMenuOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>
+          <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
-              ))}
+        ))}
             </TextField>
 
             <TextField id="difficulty" select label="Difficulty" value={this.state.difficulty} onChange={this.difficultyChange} margin="normal">
               {dropdownMenuOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>
+          <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
-              ))}
+        ))}
             </TextField>
 
             <TextField id="status_code" select label="Status" value={this.state.status_code} onChange={this.statusChange} margin="normal">
               {statusCodeMenu.map(option => (
-                <MenuItem key={option.value} value={option.value}>
+          <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
-              ))}
+        ))}
             </TextField>
 
             <div style={{ textAlign: 'center' }}>
               <Button type="submit">
 Save
-</Button>
+        </Button>
               <Button onClick={this.onDelete}>
 Delete Task
-</Button>
+        </Button>
             </div>
           </form>
           <AddBlockerForm task_id={this.state.id} />
         </CardContent>
-</div>
+      </div>
     );
   }
 }

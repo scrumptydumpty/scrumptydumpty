@@ -87,13 +87,10 @@ const self = (module.exports = {
     .select()
     .then(users => users.map(user => ({ id: user.id, username: user.username }))),
 
-  userExists: (username) => {
-    console.log('username', username);
-    return knex('users')
-      .where('username', username)
-      .select()
-      .first();
-  },
+  userExists: username => knex('users')
+    .where('username', username)
+    .select()
+    .first(),
   userHasPassword: (username, password) => knex('users')
     .where({ username, password })
     .select()
@@ -143,10 +140,7 @@ const self = (module.exports = {
           }));
       });
 
-      return pChain.then(() => {
-        console.log(solution);
-        return solution;
-      });
+      return pChain.then(() => solution);
     }),
 
   removeUserFromSprint: (owner_id, user_id, sprint_id) => knex('sprints')
@@ -225,5 +219,5 @@ const self = (module.exports = {
     }),
 
   isOwner: (owner_id, id) => knex('sprints').where({ id, owner_id }).select().first()
-    .then((res) => { console.log('callisowner', res); return (!!res); }),
+    .then(res => (!!res)),
 });
