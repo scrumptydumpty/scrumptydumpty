@@ -5,14 +5,14 @@ import { StatusCode } from '../../../lib/shared';
 import Tasks from './Tasks.jsx';
 import api from '../api';
 import AddTaskButton from './AddTaskButton.jsx';
-
+import AddUserToSprintForm from'./AddUserToSprintForm.jsx';
 
 class Sprint extends React.Component {
   constructor(props) {
     super(props);
     const sprint_id = +props.match.params.id || null;
     console.log('loading sprint', sprint_id)
-    this.state = { sprint_id , open: false , tasks:[]};
+    this.state = { sprint_id , users:[], open: false , tasks:[]};
     console.log(this.state)
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -47,8 +47,11 @@ class Sprint extends React.Component {
   }
 
   reload() {
+    console.log(this.state,'state of sprint')
     api.getTasks(this.state.sprint_id)
-      .then((tasks) => { this.setState({ tasks }); });
+      .then((tasks) => { this.setState({ tasks }); })
+      .then(()=>api.getUsersInSprint(this.state.sprint_id))
+      .then((users)=>this.setState({users}));
   }
 
   handleClose(shouldReload = false) {
@@ -63,7 +66,7 @@ class Sprint extends React.Component {
 
   render() {
     console.log('rendering id', this.state.sprint_id)
-    console.log(this.state.tasks)
+    console.log(this.state)
     const tasks = this.state.tasks;
     const notStarted = tasks.filter(x => x.status_code === StatusCode.NotStarted);
     const inProgress = tasks.filter(x => x.status_code === StatusCode.InProgress);
@@ -94,6 +97,16 @@ class Sprint extends React.Component {
             </Grid>
           </Grid>
         </Paper>
+      <AddUserToSprintForm sprint_id={this.state.sprint_id} />
+      <div>
+        USERS IN THIS SPRINT
+
+        </div>
+        <div>
+          {this.state.users.map((user,i)=>{
+            return <div key={i}>{user}</div>
+          })}
+          </div>
       </div>;
   }
 }

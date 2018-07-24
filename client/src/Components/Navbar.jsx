@@ -43,7 +43,7 @@ class Navbar extends Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { user, logout } = this.props;
     const { sprintList } = this.state;
     return (
       <AppBar color="default">
@@ -85,8 +85,7 @@ class Navbar extends Component {
               </Select>
             </FormControl>
             <Tab
-              component={Link}
-              to="/logout"
+              onClick={logout}
               label="Logout"
               href="#basic-tabs"
             />

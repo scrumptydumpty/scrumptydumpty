@@ -1,6 +1,6 @@
 const { knex } = require('./knex');
 
-const self = module.exports = {
+const self = (module.exports = {
   addTask: (title, description, sprint_id) =>
     knex("tasks")
       .insert({ title, description, sprint_id })
@@ -12,22 +12,24 @@ const self = module.exports = {
       .then(tasks => tasks[0]),
   // returns all tasks, adding the blockers each task has to the task object
 
-  getTasks: (sprint_id) =>
-    knex("tasks").where({sprint_id}).then(tasks => {
-      let pchain = Promise.resolve();
+  getTasks: sprint_id =>
+    knex("tasks")
+      .where({ sprint_id })
+      .then(tasks => {
+        let pchain = Promise.resolve();
 
-      // loop over each task, retrieve the blockers the task has,
-      // then add the array of blockers to the task
-      tasks.forEach(task => {
-        pchain = pchain.then(() =>
-          self.getBlockers(task.id).then(blockers => {
-            task.blockers = blockers;
-          })
-        );
-      });
+        // loop over each task, retrieve the blockers the task has,
+        // then add the array of blockers to the task
+        tasks.forEach(task => {
+          pchain = pchain.then(() =>
+            self.getBlockers(task.id).then(blockers => {
+              task.blockers = blockers;
+            })
+          );
+        });
 
-      return pchain.then(() => tasks);
-    }),
+        return pchain.then(() => tasks);
+      }),
 
   updateTask: ({
     id,
@@ -110,13 +112,13 @@ const self = module.exports = {
     return knex("users")
       .where("username", username)
       .select()
-      .then(arr => arr.length > 0);
+      .first();
   },
   userHasPassword: (username, password) =>
     knex("users")
       .where({ username, password })
       .select()
-      .then(arr => arr.length !== 0),
+      .first(),
 
   updateUser: (username, password) =>
     knex("users")
@@ -157,15 +159,88 @@ const self = module.exports = {
       .then(sprints => sprints[0]),
   // returns all tasks, adding the blockers each task has to the task object
 
-  getSprints: owner_id =>
-    knex("sprints").where({ owner_id }).then(sprints => sprints.map(sprint=>{return {id:sprint.id, title:sprint.title}})) ,
+  getSprints: user_id =>
+    knex("sprintusers")
+      .where({ user_id })
+      .then(results =>{
 
-  addUserToSprint: (user_id, sprint_id) =>{
-    return knex('sprintusers').insert({user_id,sprint_id})
-    .then(()=>{
+        let pChain = Promise.resolve()
+        const solution = [];
+        results.forEach(result=>{
 
-      return knex('sprints').where({id:sprint_id}).select().first();
+          pChain = pChain.then(()=>{
+            return knex('sprints').where({id:result.sprint_id}).select().first()
+            .then(({id,title})=>{solution.push({id,title})})
+          });
+
+
+        })
+
+        return pChain.then(()=>{console.log(solution); return solution})
+
+
+
+      })
+        
+      ,
+
+  addUserToSprint: (owner_id, username, sprint_id) => {
+    let user_id = null;
+    return knex("sprints")
+      .where({ owner_id, id: sprint_id })
+      .select()
+      .first()
+      .then(sprint => {
+        if (!sprint) {
+          throw "Invalid credentials to add user to a sprint";
+        }
+      })
+      .then(() => self.getUserByName(username))
+      .then( (user)=>{ 
+        if(!user){
+          throw ('No such user exists')
+        }
+        user_id = user.id;
+        return knex('sprintusers').where({user_id, sprint_id}).select().first()
+      })
+      .then( res=>{ 
+        if(res){
+          throw('User is already in the sprint!')
+        }
+      })
+      .then( () => knex("sprintusers").insert({ user_id, sprint_id }))
+      .then(() => {
+        return knex("sprints")
+          .where({ id: sprint_id })
+          .select()
+          .first();
+      });
+  },
+
+  getUsersInSprint : (sprint_id)=>
+  knex('sprintusers').where({sprint_id}).select().then((results)=>{
+    
+    let pChain = Promise.resolve();
+    let solution = []
+
+    results.forEach(result=>{
+      pChain = pChain.then(()=>{
+
+        return knex('users').where({id:result.user_id}).select().first().then(user=>{
+          solution.push(user.username);
+        })
+
+      })
+
+
+
     })
-  }
 
-}
+
+    return pChain.then( ()=>solution);
+
+
+
+
+  })
+});

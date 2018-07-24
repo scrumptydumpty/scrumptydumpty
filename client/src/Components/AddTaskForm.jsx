@@ -65,7 +65,7 @@ class AddTaskForm extends React.Component {
         <CardContent style={{ padding: '5px', textAlign: 'center' }}>
           <form onSubmit={this.onSubmit}>
             <div>
-              <TextField required id="title" label="Title" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
+              <TextField required id="title" label="Title" value={this.state.title} margin="normal" onChange={this.titleChange} />
               <TextField required id="description" label="Description" defaultValue={this.state.description} margin="normal" onChange={this.descriptionChange} />
             </div>
 

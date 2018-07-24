@@ -16,24 +16,34 @@ class App extends React.Component {
       user: null,
       sprint_id: false
     };
-
     this.updateUser = this.updateUser.bind(this);
+    this.logout = this.logout.bind(this);  
+  }
+
+  logout() {
+    api.logout()
+    .then(res=>{
+      if(res){
+        this.setState({user:null})
+      }
+    })
   }
 
   updateUser() {
-    api.verify().then(user => {
-      console.log("verify response", user);
-      if (user) {
-        this.setState({ user });
-      }
-    });
+    api.verify()
+      .then((user) => {
+        console.log('verify response', user);
+        if (user) {
+          this.setState({ user });
+        }
+      });
   }
 
   render() {
     return (
       <Router>
         <div style={{ fontFamily: "Roboto" }}>
-          <Navbar user={this.state.user} />
+          <Navbar user={this.state.user} logout={this.logout} />
           <hr style={{ marginBottom: "3.5em" }} />
           <Route exact path="/" render={() => <Home user={this.state.user}/>} />
           <Route

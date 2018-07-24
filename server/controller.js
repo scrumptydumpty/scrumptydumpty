@@ -16,6 +16,11 @@ const self = module.exports = {
     return db.updateTask(newVersion);
   },
 
+  getUsersInSprint : (sprint_id)=>{
+    if(!sprint_id) throw "no sprint id given"
+    return db.getUsersInSprint(sprint_id);
+  },
+
   addBlocker: ({ task_id, title, description }) => {
     if (!task_id) throw "No task_id";
     if (!title || title === "") throw "No Title";
@@ -82,30 +87,32 @@ const self = module.exports = {
     }
   },
 
-  addSprint: ( title, owner_id ) => {
+  addSprint: ( title, owner_id, username ) => {
     if (!title || title === "") throw "No Title";
     if (!owner_id ) throw "No owner_id";
 
     return db.addSprint(title, owner_id)
     .then(sprint=>{
+      console.log(sprint)
       const user_id = owner_id;
       const sprint_id = sprint.id;
-      return self.addUserToSprint(user_id, sprint_id)
+      return self.addUserToSprint({owner_id, username, sprint_id})
     });
   },
 
   // add user to a sprint, if successful returns the sprint
-  addUserToSprint: (user_id, sprint_id) => {
-    if(!user_id || user_id ==='') throw "No User Given";
-    if(!sprint_id) throw "no sprint id given"
+  addUserToSprint: ({ owner_id, username, sprint_id }) => {
+  if (!username || username === '') throw "No User Given";
+  if (!sprint_id) throw "no sprint id given";
+  if (!owner_id || owner_id === '') throw "no owner id given";
 
-    return db.addUserToSprint(user_id,sprint_id);
+  return db.addUserToSprint(owner_id,username,sprint_id);
 
 
   },
 
 
 
-  getSprints: ({owner_id}) => db.getSprints(owner_id),
+  getSprints: ({ user_id }) => db.getSprints(user_id),
 
 };
