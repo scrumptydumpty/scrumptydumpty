@@ -1,5 +1,4 @@
-const graphql = require('graphql');
-const { knex } = require('../database/knex')
+const { knex } = require('../../database/knex')
 const {
     GraphQLSchema,
     GraphQLObjectType,
@@ -55,16 +54,31 @@ const BlockerType = new GraphQLObjectType({
     })
 })
 
-//dummy data
-// var tasks = [
-//     {id: 1000, title: "This is a task", description: "This is a task description"},
-//     {id: 1001, title: "This is another task", description: "This is another task description"}
-// ];
+const UserType = new GraphQLObjectType({
+    name: 'User',
+    description: 'This is a user object',
 
-// var blockers = [
-//     {id: 1000, title: "This is a blocker", description: "This is a blocker description", task_id: 1000},
-//     {id: 1001, title: "This is another blocker", description: "This is another blocker description", task_id: 1001}
-// ];
+    fields: () => ({
+        id: {type: GraphQLID},
+        created_at: {type: GraphQLString},
+        updated_at: {type: GraphQLString},
+        username: {type: GraphQLString},
+        password: {type: GraphQLString},
+        owner_id: {type: GraphQLID}
+    })
+})
+
+const SprintType = new GraphQLObjectType({
+    name: 'Sprint',
+    description: 'This is a sprint object',
+
+    fields: () => ({
+        id: {type: GraphQLID},
+        created_at: {type: GraphQLString},
+        updated_at: {type: GraphQLString},
+        title: {type: GraphQLString}
+    })
+})
 
 //this is the root query. It is how a user enters the graph
 const RootQuery = new GraphQLObjectType({
@@ -72,22 +86,24 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         task: {
             type: TaskType,
-            args: {id: {type: GraphQLInt}},
+            args: {id: {type: GraphQLString}},
             resolve(parent, args) {
-                //code to get data from db/other source
-                // let result = {};
-                // tasks.forEach((val)=>{
-                //     if (val.id === args.id) {
-                //         result = val;
-                //     }
-                // })
-                // return result;
+                return knex("tasks").select().where('id', args.id).then((result)=>{return result[0]});
             }
         },
         tasks: {
             type: new GraphQLList(TaskType),
             resolve(parent, args) {
+                // return tasks
                 return knex("tasks").select();
+                
+            }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parent, args) {
+                //return users
+                return knex("users").select();
             }
         }
     }

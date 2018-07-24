@@ -9,6 +9,8 @@ const users = require('./routes/users');
 const login = require('./routes/login');
 const logout = require("./routes/logout");
 const sprints = require("./routes/sprints");
+const graphQLHTTP = require('express-graphql');
+const schema = require('./graphql/graphqlSchema');
 
 const port = process.env.PORT || 1337;
 
@@ -47,7 +49,13 @@ app.get('/verify', (req, res) => {
   }
 });
 
-
+//graphql
+app.use('/graphql', graphQLHTTP({
+  schema,
+  graphiql: true
+}))
+//uncomment to serve graphiql dev tool
+app.use(express.static(path.join(__dirname, './graphql')));
 // START SERVER
 
 
