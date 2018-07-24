@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom';
 import api from '../api';
 
-class UserHome extends React.Component {
+class AddSprint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,6 +38,7 @@ class UserHome extends React.Component {
       }
       this.setState({ status: 2 });
       this.updateSprintList();
+      this.props.history.push(`/sprint/${res.id}`);
     });
   }
 
@@ -92,7 +93,7 @@ Failed to Save!
             {interior}
           </div>
         </form>
-        {
+        {/* {
           this.state.sprintList.map((sprint, idx) => (
             <div key={idx}>
               <Link to={`/sprint/${sprint.id}`}>
@@ -100,10 +101,10 @@ Failed to Save!
               </Link>
             </div>
           ))
-        }
+        } */}
       </div>
     );
   }
 }
 
-export default UserHome;
+export default AddSprint;
