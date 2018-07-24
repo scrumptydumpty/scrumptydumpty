@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { knex } = require('../database/knex')
 const {
     GraphQLSchema,
     GraphQLObjectType,
@@ -55,37 +56,62 @@ const BlockerType = new GraphQLObjectType({
 })
 
 //dummy data
-var tasks = [
-    {id: 1000, title: "This is a task", description: "This is a task description"},
-    {id: 1001, title: "This is another task", description: "This is another task description"}
-];
+// var tasks = [
+//     {id: 1000, title: "This is a task", description: "This is a task description"},
+//     {id: 1001, title: "This is another task", description: "This is another task description"}
+// ];
 
-var blockers = [
-    {id: 1000, title: "This is a blocker", description: "This is a blocker description", task_id: 1000},
-    {id: 1001, title: "This is another blocker", description: "This is another blocker description", task_id: 1001}
-];
+// var blockers = [
+//     {id: 1000, title: "This is a blocker", description: "This is a blocker description", task_id: 1000},
+//     {id: 1001, title: "This is another blocker", description: "This is another blocker description", task_id: 1001}
+// ];
 
 //this is the root query. It is how a user enters the graph
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
-        tasks: {
+        task: {
             type: TaskType,
             args: {id: {type: GraphQLInt}},
             resolve(parent, args) {
                 //code to get data from db/other source
-                let result = {};
-                tasks.forEach((val)=>{
-                    if (val.id === args.id) {
-                        result = val;
-                    }
-                })
-                return result;
+                // let result = {};
+                // tasks.forEach((val)=>{
+                //     if (val.id === args.id) {
+                //         result = val;
+                //     }
+                // })
+                // return result;
+            }
+        },
+        tasks: {
+            type: new GraphQLList(TaskType),
+            resolve(parent, args) {
+                // return tasks;
+                return knex("tasks").select();
+                
             }
         }
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        addTask: {
+            type: TaskType,
+            args: {
+                title: {type: GraphQLString},
+                description: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                //add args to database
+            }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 });
