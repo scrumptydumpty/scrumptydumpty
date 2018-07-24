@@ -7,6 +7,9 @@ passport.use(
   new Strategy((username, password, done) => {
     controller.getUserByName(username)
       .then(user => {
+        if(!user){
+          return done("User does not exist", null);
+        }
         if (bcrypt.compareSync(password, user.password)) {
           return done(null, user);
         } else {
