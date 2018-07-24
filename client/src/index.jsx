@@ -10,13 +10,12 @@ import Navbar from './Components/Navbar.jsx';
 import Login from './Components/Login.jsx';
 import Register from './Components/Register.jsx';
 import Sprint from './Components/Sprint.jsx';
-import UserHome from './Components/UserHome.jsx'
+import UserHome from './Components/UserHome.jsx';
 import api from './api';
 
 
 const Home = () => (
-  <div>
-  </div>
+  <div />
 );
 
 
@@ -68,22 +67,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       user: null,
-       sprint_id: false};
+      user: null,
+      sprint_id: false,
+    };
 
     this.updateUser = this.updateUser.bind(this);
     this.logout = this.logout.bind(this);
-    
   }
 
   logout() {
     api.logout()
-    .then(res=>{
-      if(res){
-        this.setState({user:null})
-      }
-    })
-
+      .then((res) => {
+        if (res) {
+          this.setState({ user: null });
+        }
+      });
   }
 
 
@@ -98,24 +96,28 @@ class App extends React.Component {
   }
 
   render() {
-  
+    const user = this.state.user;
 
-    let main = (<div>Login yo, then pick a sprint</div>)
+    let main = (
+      <div>
+Login yo, then pick a sprint
+      </div>
+    );
 
-    if(this.state.user){
+    if (this.state.user) {
       // main = <Sprint updateUser={this.updateUser} sprint_id={this.state.sprint_id} />
-      main = <UserHome />
+      main = <UserHome />;
     }
     return (
       <Router>
         <div>
           <Navbar user={this.state.user} logout={this.logout} />
-          <hr style={{marginBottom: '3.5em'}} />
-            {main}
+          <hr style={{ marginBottom: '3.5em' }} />
+          {main}
           <Route exact path="/" component={Home} />
           <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
           <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />
-           <Route path="/sprint/:id" component={Sprint} />
+          <Route path="/sprint/:id" render={routeprops => <Sprint user={user} {...routeprops} />} />
         </div>
       </Router>
     );
