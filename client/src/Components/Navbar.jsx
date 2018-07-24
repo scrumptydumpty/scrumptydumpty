@@ -38,6 +38,7 @@ class Navbar extends Component {
 
   render() {
     const { user, logout } = this.props;
+
     return (
       <AppBar color="default">
         {user === null ? (
@@ -57,7 +58,7 @@ class Navbar extends Component {
             <FormControl>
               <InputLabel htmlFor="age-simple">
 Sprints
-                            </InputLabel>
+              </InputLabel>
               <Select
                 value={this.state.sprint}
                 onChange={this.handleChange}

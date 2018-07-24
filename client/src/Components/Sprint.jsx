@@ -16,7 +16,6 @@ class Sprint extends React.Component {
     };
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.closeEdits = this.closeEdits.bind(this);
     this.reload = this.reload.bind(this);
   }
 

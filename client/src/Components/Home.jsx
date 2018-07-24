@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Home = ({ user }) => {
   const splashStyle = {
@@ -10,17 +11,15 @@ const Home = ({ user }) => {
   };
   if (user) {
     return (
-      <div style={splashStyle}>
+<div style={splashStyle}>
         Welcome,
-        <span style={{ color: 'grey' }}>
-          {' '}
-          {user.username}
-        </span>
-.
+        <span style={{ color: "grey" }}> {user.username}</span>
+        .
         <br />
-        Select a sprint from the dropdown to get started.
+        <Link to="/addsprint">Create a new sprint</Link>
+        , or view a sprint from the dropdown at the top of the screen.
       </div>
-    );
+);
   }
   return (
     <div style={splashStyle}>
