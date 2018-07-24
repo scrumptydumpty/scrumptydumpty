@@ -185,6 +185,7 @@ const self = (module.exports = {
       ,
 
   addUserToSprint: (owner_id, username, sprint_id) => {
+    let user_id = null;
     return knex("sprints")
       .where({ owner_id, id: sprint_id })
       .select()
@@ -195,7 +196,19 @@ const self = (module.exports = {
         }
       })
       .then(() => self.getUserByName(username))
-      .then(user => knex("sprintusers").insert({ user_id: user.id, sprint_id }))
+      .then( (user)=>{ 
+        if(!user){
+          throw ('No such user exists')
+        }
+        user_id = user.id;
+        return knex('sprintusers').where({user_id, sprint_id}).select().first()
+      })
+      .then( res=>{ 
+        if(res){
+          throw('User is already in the sprint!')
+        }
+      })
+      .then( () => knex("sprintusers").insert({ user_id, sprint_id }))
       .then(() => {
         return knex("sprints")
           .where({ id: sprint_id })
