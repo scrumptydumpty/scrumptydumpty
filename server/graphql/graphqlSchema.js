@@ -76,7 +76,8 @@ const SprintType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        title: {type: GraphQLString}
+        title: {type: GraphQLString},
+        owner_id: {type: GraphQLInt}
     })
 })
 
@@ -142,8 +143,26 @@ const RootQuery = new GraphQLObjectType({
         },
         sprints: {
             type: new GraphQLList(SprintType),
+            args: {owner_id: {type: GraphQLString}},
             resolve(parent, args) {
+                if (args.owner_id) {
+                    return knex("sprints")
+                        .select()
+                        .where({"owner_id": args.owner_id});
+                }
                 return knex("sprints").select();
+            }
+        },
+        blockers: {
+            type: new GraphQLList(BlockerType),
+            args: {task_id: {type: GraphQLInt}},
+            resolve(parent, args) {
+                if(args.task_id) {
+                    return knex("blockers")
+                        .select()
+                        .where({"task_id": args.task_id});
+                }
+                return knex("blockers").select();
             }
         }
     }
