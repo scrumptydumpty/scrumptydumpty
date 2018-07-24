@@ -88,15 +88,23 @@ const RootQuery = new GraphQLObjectType({
             type: TaskType,
             args: {id: {type: GraphQLString}},
             resolve(parent, args) {
-                return knex("tasks").select().where('id', args.id).then((result)=>{return result[0]});
+                if (args.spring_id)
+                return knex("tasks").select()
+                    .where({'id': args.id})
+                    .then((result)=>{return result[0]});
             }
         },
         tasks: {
             type: new GraphQLList(TaskType),
+            args: {sprint_id: {type: GraphQLString}},
             resolve(parent, args) {
                 // return tasks
+                if (args.sprint_id) {
+                    return knex("tasks")
+                        .select()
+                        .where({"sprint_id": args.sprint_id});
+                }
                 return knex("tasks").select();
-                
             }
         },
         users: {
