@@ -35,19 +35,20 @@ router.post('/', (req, res) => {
     });
 });
 
-router.get('/', (req, res) => {
-  console.log('fetching users');
-  controller
-    .getUsers()
-    .then((result) => {
-      console.log('success');
-      return res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send(false);
-    });
-});
+// NOT NEEDED
+// router.get('/', (req, res) => {
+//   console.log('fetching users');
+//   controller
+//     .getUsers()
+//     .then((result) => {
+//       console.log('success');
+//       return res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       return res.send(false);
+//     });
+// });
 
 router.put('/', (req, res) => {
   console.log('updating user');
