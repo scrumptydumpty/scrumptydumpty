@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/', (req, res) => {
   console.log('adding task');
-  console.log(req.body,'body of add request')
+  console.log(req.body, 'body of add request');
   controller.addTask(req.body)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
@@ -14,14 +14,14 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   console.log('fetching tasks');
-  console.log(req.query)
+  console.log(req.query);
   controller
     .getTasks(req.query.sprint_id)
-    .then(result => {
-      console.log("success");
+    .then((result) => {
+      console.log('success');
       return res.send(result);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       return res.send(false);
     });

@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
-import { StatusCode, PRIORITY_COLOR } from '../../../lib/shared';
+import { PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
 
 
@@ -16,18 +16,17 @@ const TaskInfo = ({ task, reload }) => (
         <Blockers reload={reload} blockers={task.blockers} />
       </div>
     </CardContent>
-
   </div>
 );
 
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { shadow: 1, editing: false  };
+    this.state = { shadow: 1, editing: false };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
-  
+
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -36,17 +35,14 @@ class Task extends React.Component {
   }
 
   onMouseOver(e) {
-  
     this.setState({ shadow: 3 });
   }
 
   onMouseOut(e) {
-
     this.setState({ shadow: 1 });
   }
 
   handleDoubleClick(e) {
-    console.log(this.state)
     this.setState({ editing: !this.state.editing }, () => this.props.reload());
   }
 
@@ -70,7 +66,7 @@ class Task extends React.Component {
       return (
         <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm sprint_id={this.props.sprint_id}  reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
+            <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
           </Card>
         </div>
       );

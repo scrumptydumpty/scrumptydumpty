@@ -1,12 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
+import { Link } from 'react-router-dom';
 import api from '../api';
-import { Link } from "react-router-dom";
 
-class UserHome extends React.Component {
+class AddSprint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,25 +14,22 @@ class UserHome extends React.Component {
     };
 
     this.titleChange = this.titleChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this); 
+    this.onSubmit = this.onSubmit.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
     this.updateSprintList();
   }
 
-  
-updateSprintList(){
 
-  api.getSprints()
-    .then(sprintList => {
-     
-      this.setState({sprintList})
-    })
-
-}
+  updateSprintList() {
+    api.getSprints()
+      .then((sprintList) => {
+        this.setState({ sprintList });
+      });
+  }
 
   onSubmit(e) {
     e.preventDefault();
-    const title = this.state.title
+    const title = this.state.title;
     const description = 'In sprint add form form';
     this.setState({ status: 1 });
     api.addSprint(title).then((res) => {
@@ -43,6 +38,7 @@ updateSprintList(){
       }
       this.setState({ status: 2 });
       this.updateSprintList();
+      this.props.history.push(`/sprint/${res.id}`);
     });
   }
 
@@ -52,9 +48,6 @@ updateSprintList(){
   }
 
   render() {
-
-    
-
     let interior = (
       <div>
         <TextField required id="title" label="Sprint" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
@@ -64,7 +57,7 @@ updateSprintList(){
 
       </div>
     );
-    
+
     if (this.state.status === 1) {
       interior = (
         <div>
@@ -100,13 +93,18 @@ Failed to Save!
             {interior}
           </div>
         </form>
-        {
-          this.state.sprintList.map((sprint, idx) => <div key={idx}><Link to={`/sprint/${sprint.id}`}>{sprint.title}</Link></div>
-        )
-        }
+        {/* {
+          this.state.sprintList.map((sprint, idx) => (
+            <div key={idx}>
+              <Link to={`/sprint/${sprint.id}`}>
+                {sprint.title}
+              </Link>
+            </div>
+          ))
+        } */}
       </div>
     );
   }
 }
 
-export default UserHome;
+export default AddSprint;

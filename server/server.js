@@ -7,11 +7,10 @@ const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
 const users = require('./routes/users');
 const login = require('./routes/login');
-const logout = require("./routes/logout");
-const sprints = require("./routes/sprints");
+const sprints = require('./routes/sprints');
 const graphQLHTTP = require('express-graphql');
 const schema = require('./graphql/graphqlSchema');
-
+const logout = require('./routes/logout');
 const port = process.env.PORT || 1337;
 
 
@@ -29,7 +28,7 @@ app.use('/blockers', blockers);
 app.use('/users', users);
 app.use('/login', login);
 
-app.use("/sprints", sprints);
+app.use('/sprints', sprints);
 app.use('/logout', logout);
 
 
@@ -42,7 +41,7 @@ app.get('/test', (req, res) => {
 app.get('/verify', (req, res) => {
   if (req.user) {
     console.log('user is verified');
-    res.send({id:req.user.id, username:req.user.username});
+    res.send({ id: req.user.id, username: req.user.username });
   } else {
     console.log('user is not verified');
     res.send(false);

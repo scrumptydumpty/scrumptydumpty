@@ -13,14 +13,13 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
     this.history = props.history;
-
   }
 
   handleSubmit(e) {
     e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
-    console.log('logging in with', username, password);
+
     api.login(username, password)
       .then((res) => {
         if (!res) {
