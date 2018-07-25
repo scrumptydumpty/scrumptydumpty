@@ -68,12 +68,14 @@ const UserType = new GraphQLObjectType({
                     .where({"owner_id": parent.id})
             }
         },
-        // sprintsICanUse: {
-        //     type: new GraphQLList(SprintType),
-        //     resolve(parent, args) {
-        //         return knex("")
-        //     }
-        // }
+        sprints: {
+            type: new GraphQLList(SprintUsersType),
+            resolve(parent, args) {
+                return knex("sprintusers")
+                    .select()
+                    .where({"user_id": parent.id})
+            }
+        }
     })
 })
 
@@ -112,7 +114,18 @@ const SprintUsersType = new GraphQLObjectType({
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
         user_id: {type: GraphQLInt},
-        sprint_id: {type: GraphQLInt}
+        sprint_id: {type: GraphQLInt},
+        sprint: {
+            type: SprintType,
+            resolve(parent, args) {
+                return knex("sprints")
+                    .select()
+                    .where({"id": parent.sprint_id})
+                    .then((result)=> {
+                        return result[0];
+                    })
+            }
+        }
     })
 })
 
