@@ -55,7 +55,7 @@ app.use('/graphql', graphQLHTTP({
   graphiql: true
 }))
 //uncomment to serve graphiql dev tool
-app.use(express.static(path.join(__dirname, './graphql')));
+//app.use(express.static(path.join(__dirname, './graphql')));
 // START SERVER
 
 
