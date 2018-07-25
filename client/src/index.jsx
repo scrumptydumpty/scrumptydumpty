@@ -20,6 +20,10 @@ class App extends React.Component {
     this.logout = this.logout.bind(this);  
   }
 
+  componentDidMount() {
+    this.updateUser();
+  }
+
   logout() {
     api.logout()
     .then(res=>{
