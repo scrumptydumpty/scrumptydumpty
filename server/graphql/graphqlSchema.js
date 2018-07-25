@@ -7,6 +7,8 @@ const {
     GraphQLList,
     GraphQLID
 } = require('graphql');
+const controller = require('../controller');
+const bcrypt = require('bcrypt');
 
 const TaskType = new GraphQLObjectType({
     name : 'Task',
@@ -143,9 +145,8 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         task: {
             type: TaskType,
-            args: {id: {type: GraphQLString}},
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
-                if (args.spring_id)
                 return knex("tasks").select()
                     .where({'id': args.id})
                     .then((result)=>{return result[0]});
@@ -201,14 +202,53 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
+        // addUser: {
+        //     type: UserType,
+        //     args: {
+        //         username: {type: GraphQLString},
+        //         password: {type: GraphQLString}
+        //     },
+        //     resolve(parent, args) {
+        //         //add args to database
+        //         bcrypt.hash(args.password, 10)
+        //             .then((hash) => {
+        //                 controller.addUser({username: parent.username, password: hash})
+        //                     .then((result) => {
+        //                         passport.authenticate
+        //                     })
+        //             })
+        //     }
+        // }
         addTask: {
             type: TaskType,
             args: {
+                id: {type: GraphQLID},
                 title: {type: GraphQLString},
-                description: {type: GraphQLString}
+                description: {type: GraphQLString},
+                sprint_id: {type: GraphQLID}
             },
             resolve(parent, args) {
-                //add args to database
+                return controller.addTask({
+                    title: args.title,
+                    description: args.description,
+                    sprint_id: args.sprint_id
+                })
+            }
+        },
+        addBlocker: {
+            type: BlockerType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                description: {type: GraphQLString},
+                task_id: {type: GraphQLID}
+            },
+            resolve(parent, args) {
+                return controller.addBlocker({
+                    title: args.title,
+                    description: args.description,
+                    task_id: args.task_id
+                })
             }
         }
     }
