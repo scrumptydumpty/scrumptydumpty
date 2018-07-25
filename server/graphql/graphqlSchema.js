@@ -250,6 +250,18 @@ const Mutation = new GraphQLObjectType({
                     task_id: args.task_id
                 })
             }
+        },
+        addSprint: {
+            type: SprintType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                owner_id: {type: GraphQLID},
+                username: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                return controller.addSprint( args.title, args.owner_id, args.username);
+            }
         }
     }
 })
