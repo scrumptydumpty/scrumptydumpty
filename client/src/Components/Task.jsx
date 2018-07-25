@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
@@ -7,21 +6,14 @@ import { StatusCode, PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
 
 
-const TaskInfo = ({ task }) => (
+const TaskInfo = ({ task, reload }) => (
   <div>
     <CardContent style={{ padding: '5px', textAlign: 'center' }}>
       <div>
         {task.title}
       </div>
       <div>
-Status:
-        {' '}
-        {Object.keys(StatusCode).find(x => StatusCode[x] === task.status_code)}
-      </div>
-      <div>
-Blockers:
-        {' '}
-        <Blockers blockers={task.blockers} />
+        <Blockers reload={reload} blockers={task.blockers} />
       </div>
     </CardContent>
 
@@ -31,43 +23,36 @@ Blockers:
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { task: props.task, shadow: 1, editing: false };
+    this.state = { shadow: 1, editing: false  };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
-    this.reload = props.reload;
+  
     this.closeTask = this.closeTask.bind(this);
   }
 
   closeTask() {
-    this.setState({ editing: false })
-  }
-
-  componentWillReceiveProps({ task }) {
-    this.setState({ task });
+    this.setState({ editing: false });
   }
 
   onMouseOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  
     this.setState({ shadow: 3 });
   }
 
   onMouseOut(e) {
-    e.preventDefault();
-    e.stopPropagation();
+
     this.setState({ shadow: 1 });
   }
 
   handleDoubleClick(e) {
-   
-      this.setState({ editing: !this.state.editing});
-    
+    console.log(this.state)
+    this.setState({ editing: !this.state.editing }, () => this.props.reload());
   }
 
 
   render() {
-    const { task } = this.state;
+    const { task } = this.props;
     const borderColor = PRIORITY_COLOR[task.priority_code];
 
     const style = {
@@ -82,11 +67,13 @@ class Task extends React.Component {
     }
 
     if (this.state.editing) {
-      return <div>
+      return (
+        <div>
           <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm reload={this.reload} closeTask={this.closeTask} task={this.state.task} />
+            <EditTaskForm sprint_id={this.props.sprint_id}  reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
           </Card>
-        </div>;
+        </div>
+      );
     }
 
     return (
@@ -97,7 +84,7 @@ class Task extends React.Component {
           onDoubleClick={this.handleDoubleClick}
           style={style}
         >
-          <TaskInfo task={this.state.task} />
+          <TaskInfo task={this.props.task} reload={this.props.reload} />
         </Card>
       </div>
     );
