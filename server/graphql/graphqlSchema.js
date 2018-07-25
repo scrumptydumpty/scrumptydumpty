@@ -88,7 +88,15 @@ const SprintType = new GraphQLObjectType({
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
-        owner_id: {type: GraphQLInt}
+        owner_id: {type: GraphQLInt},
+        tasks: {
+            type: new GraphQLList(TaskType),
+            resolve(parent, args) {
+                return knex("tasks")
+                    .select()
+                    .where({"sprint_id": parent.id})
+            }
+        }
     })
 })
 
