@@ -7,6 +7,8 @@ const {
     GraphQLList,
     GraphQLID
 } = require('graphql');
+const controller = require('../controller');
+const bcrypt = require('bcrypt');
 
 const TaskType = new GraphQLObjectType({
     name : 'Task',
@@ -16,10 +18,10 @@ const TaskType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        sprint_id: {type: GraphQLInt},
+        sprint_id: {type: GraphQLID},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        user_id: {type: GraphQLInt},
+        user_id: {type: GraphQLID},
         status_code: {type: GraphQLInt},
         eta: {type: GraphQLString},
         priority_code: {type: GraphQLInt},
@@ -45,7 +47,7 @@ const BlockerType = new GraphQLObjectType({
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        task_id: {type: GraphQLInt},
+        task_id: {type: GraphQLID},
         status_code: {type: GraphQLInt}
     })
 })
@@ -88,7 +90,15 @@ const SprintType = new GraphQLObjectType({
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
-        owner_id: {type: GraphQLInt}
+        owner_id: {type: GraphQLID},
+        tasks: {
+            type: new GraphQLList(TaskType),
+            resolve(parent, args) {
+                return knex("tasks")
+                    .select()
+                    .where({"sprint_id": parent.id})
+            }
+        }
     })
 })
 
@@ -100,8 +110,8 @@ const SprintTasksType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        task_id: {type: GraphQLInt},
-        sprint_id: {type: GraphQLInt}
+        task_id: {type: GraphQLID},
+        sprint_id: {type: GraphQLID}
     })
 })
 
@@ -113,8 +123,8 @@ const SprintUsersType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        user_id: {type: GraphQLInt},
-        sprint_id: {type: GraphQLInt},
+        user_id: {type: GraphQLID},
+        sprint_id: {type: GraphQLID},
         sprint: {
             type: SprintType,
             resolve(parent, args) {
@@ -135,9 +145,8 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         task: {
             type: TaskType,
-            args: {id: {type: GraphQLString}},
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
-                if (args.spring_id)
                 return knex("tasks").select()
                     .where({'id': args.id})
                     .then((result)=>{return result[0]});
@@ -145,7 +154,7 @@ const RootQuery = new GraphQLObjectType({
         },
         tasks: {
             type: new GraphQLList(TaskType),
-            args: {sprint_id: {type: GraphQLString}},
+            args: {sprint_id: {type: GraphQLID}},
             resolve(parent, args) {
                 // return tasks
                 if (args.sprint_id) {
@@ -165,7 +174,7 @@ const RootQuery = new GraphQLObjectType({
         },
         sprints: {
             type: new GraphQLList(SprintType),
-            args: {owner_id: {type: GraphQLString}},
+            args: {owner_id: {type: GraphQLID}},
             resolve(parent, args) {
                 if (args.owner_id) {
                     return knex("sprints")
@@ -177,7 +186,7 @@ const RootQuery = new GraphQLObjectType({
         },
         blockers: {
             type: new GraphQLList(BlockerType),
-            args: {task_id: {type: GraphQLInt}},
+            args: {task_id: {type: GraphQLID}},
             resolve(parent, args) {
                 if(args.task_id) {
                     return knex("blockers")
@@ -193,14 +202,94 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
+        // addUser: {
+        //     type: UserType,
+        //     args: {
+        //         username: {type: GraphQLString},
+        //         password: {type: GraphQLString}
+        //     },
+        //     resolve(parent, args) {
+        //         //add args to database
+        //         bcrypt.hash(args.password, 10)
+        //             .then((hash) => {
+        //                 controller.addUser({username: parent.username, password: hash})
+        //                     .then((result) => {
+        //                         passport.authenticate
+        //                     })
+        //             })
+        //     }
+        // }
         addTask: {
             type: TaskType,
             args: {
+                id: {type: GraphQLID},
                 title: {type: GraphQLString},
-                description: {type: GraphQLString}
+                description: {type: GraphQLString},
+                sprint_id: {type: GraphQLID}
             },
             resolve(parent, args) {
-                //add args to database
+                return controller.addTask({
+                    title: args.title,
+                    description: args.description,
+                    sprint_id: args.sprint_id
+                })
+            }
+        },
+        updateTask: {
+            type: TaskType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                description: {type: GraphQLString},
+                user_id: {type: GraphQLID},
+                status_code: {type: GraphQLInt},
+                eta: {type: GraphQLString},
+                priority_code: {type: GraphQLInt},
+                difficulty: {type: GraphQLInt}
+            },
+            resolve(parent, args) {
+                return controller.updateTask(args);
+            }
+        },
+        addBlocker: {
+            type: BlockerType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                description: {type: GraphQLString},
+                task_id: {type: GraphQLID}
+            },
+            resolve(parent, args) {
+                return controller.addBlocker({
+                    title: args.title,
+                    description: args.description,
+                    task_id: args.task_id
+                })
+            }
+        },
+        updateBlocker: {
+            type: BlockerType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                description: {type: GraphQLString},
+                task_id: {type: GraphQLID},
+                status_code: {type: GraphQLInt}
+            },
+            resolve(parent, args){
+                return controller.updateBlocker(args);
+            }
+        },
+        addSprint: {
+            type: SprintType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                owner_id: {type: GraphQLID},
+                username: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                return controller.addSprint( args.title, args.owner_id, args.username);
             }
         }
     }

@@ -36,6 +36,10 @@ class Navbar extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  handleGraphiQL() {
+
+  }
+
   render() {
     const { user, logout } = this.props;
 
@@ -51,6 +55,7 @@ class Navbar extends Component {
               label="Login"
               href="#basic-tabs"
             />
+            <Tab to="/graphql" label="GraphiQL" href="/graphql"/>
           </Tabs>
         ) : (
           <Tabs>
