@@ -1,23 +1,25 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import api from '../api';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import api from "../api";
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       sprintList: [],
-      sprint: '',
+      sprint: "",
+      anchorEl: null
     };
     this.updateSprintList = this.updateSprintList.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -27,7 +29,7 @@ class Navbar extends Component {
   }
 
   updateSprintList() {
-    api.getSprints().then((sprintList) => {
+    api.getSprints().then(sprintList => {
       this.setState({ sprintList });
     });
   }
@@ -36,39 +38,76 @@ class Navbar extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  handleClick(event) {
+    this.setState({ anchorEl: event.currentTarget });
+  }
+
+  handleClose() {
+    this.setState({ anchorEl: null });
+  }
+
   render() {
     const { user, logout } = this.props;
-
+    const { anchorEl } = this.state;
     return (
-      <AppBar color="default">
-        {user === null ? (
-          <Tabs>
-            <Tab component={Link} textColor="primary" label="Scrumpty" to="/" />
-            <Tab component={Link} to="/register" label="Register" />
-            <Tab
-              component={Link}
-              to="/login"
-              label="Login"
-              href="#basic-tabs"
-            />
-          </Tabs>
-        ) : (
-          <Tabs>
-            <Tab component={Link} textColor="primary" label="Scrumpty" to="/" />
-            <FormControl>
-              <InputLabel htmlFor="age-simple">
-Sprints
-              </InputLabel>
-              <Select
-                value={this.state.sprint}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: 'sprint',
-                  id: 'sprint-select',
-                }}
+      <AppBar>
+        <Toolbar>
+          <Typography
+            variant="title"
+            color="inherit"
+            style={{
+              marginLeft: 0,
+              marginRight: 30
+            }}
+            component={Link}
+            to={"/"}
+          >
+            Scrumpty.
+          </Typography>
+          {user === null ? (
+            <div>
+              <Button
+                color="inherit"
+                aria-owns={anchorEl ? "simple-menu" : null}
+                aria-haspopup="true"
+                component={Link}
+                label="login"
+                to={"/login"}
               >
-                {this.state.sprintList.map(sprint => (
+                Log In
+              </Button>
+              <Button
+                color="inherit"
+                aria-owns={anchorEl ? "simple-menu" : null}
+                aria-haspopup="true"
+                component={Link}
+                label="register"
+                to={"/register"}
+              >
+                Sign Up
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button
+                color="inherit"
+                aria-owns={anchorEl ? "simple-menu" : null}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+                label="sprints"
+              >
+                Your Sprints
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={this.handleClose}
+              >
+                {this.state.sprintList && this.state.sprintList.map(sprint => (
                   <MenuItem
+                    key={sprint.id}
+                    onClick={this.handleClose}
                     value={sprint.id}
                     component={Link}
                     label={sprint.title}
@@ -77,16 +116,19 @@ Sprints
                     {sprint.title}
                   </MenuItem>
                 ))}
-
-              </Select>
-            </FormControl>
-            <Tab
-              onClick={logout}
-              label="Logout"
-              href="#basic-tabs"
-            />
-          </Tabs>
-        )}
+              </Menu>
+              <Button
+                color="inherit"
+                aria-owns={anchorEl ? "simple-menu" : null}
+                aria-haspopup="true"
+                onClick={logout}
+                label="logout"
+              >
+                Log Out
+              </Button>
+            </div>
+          )}
+        </Toolbar>
       </AppBar>
     );
   }
