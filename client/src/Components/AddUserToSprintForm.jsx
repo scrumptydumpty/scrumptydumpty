@@ -128,9 +128,11 @@ class AddUserToSprintForm extends React.Component {
             {this.state.users.map((user, i) => (
               <div key={i}>
                 {`${user.username}  `}
-                <button onClick={() => this.deleteUser(user.id)}>
-                  X
-                </button>
+                {user.id !== this.props.user.id && 
+                  <button onClick={() => this.deleteUser(user.id)}>
+                    X
+                  </button>
+                }
               </div>
             ))}
           </div>
