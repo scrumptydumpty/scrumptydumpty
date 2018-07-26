@@ -47,7 +47,6 @@ class AddTaskButton extends React.Component {
       borderRadius: '10px',
       margin: '10px',
 
-
     };
     if (this.state.shadow === 3) {
       style.boxShadow = '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)';
@@ -66,7 +65,7 @@ class AddTaskButton extends React.Component {
     return (
       <div>
         <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.handleClick} style={style}>
-          <Button variant="fab" aria-label="Add">
+          <Button variant="fab" aria-label="Add" style={{borderRadius: '0'}}>
             <AddIcon />
           </Button>
         </Card>
