@@ -267,6 +267,19 @@ const Mutation = new GraphQLObjectType({
                 })
             }
         },
+        updateBlocker: {
+            type: BlockerType,
+            args: {
+                id: {type: GraphQLID},
+                title: {type: GraphQLString},
+                description: {type: GraphQLString},
+                task_id: {type: GraphQLID},
+                status_code: {type: GraphQLInt}
+            },
+            resolve(parent, args){
+                return controller.updateBlocker(args);
+            }
+        },
         addSprint: {
             type: SprintType,
             args: {
