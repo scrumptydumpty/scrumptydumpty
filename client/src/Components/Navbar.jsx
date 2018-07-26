@@ -51,6 +51,7 @@ class Navbar extends Component {
               label="Login"
               href="#basic-tabs"
             />
+            <Tab component={Link} to="/graphql" label="GraphiQL"/>
           </Tabs>
         ) : (
           <Tabs>
