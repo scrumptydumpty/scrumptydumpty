@@ -18,10 +18,10 @@ const TaskType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        sprint_id: {type: GraphQLInt},
+        sprint_id: {type: GraphQLID},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        user_id: {type: GraphQLInt},
+        user_id: {type: GraphQLID},
         status_code: {type: GraphQLInt},
         eta: {type: GraphQLString},
         priority_code: {type: GraphQLInt},
@@ -47,7 +47,7 @@ const BlockerType = new GraphQLObjectType({
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        task_id: {type: GraphQLInt},
+        task_id: {type: GraphQLID},
         status_code: {type: GraphQLInt}
     })
 })
@@ -90,7 +90,7 @@ const SprintType = new GraphQLObjectType({
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
         title: {type: GraphQLString},
-        owner_id: {type: GraphQLInt},
+        owner_id: {type: GraphQLID},
         tasks: {
             type: new GraphQLList(TaskType),
             resolve(parent, args) {
@@ -110,8 +110,8 @@ const SprintTasksType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        task_id: {type: GraphQLInt},
-        sprint_id: {type: GraphQLInt}
+        task_id: {type: GraphQLID},
+        sprint_id: {type: GraphQLID}
     })
 })
 
@@ -123,8 +123,8 @@ const SprintUsersType = new GraphQLObjectType({
         id: {type: GraphQLID},
         created_at: {type: GraphQLString},
         updated_at: {type: GraphQLString},
-        user_id: {type: GraphQLInt},
-        sprint_id: {type: GraphQLInt},
+        user_id: {type: GraphQLID},
+        sprint_id: {type: GraphQLID},
         sprint: {
             type: SprintType,
             resolve(parent, args) {
@@ -154,7 +154,7 @@ const RootQuery = new GraphQLObjectType({
         },
         tasks: {
             type: new GraphQLList(TaskType),
-            args: {sprint_id: {type: GraphQLString}},
+            args: {sprint_id: {type: GraphQLID}},
             resolve(parent, args) {
                 // return tasks
                 if (args.sprint_id) {
@@ -174,7 +174,7 @@ const RootQuery = new GraphQLObjectType({
         },
         sprints: {
             type: new GraphQLList(SprintType),
-            args: {owner_id: {type: GraphQLString}},
+            args: {owner_id: {type: GraphQLID}},
             resolve(parent, args) {
                 if (args.owner_id) {
                     return knex("sprints")
@@ -186,7 +186,7 @@ const RootQuery = new GraphQLObjectType({
         },
         blockers: {
             type: new GraphQLList(BlockerType),
-            args: {task_id: {type: GraphQLInt}},
+            args: {task_id: {type: GraphQLID}},
             resolve(parent, args) {
                 if(args.task_id) {
                     return knex("blockers")
