@@ -72,20 +72,25 @@ class Sprint extends React.Component {
 
     let ownerMenu = <div />;
     if (this.state.isOwner) {
-      ownerMenu = <AddUserToSprintForm sprint_id={this.state.sprint_id} />;
+      ownerMenu = <AddUserToSprintForm user={this.props.user} isOwner={this.state.isOwner} sprint_id={this.state.sprint_id} />;
     }
 
     const addButtonStyle = {
       margin: 'auto',
       backgroundColor: 'white',
     };
+
+    const taskIndicatorStyle = {
+      textAlign: 'center',
+      display: 'block'
+    }
     // console.log(notStarted,inProgress,complete)
     return (
-      <div onClick={this.closeEdits}>
+      <div style={{maxWidth: '90%', margin: '5em auto'}}onClick={this.closeEdits}>
         <Paper>
           <Grid container spacing={24} justify="center">
             <Grid item xs={4}>
-              <strong>
+              <strong style={taskIndicatorStyle}>
 Todo
               </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={notStarted} />
@@ -94,13 +99,13 @@ Todo
               </Grid>
             </Grid>
             <Grid item xs={4}>
-              <strong>
+              <strong style={taskIndicatorStyle}>
 In Progress
               </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={inProgress} />
             </Grid>
             <Grid item xs={4}>
-              <strong>
+              <strong style={taskIndicatorStyle}>
 Completed
               </strong>
               <Tasks sprint_id={this.state.sprint_id} reload={this.reload} tasks={complete} />
