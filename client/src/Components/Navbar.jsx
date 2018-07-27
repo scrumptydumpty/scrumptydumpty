@@ -45,6 +45,9 @@ class Navbar extends Component {
   handleClose() {
     this.setState({ anchorEl: null });
   }
+        
+  handleGraphiQL() {
+  }
 
   render() {
     const { user, logout } = this.props;
@@ -117,6 +120,16 @@ class Navbar extends Component {
                   </MenuItem>
                 ))}
               </Menu>
+              <Button
+                color="inherit"
+                aria-owns={anchorEl ? "simple-menu" : null}
+                aria-haspopup="true"
+                component={Link}
+                label="graphql"
+                to={"/graphql"}
+              >
+                GraphQL
+              </Button>
               <Button
                 color="inherit"
                 aria-owns={anchorEl ? "simple-menu" : null}
