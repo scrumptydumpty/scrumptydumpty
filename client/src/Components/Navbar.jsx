@@ -45,9 +45,8 @@ class Navbar extends Component {
   handleClose() {
     this.setState({ anchorEl: null });
   }
-        
-  handleGraphiQL() {
-  }
+
+  handleGraphiQL() {}
 
   render() {
     const { user, logout } = this.props;
@@ -107,18 +106,19 @@ class Navbar extends Component {
                 open={Boolean(anchorEl)}
                 onClose={this.handleClose}
               >
-                {this.state.sprintList && this.state.sprintList.map(sprint => (
-                  <MenuItem
-                    key={sprint.id}
-                    onClick={this.handleClose}
-                    value={sprint.id}
-                    component={Link}
-                    label={sprint.title}
-                    to={`/sprint/${sprint.id}`}
-                  >
-                    {sprint.title}
-                  </MenuItem>
-                ))}
+                {this.state.sprintList &&
+                  this.state.sprintList.map(sprint => (
+                    <MenuItem
+                      key={sprint.id}
+                      onClick={this.handleClose}
+                      value={sprint.id}
+                      component={Link}
+                      label={sprint.title}
+                      to={`/sprint/${sprint.id}`}
+                    >
+                      {sprint.title}
+                    </MenuItem>
+                  ))}
               </Menu>
               <Button
                 color="inherit"
@@ -134,7 +134,8 @@ class Navbar extends Component {
                 color="inherit"
                 aria-owns={anchorEl ? "simple-menu" : null}
                 aria-haspopup="true"
-                onClick={logout}
+                component={Link}
+                to={"/logout"}
                 label="logout"
               >
                 Log Out

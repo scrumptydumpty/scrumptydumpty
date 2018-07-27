@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Navbar from "./Components/Navbar.jsx";
 import Login from "./Components/Login.jsx";
+import Logout from './Components/Logout.jsx';
 import Register from "./Components/Register.jsx";
 import Sprint from "./Components/Sprint.jsx";
 import Home from "./Components/Home.jsx";
@@ -67,6 +68,12 @@ class App extends React.Component {
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
+            )}
+          />
+          <Route 
+            path="/logout"
+            render={({ history }) => (
+              <Logout history={history} logout={this.logout} />
             )}
           />
           <Route

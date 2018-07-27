@@ -50,9 +50,9 @@ class AddSprint extends React.Component {
   render() {
     let interior = (
       <div>
-        <TextField required id="title" label="Sprint" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
+        <TextField required id="title" label="Sprint Name" defaultValue={this.state.title} margin="normal" onChange={this.titleChange} />
         <Button type="submit">
-        Save
+        Save New Sprint
         </Button>
 
       </div>
@@ -87,7 +87,7 @@ Failed to Save!
     }
 
     return (
-      <div>
+      <div style={{textAlign: 'center'}}>
         <form onSubmit={this.onSubmit}>
           <div>
             {interior}
