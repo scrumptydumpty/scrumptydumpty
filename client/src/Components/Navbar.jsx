@@ -58,8 +58,9 @@ class Navbar extends Component {
             variant="title"
             color="inherit"
             style={{
-              marginLeft: 0,
-              marginRight: 30
+              marginLeft: 20,
+              marginRight: 40,
+              fontSize: '1.5em'
             }}
             component={Link}
             to={"/"}
