@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Drawer from "@material-ui/core/Drawer";
 import { StatusCode } from "../../../lib/shared";
 import Tasks from "./Tasks.jsx";
 import api from "../api";
@@ -86,12 +87,22 @@ class Sprint extends React.Component {
     };
 
     return (
-      <div
-        style={{ maxWidth: "90%", margin: "5em auto" }}
-        onClick={this.closeEdits}
-      >
-        <Paper>
-          <Grid container spacing={24} justify="center">
+      <div onClick={this.closeEdits}>
+        <Drawer variant="permanent" anchor="right">
+          <AddUserToSprintForm
+            user={this.props.user}
+            isOwner={this.state.isOwner}
+            sprint_id={this.state.sprint_id}
+            style={{ top: "auto" }}
+          />
+        </Drawer>
+        <Paper style={{ marginRight: "13.5em", marginLeft: "1em" }}>
+          <Grid
+            style={{ padding: "1em" }}
+            container
+            spacing={24}
+            justify="center"
+          >
             <Grid item xs={4}>
               <strong style={taskIndicatorStyle}>Todo</strong>
               <Tasks
@@ -124,11 +135,6 @@ class Sprint extends React.Component {
             </Grid>
           </Grid>
         </Paper>
-        <AddUserToSprintForm
-          user={this.props.user}
-          isOwner={this.state.isOwner}
-          sprint_id={this.state.sprint_id}
-        />
       </div>
     );
   }

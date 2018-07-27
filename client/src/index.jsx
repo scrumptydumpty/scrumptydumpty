@@ -1,20 +1,20 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import Navbar from './Components/Navbar.jsx';
-import Login from './Components/Login.jsx';
-import Register from './Components/Register.jsx';
-import Sprint from './Components/Sprint.jsx';
-import Home from './Components/Home.jsx';
-import AddSprint from './Components/AddSprint.jsx';
-import api from './api';
+import React from "react";
+import { render } from "react-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Navbar from "./Components/Navbar.jsx";
+import Login from "./Components/Login.jsx";
+import Register from "./Components/Register.jsx";
+import Sprint from "./Components/Sprint.jsx";
+import Home from "./Components/Home.jsx";
+import AddSprint from "./Components/AddSprint.jsx";
+import api from "./api";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: null,
-      sprint_id: false,
+      sprint_id: false
     };
     this.updateUser = this.updateUser.bind(this);
     this.forceSprintListUpdate = this.forceSprintListUpdate.bind(this);
@@ -22,16 +22,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.updateUser();
+    if (this.state.user) {
+      this.updateUser();
+    }
   }
 
   logout() {
-    api.logout()
-      .then((res) => {
-        if (res) {
-          this.setState({ user: null });
-        }
-      });
+    api.logout().then(res => {
+      if (res) {
+        this.setState({ user: null });
+      }
+    });
   }
 
   forceSprintListUpdate() {
@@ -42,30 +43,56 @@ class App extends React.Component {
 
   updateUser() {
     return new Promise((res, rej) => {
-      api.verify()
-        .then((user) => {
-          if (user) {
-            this.setState({ user });
-          }
-          res();
-        });
+      api.verify().then(user => {
+        if (user) {
+          this.setState({ user });
+        }
+        res();
+      });
     });
   }
 
   render() {
     return (
       <Router>
-        <div style={{ fontFamily: 'Roboto' }}>
+        <div style={{ fontFamily: "Roboto" }}>
           <Navbar user={this.state.user} logout={this.logout} />
-          <hr style={{ marginBottom: '3.5em' }} />
-          <Route exact path="/" render={() => <Home user={this.state.user} />} />
-          <Route path="/login" render={({ history }) => <Login history={history} updateUser={this.updateUser} />} />
-          <Route path="/register" render={({ history }) => <Register history={history} updateUser={this.updateUser} />} />
-          <Route path="/addsprint" render={({ history }) => <AddSprint history={history} forceSprintListUpdate={this.forceSprintListUpdate} />} />
-          <Route path="/sprint/:id" render={routeprops => <Sprint user={this.state.user} {...routeprops} />} />
+          <hr style={{ marginBottom: "3.5em" }} />
+          <Route
+            exact
+            path="/"
+            render={() => <Home user={this.state.user} />}
+          />
+          <Route
+            path="/login"
+            render={({ history }) => (
+              <Login history={history} updateUser={this.updateUser} />
+            )}
+          />
+          <Route
+            path="/register"
+            render={({ history }) => (
+              <Register history={history} updateUser={this.updateUser} />
+            )}
+          />
+          <Route
+            path="/addsprint"
+            render={({ history }) => (
+              <AddSprint
+                history={history}
+                forceSprintListUpdate={this.forceSprintListUpdate}
+              />
+            )}
+          />
+          <Route
+            path="/sprint/:id"
+            render={routeprops => (
+              <Sprint user={this.state.user} {...routeprops} />
+            )}
+          />
         </div>
       </Router>
     );
   }
 }
-render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById("app"));
