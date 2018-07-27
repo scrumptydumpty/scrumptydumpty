@@ -1,23 +1,24 @@
-import React from "react";
-import { render } from "react-dom";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Navbar from "./Components/Navbar.jsx";
-import Login from "./Components/Login.jsx";
-import Register from "./Components/Register.jsx";
-import Sprint from "./Components/Sprint.jsx";
-import Home from "./Components/Home.jsx";
-import AddSprint from "./Components/AddSprint.jsx";
-import api from "./api";
+import React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Navbar from './Components/Navbar.jsx';
+import Login from './Components/Login.jsx';
+import Register from './Components/Register.jsx';
+import Sprint from './Components/Sprint.jsx';
+import Home from './Components/Home.jsx';
+import AddSprint from './Components/AddSprint.jsx';
+import api from './api';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: null,
-      sprint_id: false
+      sprintList: [],
+      sprint_id: false,
     };
     this.updateUser = this.updateUser.bind(this);
-    this.forceSprintListUpdate = this.forceSprintListUpdate.bind(this);
+    this.updateSprintList = this.updateSprintList.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -27,37 +28,39 @@ class App extends React.Component {
     }
   }
 
+  updateSprintList() {
+    return api.getSprints().then((sprintList) => {
+      this.setState({ sprintList });
+    });
+  }
+
   logout() {
-    api.logout().then(res => {
+    api.logout().then((res) => {
       if (res) {
-        this.setState({ user: null });
+        this.setState({ user: null, sprintList: [] });
       }
     });
   }
 
-  forceSprintListUpdate() {
-    return new Promise((res, rej) => {
-      this.setState({ user: null }, () => this.updateUser().then(() => res()));
-    });
-  }
-
   updateUser() {
-    return new Promise((res, rej) => {
-      api.verify().then(user => {
-        if (user) {
-          this.setState({ user });
-        }
-        res();
-      });
+    api.verify().then((user) => {
+      if (user) {
+        this.setState({ user });
+        this.updateSprintList();
+      }
     });
   }
 
   render() {
     return (
       <Router>
-        <div style={{ fontFamily: "Roboto" }}>
-          <Navbar user={this.state.user} logout={this.logout} />
-          <hr style={{ marginBottom: "3.5em" }} />
+        <div style={{ fontFamily: 'Roboto' }}>
+          <Navbar
+            user={this.state.user}
+            logout={this.logout}
+            sprintList={this.state.sprintList}
+          />
+          <hr style={{ marginBottom: '3.5em' }} />
           <Route
             exact
             path="/"
@@ -80,7 +83,7 @@ class App extends React.Component {
             render={({ history }) => (
               <AddSprint
                 history={history}
-                forceSprintListUpdate={this.forceSprintListUpdate}
+                updateSprintList={this.updateSprintList}
               />
             )}
           />
@@ -95,4 +98,4 @@ class App extends React.Component {
     );
   }
 }
-render(<App />, document.getElementById("app"));
+render(<App />, document.getElementById('app'));
