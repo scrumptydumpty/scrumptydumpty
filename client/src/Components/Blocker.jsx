@@ -40,9 +40,6 @@ class Blocker extends React.Component {
       borderRadius: '10px', margin: 'auto', width: '80%', backgroundColor: COLOR.red, padding: '5px', textAlign: 'center', height: '20px',
     };
 
-    if (this.state.hovering) {
-      style.backgroundColor = COLOR.green;
-    }
 
     if (this.state.hovering) {
       return (

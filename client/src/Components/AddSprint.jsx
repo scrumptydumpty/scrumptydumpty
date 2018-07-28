@@ -8,23 +8,12 @@ class AddSprint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sprintList: [],
       title: '',
       status: 0, // display what when the menu is showing? 0 - not submitted, 1 - pending, 2 - success, 3 - failed
     };
 
     this.titleChange = this.titleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.updateSprintList = this.updateSprintList.bind(this);
-    this.updateSprintList();
-  }
-
-
-  updateSprintList() {
-    api.getSprints()
-      .then((sprintList) => {
-        this.setState({ sprintList });
-      });
   }
 
   onSubmit(e) {
@@ -37,7 +26,7 @@ class AddSprint extends React.Component {
         this.setState({ status: 3 }); return;
       }
       this.setState({ status: 2 });
-      this.updateSprintList();
+      this.props.updateSprintList();
       this.props.history.push(`/sprint/${res.id}`);
     });
   }
