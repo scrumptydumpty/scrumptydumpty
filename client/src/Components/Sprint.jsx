@@ -83,7 +83,9 @@ class Sprint extends React.Component {
 
     const taskIndicatorStyle = {
       textAlign: "center",
-      display: "block"
+      display: "block",
+      fontSize: '1.4em',
+      fontWeight: 'lighter'
     };
 
     return (

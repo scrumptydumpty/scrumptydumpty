@@ -44,8 +44,9 @@ class Navbar extends Component {
             variant="title"
             color="inherit"
             style={{
-              marginLeft: 0,
-              marginRight: 30,
+              marginLeft: 20,
+              marginRight: 40,
+              fontSize: '1.5em'
             }}
             component={Link}
             to="/"
@@ -119,7 +120,8 @@ class Navbar extends Component {
                 color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}
                 aria-haspopup="true"
-                onClick={logout}
+                component={Link}
+                to={"/logout"}
                 label="logout"
               >
                 Log Out

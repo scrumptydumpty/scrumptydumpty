@@ -15,11 +15,13 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  console.log('fetching sprints a user has access to');
-  const user_id = req.user.id;
-  controller.getSprints({ user_id })
-    .then((result) => { console.log('success', result); return res.send(result); })
-    .catch((err) => { console.log(err); return res.send(false); });
+  if (req.user) {
+    console.log('fetching sprints a user has access to');
+    const user_id = req.user.id;
+    controller.getSprints({ user_id })
+      .then((result) => { console.log('success', result); return res.send(result); })
+      .catch((err) => { console.log(err); return res.send(false); });
+  }
 });
 
 
