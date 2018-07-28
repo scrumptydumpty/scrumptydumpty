@@ -219,6 +219,29 @@ const Mutation = new GraphQLObjectType({
         //             })
         //     }
         // }
+        addUser: {
+            type: UserType,
+            args: {
+                username: {type: GraphQLString},
+                password: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                //need to hash the password first
+                return controller.addUser(args);
+            }
+        },
+        updateUser: {
+            type: UserType,
+            args: {
+                username: {type: GraphQLString},
+                oldPassword: {type: GraphQLString},
+                newPassword: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                //need to hash the password first
+                return controller.updateUser(args);
+            }
+        },
         addTask: {
             type: TaskType,
             args: {
