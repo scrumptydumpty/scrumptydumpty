@@ -38,15 +38,15 @@ class Navbar extends Component {
     const { user, logout, sprintList } = this.props;
     const { anchorEl } = this.state;
     return (
-      <AppBar>
+      <AppBar style={{ backgroundColor: '#ed1a5c' }}>
         <Toolbar>
           <Typography
             variant="title"
             color="inherit"
             style={{
-              marginLeft: 20,
-              marginRight: 40,
-              fontSize: '1.5em'
+              marginLeft: 50,
+              marginRight: 50,
+              fontSize: '1.75em'
             }}
             component={Link}
             to="/"
@@ -85,7 +85,9 @@ class Navbar extends Component {
                 onClick={this.handleClick}
                 label="sprints"
               >
-                Your Sprints
+                Your Sprints 
+                <i class="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
+
               </Button>
               <Menu
                 id="simple-menu"
