@@ -65,9 +65,9 @@ module.exports = {
 
   getBlockers: task_id => axios.get('/blockers'),
 
-  updateBlocker: (newVersion) => {
-    const id = newVersion.id;
-  },
+  // updateBlocker: (newVersion) => {
+  //   const id = newVersion.id;
+  // },
 
   addUser: (username, password) => axios
     .post('/users', { username, password })

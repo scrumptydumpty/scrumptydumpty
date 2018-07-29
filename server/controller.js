@@ -28,19 +28,20 @@ const self = (module.exports = {
     return db.getUsersInSprint(sprint_id);
   },
 
-  addBlocker: ({ task_id, title, description }) => {
+  addBlocker: ({ task_id, title, description }, user) => {
     if (!task_id) throw 'No task_id';
     if (!title || title === '') throw 'No Title';
     if (!description || description === '') throw 'No description';
+    if (!user || !user.id) throw 'user not logged in';
 
-    return db.addBlocker(task_id, title, description);
+    return db.userCanAccessTask(task_id, user.id).then(() => db.addBlocker(task_id, title, description, user.id));
   },
   getBlockers: (task_id) => {
     if (!task_id) throw 'No Test Id Given';
     return db.getBlockers(task_id);
   },
 
-  updateBlocker: newVersion => db.updateBlocker(newVersion),
+  updateBlocker: (newVersion, user) => () => db.updateBlocker(newVersion),
 
   addUser: ({ username, password }) => {
     if (!password || password === '') throw 'No Password Given';
