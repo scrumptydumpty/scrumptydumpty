@@ -16,7 +16,8 @@ const Home = ({ user }) => {
         <span style={{ color: "grey" }}> {user.username}</span>
         .
         <br />
-        <Link to="/addsprint">Create a new sprint</Link>
+        Create a 
+        <Link to="/addsprint" style={{color: '#ed1a5c', textDecoration: 'none'}}> new sprint</Link>
         , or view a sprint from the dropdown at the top of the screen.
       </div>
     );

@@ -95,7 +95,6 @@ class Sprint extends React.Component {
             user={this.props.user}
             isOwner={this.state.isOwner}
             sprint_id={this.state.sprint_id}
-            style={{ top: "auto" }}
           />
         </Drawer>
         <Paper style={{ marginRight: "13.5em", marginLeft: "1em" }}>
