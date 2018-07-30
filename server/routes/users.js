@@ -61,7 +61,7 @@ router.get('/sprint', (req, res) => {
 // needs AUTH
   console.log('getting all users in sprint', req.query.sprint_id);
   controller
-    .getUsersInSprint(req.query.sprint_id)
+    .getUsersInSprint(req.query.sprint_id, req.user)
     .then((result) => {
       console.log('success');
       return res.send(result);
