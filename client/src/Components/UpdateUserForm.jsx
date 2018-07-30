@@ -73,7 +73,7 @@ class UpdateUserForm extends React.Component {
               type="password"
               id="password"
               label="Old Password"
-              defaultValue={this.state.password}
+              value={this.state.password}
               margin="normal"
               onChange={this.handlePasswordChange}
             />
@@ -84,7 +84,7 @@ class UpdateUserForm extends React.Component {
               type="password"
               id="newpassword"
               label="New Password"
-              defaultValue={this.state.newpassword}
+              value={this.state.newpassword}
               margin="normal"
               onChange={this.handleNewPasswordChange}
             />

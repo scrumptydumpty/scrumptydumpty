@@ -51,10 +51,10 @@ class Register extends React.Component {
         <form onSubmit={this.handleSubmit}>
 
           <div>
-            <TextField required id="username" label="Username" defaultValue={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
+            <TextField required id="username" label="Username" value={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
           </div>
           <div>
-            <TextField required type="password" id="password" label="Password" defaultValue={this.state.password} margin="normal" onChange={this.handlePasswordChange} />
+            <TextField required type="password" id="password" label="Password" value={this.state.password} margin="normal" onChange={this.handlePasswordChange} />
           </div>
           <div id="registerformmessage" style={{ height: '20px' }}>
             {this.state.errormessage}
