@@ -26,10 +26,6 @@ const Home = ({ user }) => {
           new sprint
         </Link>
         , or view a sprint from the dropdown at the top of the screen.
-        <div>
-          Update Password
-          <UpdateUserForm user={user} />
-        </div>
       </div>
 
     );
