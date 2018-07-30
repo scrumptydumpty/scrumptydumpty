@@ -7,12 +7,16 @@ const self = (module.exports = {
     if (!sprint_id) throw 'No sprint id';
     if (!user || !user.id) throw 'user not logged in';
 
-    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.addTask(title, description, sprint_id));
+    return db
+      .userCanAccessSprint(sprint_id, user.id)
+      .then(() => db.addTask(title, description, sprint_id));
   },
   getTasks: (sprint_id, user) => {
     if (!user || !user.id) throw 'user not logged in';
 
-    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.getTasks(sprint_id));
+    return db
+      .userCanAccessSprint(sprint_id, user.id)
+      .then(() => db.getTasks(sprint_id));
   },
 
   updateTask: (newVersion, user) => {
@@ -35,7 +39,9 @@ const self = (module.exports = {
     if (!sprint_id) throw 'no sprint id given';
     if (!user || !user.id) throw 'user not logged in';
 
-    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.getUsersInSprint(sprint_id));
+    return db
+      .userCanAccessSprint(sprint_id, user.id)
+      .then(() => db.getUsersInSprint(sprint_id));
   },
 
   addBlocker: ({ task_id, title, description }, user) => {
@@ -44,7 +50,9 @@ const self = (module.exports = {
     if (!description || description === '') throw 'No description';
     if (!user || !user.id) throw 'user not logged in';
 
-    return db.userCanAccessTask(task_id, user.id).then(() => db.addBlocker(task_id, title, description, user.id));
+    return db
+      .userCanAccessTask(task_id, user.id)
+      .then(() => db.addBlocker(task_id, title, description, user.id));
   },
   getBlockers: (task_id) => {
     if (!task_id) throw 'No Test Id Given';
@@ -54,7 +62,9 @@ const self = (module.exports = {
   updateBlocker: (newVersion, user) => {
     if (!user || !user.id) throw 'user not logged in';
 
-    return db.userCanAccessTask(newVersion.task_id, user.id).then(() => db.updateBlocker(newVersion));
+    return db
+      .userCanAccessTask(newVersion.task_id, user.id)
+      .then(() => db.updateBlocker(newVersion));
   },
 
   addUser: ({ username, password }) => {
@@ -68,27 +78,15 @@ const self = (module.exports = {
     });
   },
   getUsers: () => db.getUsers(),
+  // NOT NEEDED. USING PASSPORT NOW
+  // loginCorrect: ({ username, password }) => {
+  //   if (!username || !password) throw 'Invalid Credentials';
+  //   if (username === '' || password === '') throw 'Invalid Credentials';
+  //   return db.userHasPassword(username, password);
+  // },
 
-  loginCorrect: ({ username, password }) => {
-    if (!username || !password) throw 'Invalid Credentials';
-    if (username === '' || password === '') throw 'Invalid Credentials';
-    return db.userHasPassword(username, password);
-  },
 
-  updateUser: ({ username, oldpassword, newpassword }) => db
-    .userExists(username)
-    .then((userExists) => {
-      if (!userExists) {
-        throw 'User does not exist';
-      }
-      return db.userHasPassword(username, oldpassword);
-    })
-    .then((hasPassword) => {
-      if (!hasPassword) {
-        throw 'Invalid Password';
-      }
-      return db.updateUser(username, newpassword);
-    }),
+  updateUser: ({ username, password }) => db.updateUser(username, password),
 
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
