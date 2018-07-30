@@ -86,7 +86,7 @@ class Navbar extends Component {
                 label="sprints"
               >
                 Your Sprints 
-                <i class="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
+                <i className="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
 
               </Button>
               <Menu
@@ -112,9 +112,8 @@ class Navbar extends Component {
                 color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}
                 aria-haspopup="true"
-                component={Link}
+                href="/graphql"
                 label="graphql"
-                to="/graphql"
               >
                 GraphQL
               </Button>
