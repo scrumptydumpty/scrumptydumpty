@@ -1,19 +1,25 @@
 const db = require('../database/db');
 
 const self = (module.exports = {
-  addTask: ({ title, description, sprint_id }) => {
+  addTask: ({ title, description, sprint_id }, user) => {
     if (!title || title === '') throw 'No Title';
     if (!description || description === '') throw 'No description';
     if (!sprint_id) throw 'No sprint id';
+    if (!user || !user.id) throw 'user not logged in';
 
-    return db.addTask(title, description, sprint_id);
+    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.addTask(title, description, sprint_id));
   },
-  getTasks: sprint_id => db.getTasks(sprint_id),
+  getTasks: (sprint_id, user) => {
+    if (!user || !user.id) throw 'user not logged in';
 
-  updateTask: (newVersion) => {
+    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.getTasks(sprint_id));
+  },
+
+  updateTask: (newVersion, user) => {
     if (!newVersion.id) throw 'No Task ID Given';
+    if (!user || !user.id) throw 'user not logged in';
     // filter out stuff?
-    return db.updateTask(newVersion);
+    return db.userCanAccessSprint(newVersion.sprint_id, user.id).then(() => db.updateTask(newVersion));
   },
 
   isOwner: ({ owner_id, sprint_id }) => {
@@ -23,24 +29,31 @@ const self = (module.exports = {
     return db.isOwner(owner_id, sprint_id);
   },
 
-  getUsersInSprint: (sprint_id) => {
+  getUsersInSprint: (sprint_id, user) => {
     if (!sprint_id) throw 'no sprint id given';
-    return db.getUsersInSprint(sprint_id);
+    if (!user || !user.id) throw 'user not logged in';
+
+    return db.userCanAccessSprint(sprint_id, user.id).then(() => db.getUsersInSprint(sprint_id));
   },
 
-  addBlocker: ({ task_id, title, description }) => {
+  addBlocker: ({ task_id, title, description }, user) => {
     if (!task_id) throw 'No task_id';
     if (!title || title === '') throw 'No Title';
     if (!description || description === '') throw 'No description';
+    if (!user || !user.id) throw 'user not logged in';
 
-    return db.addBlocker(task_id, title, description);
+    return db.userCanAccessTask(task_id, user.id).then(() => db.addBlocker(task_id, title, description, user.id));
   },
   getBlockers: (task_id) => {
     if (!task_id) throw 'No Test Id Given';
     return db.getBlockers(task_id);
   },
 
-  updateBlocker: newVersion => db.updateBlocker(newVersion),
+  updateBlocker: (newVersion, user) => {
+    if (!user || !user.id) throw 'user not logged in';
+
+    return db.userCanAccessTask(newVersion.task_id, user.id).then(() => db.updateBlocker(newVersion));
+  },
 
   addUser: ({ username, password }) => {
     if (!password || password === '') throw 'No Password Given';

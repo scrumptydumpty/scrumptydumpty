@@ -65,9 +65,9 @@ module.exports = {
 
   getBlockers: task_id => axios.get('/blockers'),
 
-  updateBlocker: (newVersion) => {
-    const id = newVersion.id;
-  },
+  // updateBlocker: (newVersion) => {
+  //   const id = newVersion.id;
+  // },
 
   addUser: (username, password) => axios
     .post('/users', { username, password })
@@ -103,8 +103,8 @@ module.exports = {
       return false;
     }),
 
-  deleteBlocker: id => axios
-    .put('/blockers', { id, status_code: 1 })
+  deleteBlocker: ({ id, task_id }) => axios
+    .put('/blockers', { id, task_id, status_code: 1 })
     .then(resp => resp.data)
     .catch((err) => {
       console.log(err);

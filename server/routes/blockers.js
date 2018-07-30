@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', (req, res) => {
   console.log('adding blocker');
-  controller.addBlocker(req.body)
+  controller.addBlocker(req.body, req.user)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
 });
@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
 
 router.put('/', (req, res) => {
   console.log('updating blocker', req.body);
-  controller.updateBlocker(req.body)
+  controller.updateBlocker(req.body, req.user)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
 });
