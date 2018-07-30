@@ -31,6 +31,7 @@ class UpdateUserForm extends React.Component {
         this.setState({ errormessage: 'Password Updated', password: '', newpassword: '' });
         setTimeout(() => {
           this.setState({ errormessage: '' });
+          this.props.history.push('/');
         }, 2000);
       }
     });
