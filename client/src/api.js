@@ -103,8 +103,8 @@ module.exports = {
       return false;
     }),
 
-  deleteBlocker: id => axios
-    .put('/blockers', { id, status_code: 1 })
+  deleteBlocker: ({ id, task_id }) => axios
+    .put('/blockers', { id, task_id, status_code: 1 })
     .then(resp => resp.data)
     .catch((err) => {
       console.log(err);

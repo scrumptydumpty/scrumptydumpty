@@ -41,7 +41,11 @@ const self = (module.exports = {
     return db.getBlockers(task_id);
   },
 
-  updateBlocker: (newVersion, user) => () => db.updateBlocker(newVersion),
+  updateBlocker: (newVersion, user) => {
+    if (!user || !user.id) throw 'user not logged in';
+
+    return db.userCanAccessTask(newVersion.task_id, user.id).then(() => db.updateBlocker(newVersion));
+  },
 
   addUser: ({ username, password }) => {
     if (!password || password === '') throw 'No Password Given';

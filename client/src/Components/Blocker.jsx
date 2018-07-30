@@ -30,7 +30,7 @@ class Blocker extends React.Component {
   }
 
   onClickHandler(e) {
-    api.deleteBlocker(this.state.blocker.id)
+    api.deleteBlocker(this.state.blocker)
       .then(res => this.reload());
   }
 
