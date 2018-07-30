@@ -24,9 +24,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.user) {
       this.updateUser();
-    }
   }
 
   updateSprintList() {
