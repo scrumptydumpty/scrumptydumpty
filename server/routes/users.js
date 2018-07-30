@@ -50,6 +50,28 @@ router.post('/', (req, res) => {
 //     });
 // });
 
+router.put('/', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.log(err);
+      res.send(false);
+      return;
+    }
+    if (!user) {
+      console.log('user login failed');
+      return res.send(false);
+    }
+    // username, password was correct. now update based on newpassword.
+    bcrypt.hash(req.body.newpassword, 10)
+      .then(hash => controller.updateUser({ username: req.body.username, password: hash }))
+      .then(user => res.send({ id: user.id, username: user.username }))
+      .catch((err) => {
+        console.log(err);
+        res.send(false);
+      });
+  })(req, res, next);
+});
+
 router.put('/', (req, res) => {
   console.log('updating user');
   controller.updateUser(req.body)
@@ -61,7 +83,7 @@ router.get('/sprint', (req, res) => {
 // needs AUTH
   console.log('getting all users in sprint', req.query.sprint_id);
   controller
-    .getUsersInSprint(req.query.sprint_id)
+    .getUsersInSprint(req.query.sprint_id, req.user)
     .then((result) => {
       console.log('success');
       return res.send(result);

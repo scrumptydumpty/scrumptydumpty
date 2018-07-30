@@ -3,12 +3,13 @@ import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Navbar from "./Components/Navbar.jsx";
 import Login from "./Components/Login.jsx";
-import Logout from './Components/Logout.jsx';
+import Logout from "./Components/Logout.jsx";
 import Register from "./Components/Register.jsx";
 import Sprint from "./Components/Sprint.jsx";
 import Home from "./Components/Home.jsx";
 import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
+import UpdateUserForm from "./Components/UpdateUserForm.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class App extends React.Component {
     this.state = {
       user: null,
       sprintList: [],
-      sprint_id: false,
+      sprint_id: false
     };
     this.updateUser = this.updateUser.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
@@ -24,19 +25,20 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.user) {
-      this.updateUser();
-    }
+    // Any time app re-renders, check for user session
+    this.updateUser();
   }
 
   updateSprintList() {
-    return api.getSprints().then((sprintList) => {
+    // Fetch sprints for user
+    return api.getSprints().then(sprintList => {
       this.setState({ sprintList });
     });
   }
 
   logout() {
-    api.logout().then((res) => {
+    // Destroy user session
+    api.logout().then(res => {
       if (res) {
         this.setState({ user: null, sprintList: [] });
       }
@@ -44,7 +46,8 @@ class App extends React.Component {
   }
 
   updateUser() {
-    api.verify().then((user) => {
+    // Check for user credentials, then fetch sprints for user
+    api.verify().then(user => {
       if (user) {
         this.setState({ user });
         this.updateSprintList();
@@ -55,13 +58,13 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div style={{ fontFamily: 'Roboto' }}>
+        <div style={{ fontFamily: "Roboto" }}>
           <Navbar
             user={this.state.user}
             logout={this.logout}
             sprintList={this.state.sprintList}
           />
-          <hr style={{ marginBottom: '3.5em' }} />
+          <hr style={{ marginBottom: "3.5em" }} />
           <Route
             exact
             path="/"
@@ -73,10 +76,16 @@ class App extends React.Component {
               <Login history={history} updateUser={this.updateUser} />
             )}
           />
-          <Route 
+          <Route
             path="/logout"
             render={({ history }) => (
               <Logout history={history} logout={this.logout} />
+            )}
+          />
+          <Route
+            path="/updateuser"
+            render={({ history }) => (
+              <UpdateUserForm history={history} user={this.state.user} />
             )}
           />
           <Route
@@ -105,4 +114,4 @@ class App extends React.Component {
     );
   }
 }
-render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById("app"));

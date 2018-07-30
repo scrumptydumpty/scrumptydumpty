@@ -13,7 +13,6 @@ const self = (module.exports = {
     .where({ sprint_id })
     .then((tasks) => {
       let pchain = Promise.resolve();
-
       // loop over each task, retrieve the blockers the task has,
       // then add the array of blockers to the task
       tasks.forEach((task) => {
@@ -50,12 +49,11 @@ const self = (module.exports = {
       .select())
     .then(tasks => tasks[0]),
 
-  addBlocker: (task_id, title, description) => knex('blockers')
+  addBlocker: (task_id, title, description, user_id) => knex('blockers')
     .insert({ task_id, title, description })
     .then(id => knex('blockers')
       .where('id', id)
-      .select())
-    .then(blockers => blockers[0]),
+      .select().first()),
 
   getBlockers: task_id => knex('blockers')
     .where('task_id', task_id)
@@ -220,4 +218,20 @@ const self = (module.exports = {
 
   isOwner: (owner_id, id) => knex('sprints').where({ id, owner_id }).select().first()
     .then(res => (!!res)),
+
+  userCanAccessTask: (task_id, user_id) => knex('tasks')
+    .where({ id: task_id }).select().first()
+    .then(({ sprint_id }) => knex('sprintusers').where({ sprint_id, user_id }).select().first())
+    .then((result) => {
+      if (!result) {
+        throw ('User does not have access to the sprint for the specified task');
+      }
+    }),
+
+  userCanAccessSprint: (sprint_id, user_id) => knex('sprintusers').where({ sprint_id, user_id }).select().first()
+    .then((result) => {
+      if (!result) {
+        throw ('User does not have access to the sprint for the specified task');
+      }
+    }),
 });

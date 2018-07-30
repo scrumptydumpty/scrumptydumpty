@@ -44,9 +44,8 @@ Expects: username,password
 Creates a new user. Username must be unique, and username and password cannot be blank. Returns user's object {id,username} on success, returns false on failure.
 
 #put /users
-BROKEN!!!!!
-Expects: username, oldpassword, newpassword
-Should update a user's password. Should return false on failure.
+Expects: username, password, newpassword
+Should update a user's password. Returns a user object on success {id, username}. Should return false on failure.
 
 #get /users/sprint
 Expects: sprint_id
@@ -78,17 +77,14 @@ Removes the specified user from the specified sprint. Only the owner of the spri
 
 
 #post /tasks
-CURRENT NOT TESTING AUTHENTICATION! 
 Expects: task object {title,description,sprint_id}
 Adds a task to the specified sprint. should require a user to be included in the given sprint under the table 'sprintusers'.
 
 #get /tasks
-CURRENT NOT TESTING AUTHENTICATION! 
 Expects: sprint_id
 Returns all of the tasks a given sprint has. Each task object contains a list of the blockers associated with the task.
 
 #put /tasks
-CURRENT NOT TESTING AUTHENTICATION! 
 Expects: task object {
     [required key] id, 
     [optional keys] title,
@@ -103,12 +99,10 @@ Updates the specified task with any of the other fields given. Only specify the 
 # BLOCKER ENDPOINTS
 
 #post /blockers
-CURRENT NOT TESTING AUTHENTICATION! 
 Expects: blocker object {task_id, title, description}
 Adds a new blocker to the specified task. Returns the new blocker object on success, returns false on failure.
 
 #put /blockers
-CURRENT NOT TESTING AUTHENTICATION! 
 Expects: blocker object {
   [required key] id,
   [optional keys] title,

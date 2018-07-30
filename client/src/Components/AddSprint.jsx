@@ -82,15 +82,6 @@ Failed to Save!
             {interior}
           </div>
         </form>
-        {/* {
-          this.state.sprintList.map((sprint, idx) => (
-            <div key={idx}>
-              <Link to={`/sprint/${sprint.id}`}>
-                {sprint.title}
-              </Link>
-            </div>
-          ))
-        } */}
       </div>
     );
   }

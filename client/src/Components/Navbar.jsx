@@ -13,10 +13,13 @@ class Navbar extends Component {
     super(props);
     this.state = {
       anchorEl: null,
+      accountEl: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleAcctClick = this.handleAcctClick.bind(this);
+    this.handleAcctClose = this.handleAcctClose.bind(this);
   }
 
   handleChange(event) {
@@ -31,12 +34,20 @@ class Navbar extends Component {
     this.setState({ anchorEl: null });
   }
 
+  handleAcctClick(event) {
+    this.setState({accountEl: event.currentTarget});
+  }
+
+  handleAcctClose() {
+    this.setState({accountEl: null});
+  }
+
   handleGraphiQL() {
   }
 
   render() {
     const { user, logout, sprintList } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl, accountEl } = this.state;
     return (
       <AppBar style={{ backgroundColor: '#ed1a5c' }}>
         <Toolbar>
@@ -85,8 +96,8 @@ class Navbar extends Component {
                 onClick={this.handleClick}
                 label="sprints"
               >
-                Your Sprints 
-                <i class="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
+                My Sprints 
+                <i className="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
 
               </Button>
               <Menu
@@ -110,11 +121,37 @@ class Navbar extends Component {
               </Menu>
               <Button
                 color="inherit"
+                aria-owns={accountEl ? 'simple-menu' : null}
+                aria-haspopup="true"
+                onClick={this.handleAcctClick}
+                label="account"
+              >
+                My Account
+                <i className="fa fa-user-circle" style={{marginLeft: '8px'}} aria-hidden="true"></i>
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={accountEl}
+                open={Boolean(accountEl)}
+                onClose={this.handleAcctClose}
+              >
+                  <MenuItem
+                    onClick={this.handleAcctClose}
+                    value={'Change Password'}
+                    component={Link}
+                    label='Change Password'
+                    to={`/updateuser`}
+                  >
+                  Change Password
+
+                  </MenuItem>
+              </Menu>
+              <Button
+                color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}
                 aria-haspopup="true"
-                component={Link}
+                href="/graphql"
                 label="graphql"
-                to="/graphql"
               >
                 GraphQL
               </Button>
