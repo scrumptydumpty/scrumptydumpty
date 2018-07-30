@@ -1,91 +1,108 @@
-import React from 'react';
+import React from "react";
 import { render } from "react-dom";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Navbar from "./Components/Navbar.jsx";
 import Login from "./Components/Login.jsx";
+import Logout from './Components/Logout.jsx';
 import Register from "./Components/Register.jsx";
-import Button from "@material-ui/core/Button";
 import Sprint from "./Components/Sprint.jsx";
-import api from "./api"
-
-
-const Home = () => (
-  <div>
-    <h2>Home Page LOLOL</h2>
-  </div>
-);
-
-
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
-
-const Topics = ({ match }) => (
-  <div>
-    <h2>Topics</h2>
-    <ul>
-      <li>
-        <Link to={`${match.url}/rendering`}>
-          Rendering with React
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/components`}>
-          Components
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/props-v-state`}>
-          Props v. State
-        </Link>
-      </li>
-    </ul>
-
-    <Route path={`${match.path}/:topicId`} component={Topic} />
-    <Route exact path={match.path} render={() => (
-      <h3>Please select a topic.</h3>
-    )} />
-  </div>
-)
+import Home from "./Components/Home.jsx";
+import AddSprint from "./Components/AddSprint.jsx";
+import api from "./api";
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {tasks:[]}
-
-    api.getTasks()
-    .then(tasks=>this.setState({tasks}));
+    this.state = {
+      user: null,
+      sprintList: [],
+      sprint_id: false,
+    };
+    this.updateUser = this.updateUser.bind(this);
+    this.updateSprintList = this.updateSprintList.bind(this);
+    this.logout = this.logout.bind(this);
   }
-  
-  
-  
-  
-  
-render(){
-  console.log(this.state)
-  return(
-  <Router>
-    <div>
-      <Navbar />
 
-      <hr />
-      <Button variant="contained" color="primary">
-        View Sprint
-      </Button>
-      <Sprint tasks={this.state.tasks}/>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      {/* <Route path="/sprint" component={Sprint} /> */}
-    </div>
-    </Router>
-  );
+  componentDidMount() {
+    if (this.state.user) {
+      this.updateUser();
+    }
+  }
+
+  updateSprintList() {
+    return api.getSprints().then((sprintList) => {
+      this.setState({ sprintList });
+    });
+  }
+
+  logout() {
+    api.logout().then((res) => {
+      if (res) {
+        this.setState({ user: null, sprintList: [] });
+      }
+    });
+  }
+
+  updateUser() {
+    api.verify().then((user) => {
+      if (user) {
+        this.setState({ user });
+        this.updateSprintList();
+      }
+    });
+  }
+
+  render() {
+    return (
+      <Router>
+        <div style={{ fontFamily: 'Roboto' }}>
+          <Navbar
+            user={this.state.user}
+            logout={this.logout}
+            sprintList={this.state.sprintList}
+          />
+          <hr style={{ marginBottom: '3.5em' }} />
+          <Route
+            exact
+            path="/"
+            render={() => <Home user={this.state.user} />}
+          />
+          <Route
+            path="/login"
+            render={({ history }) => (
+              <Login history={history} updateUser={this.updateUser} />
+            )}
+          />
+          <Route 
+            path="/logout"
+            render={({ history }) => (
+              <Logout history={history} logout={this.logout} />
+            )}
+          />
+          <Route
+            path="/register"
+            render={({ history }) => (
+              <Register history={history} updateUser={this.updateUser} />
+            )}
+          />
+          <Route
+            path="/addsprint"
+            render={({ history }) => (
+              <AddSprint
+                history={history}
+                updateSprintList={this.updateSprintList}
+              />
+            )}
+          />
+          <Route
+            path="/sprint/:id"
+            render={routeprops => (
+              <Sprint user={this.state.user} {...routeprops} />
+            )}
+          />
+        </div>
+      </Router>
+    );
+  }
 }
-}
-render(<App />,document.getElementById("app"));
+render(<App />, document.getElementById('app'));
