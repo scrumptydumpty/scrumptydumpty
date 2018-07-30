@@ -19,7 +19,9 @@ const self = (module.exports = {
     if (!newVersion.id) throw 'No Task ID Given';
     if (!user || !user.id) throw 'user not logged in';
     // filter out stuff?
-    return db.userCanAccessSprint(newVersion.sprint_id, user.id).then(() => db.updateTask(newVersion));
+    return db
+      .userCanAccessTask(newVersion.id, user.id)
+      .then(() => db.updateTask(newVersion));
   },
 
   isOwner: ({ owner_id, sprint_id }) => {

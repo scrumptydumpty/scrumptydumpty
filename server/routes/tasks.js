@@ -29,6 +29,7 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   console.log('updating task');
+  console.log(req.body);
   controller.updateTask(req.body, req.user)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
