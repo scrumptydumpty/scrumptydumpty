@@ -126,7 +126,7 @@ class Navbar extends Component {
                 onClick={this.handleAcctClick}
                 label="account"
               >
-                My Account
+                My Profile
                 <i className="fa fa-user-circle" style={{marginLeft: '8px'}} aria-hidden="true"></i>
               </Button>
               <Menu
