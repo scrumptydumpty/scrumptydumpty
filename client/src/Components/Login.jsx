@@ -48,9 +48,8 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', height: '600px', width: '400px', border: '1px solid red'}}>
         <form onSubmit={this.handleSubmit}>
-
           <div>
             <TextField required id="username" label="Username" value={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
           </div>
