@@ -50,10 +50,21 @@ class AddUserToSprintForm extends React.Component {
     this.reload();
   }
 
+  //** need to refactor so getUsersInSprint returns list of users in dating pool **
+
+  //uses sprint id to fetch all users authorized to access that sprint
   reload() {
     api
-      .getUsersInSprint(this.state.sprint_id)
-      .then(users => this.setState({ users }));
+      .getUsers()
+      .then((userArr) => {
+        let users = [];
+        userArr.data.forEach( user => {
+          if (this.props.user.id !== user.id) {
+            users.push(user);
+          }
+        });
+        this.setState({ users });
+      })
   }
 
   onSubmit(e) {
@@ -118,10 +129,12 @@ class AddUserToSprintForm extends React.Component {
         }}
       >
         <div>
+          {/* change Team Members to something punny for title of dating pool (broken pieces? all the kings men/women?) */}
           <strong>Team Members</strong>
         </div>
         <hr />
         <div>
+          {/* change map function below to render user chips */}
           {this.state.users.map((user, i) => (
             <div key={i}>
               {`${user.username}  `}
@@ -133,16 +146,12 @@ class AddUserToSprintForm extends React.Component {
                   >
                     X
                   </button>
+                  
                 )}
               <hr />
             </div>
           ))}
         </div>
-        {this.props.isOwner && (
-          <form style={{ width: "150px" }} onSubmit={this.onSubmit}>
-            {interior}
-          </form>
-        )}
       </div>
     );
   }
