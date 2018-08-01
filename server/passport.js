@@ -16,7 +16,7 @@ passport.use(
         return done('Invalid Credentials', null);
       })
       .catch(err => console.log(err));
-  }),
+  })
 );
 
 passport.serializeUser((user, cb) => {
