@@ -86,7 +86,10 @@ const self = (module.exports = {
   // },
 
 
-  updateUser: ({ username, password }) => db.updateUser(username, password),
+  updateUser: ({ username, desc, password }) => {
+    // console.log(`\n[controller.js]--->\nusername: ${username}\ndescription: ${desc}\npassword: ${password}`);
+    return db.updateUser(username, desc, password)
+  },
 
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
