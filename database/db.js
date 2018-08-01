@@ -94,12 +94,13 @@ const self = (module.exports = {
     .select()
     .first(),
 
-  updateUser: (username, password) => knex('users')
+  updateUser: (username, description, password) => knex('users')
     .where('username', username)
     .select()
     .then(arr => knex('users')
       .where('id', arr[0].id)
-      .update({ username, password }))
+      .update({ username, description, password })
+    })
     .then(() => knex('users')
       .where('username', username)
       .select())
