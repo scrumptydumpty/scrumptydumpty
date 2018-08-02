@@ -9,6 +9,7 @@ import Sprint from "./Components/Sprint.jsx";
 //import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
+import socketIOClient from "socket.io-client";
 
 
 class App extends React.Component {
@@ -19,11 +20,14 @@ class App extends React.Component {
       sprintList: [],
       sprint_id: false,
       sprint: ``,
+      loggedIn: null
     };
     this.updateUser = this.updateUser.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
+    
+    this.socket = socketIOClient("http://127.0.0.1:1337")
   }
 
   componentDidMount() {
@@ -79,12 +83,12 @@ class App extends React.Component {
             path="/"  
             render={() => this.state.user && this.state.sprint ? <Redirect to={this.state.sprint} /> : <Login history={history} updateUser={this.updateUser} />}
           />
-          <Route
+          {/*<Route
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
             )}
-          />
+          />*/}
           <Route
             path="/logout"
             render={({ history }) => (
@@ -114,11 +118,9 @@ class App extends React.Component {
           /> */}
           <Route
             path="/sprint/:id"
-            render={routeprops => {
-              return(
-                <Sprint user={user} {...routeprops} />
-              )
-            }}
+            render={routeprops => (
+              <Sprint user={user} {...routeprops} socket={this.socket}/>
+            )}
           />
         </div>
       </Router>
