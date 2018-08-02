@@ -18,7 +18,7 @@ class Sprint extends React.Component {
       isOwner: false,
       open: false,
       tasks: [], 
-      selectedProfile: ""
+      selectedProfile: "",
     };
     this.getDefaultSelectedProfile = this.getDefaultSelectedProfile.bind(this);
     this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
@@ -112,7 +112,6 @@ class Sprint extends React.Component {
             getNewSelectedProfile={this.getNewSelectedProfile}
           />
         </Drawer>
-        {/* <Paper style={{ marginRight: "13.5em", marginLeft: "1em" }}> */}
           <Grid
           style={{ padding: "1em", width: "85%" }}
             container
@@ -167,7 +166,6 @@ class Sprint extends React.Component {
               </Paper>
             </Grid>
           </Grid>
-        {/* </Paper> */}
       </div>
     );
   }
