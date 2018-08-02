@@ -3,8 +3,10 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import SaveIcon from '@material-ui/icons/Save';
+import HelpIcon from '@material-ui/icons/HelpOutline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
 
 const api = require('../api');
@@ -60,18 +62,19 @@ class UpdateUserForm extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     const { currentPassword, newDescription, newPassword } = this.state;
     const submitDisabled = (newPassword === '') && (newDescription === '');
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <Typography variant="subheading" gutterBottom>
-          DB Username: {this.props.user.username}
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="headline" gutterBottom>
+              Welcome, {user.username}!
         </Typography>
-        <Typography variant="subheading" gutterBottom>
-          DB Description: {this.props.user.description}
-        </Typography>
+          </CardContent>
+        </Card>
         <Card className={classes.card}>
           <CardContent>
             <TextField
@@ -83,6 +86,9 @@ class UpdateUserForm extends React.Component {
               margin="normal"
               onChange={this.handleFieldUpdate}
             />
+            <Tooltip title="We require your current password to make any changes to your profile because we're SUPER SECURE!">
+              <HelpIcon />
+            </Tooltip>
           </CardContent>
         </Card>
         <Card className={classes.card}>
@@ -98,8 +104,9 @@ class UpdateUserForm extends React.Component {
             />
             <TextField
               id="newDescription"
-              label="Description"
+              label="New Description"
               multiline
+              placeholder={user.description}
               value={newDescription}
               margin="normal"
               onChange={this.handleFieldUpdate}
