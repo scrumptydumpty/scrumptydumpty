@@ -88,6 +88,7 @@ class UpdateUserForm extends React.Component {
         <Card className={classes.card}>
           <CardContent>
             <TextField
+              required
               type="password"
               id="newPassword"
               label="New Password"
