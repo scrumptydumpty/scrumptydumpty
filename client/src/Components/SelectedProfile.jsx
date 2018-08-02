@@ -37,6 +37,7 @@ class SelectedProfile extends React.Component {
             <AddTaskForm
               sprint_id={this.props.sprint_id}
               reload={this.props.reload}
+              user={this.props.selectedProfile}
             />
           </CardActions>
         </Card>
