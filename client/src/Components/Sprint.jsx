@@ -18,7 +18,7 @@ class Sprint extends React.Component {
       isOwner: false,
       open: false,
       tasks: [], 
-      selectedProfile: "",
+      selectedProfile: ""
     };
     this.getDefaultSelectedProfile = this.getDefaultSelectedProfile.bind(this);
     this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
@@ -65,7 +65,6 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    // console.log(this.state,'state of sprint')
     api.getTasks(this.state.sprint_id).then(tasks => {
       this.setState({ tasks });
     });
@@ -142,6 +141,7 @@ class Sprint extends React.Component {
                   sprint_id={this.state.sprint_id}
                   reload={this.reload}
                   tasks={notStarted}
+                  getNewSelectedProfile={this.getNewSelectedProfile}
                 />
               </Paper>
             </Grid>
@@ -154,6 +154,7 @@ class Sprint extends React.Component {
                   sprint_id={this.state.sprint_id}
                   reload={this.reload}
                   tasks={inProgress}
+                  getNewSelectedProfile={this.getNewSelectedProfile}
                 />
               </Paper>
             </Grid>
@@ -166,6 +167,7 @@ class Sprint extends React.Component {
                   sprint_id={this.state.sprint_id}
                   reload={this.reload}
                   tasks={complete}
+                  getNewSelectedProfile={this.getNewSelectedProfile}
                 />
               </Paper>
             </Grid>

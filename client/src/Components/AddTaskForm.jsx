@@ -66,14 +66,10 @@ class AddTaskForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    if (this.state.title === "" && this.state.description === "") {
-      this.setState({
-        title: this.props.user.username,
-        description: this.props.user.description
-      }, () => this.addTask());
-    } else {
-      this.addTask();
-    }
+    this.setState({
+      title: this.props.selected.username,
+      description: this.props.selected.description
+    }, () => this.addTask());
   }
 
   titleChange(e) {
@@ -117,7 +113,7 @@ class AddTaskForm extends React.Component {
               <FormControl>
                 <TextField 
                   required id="title" label="Title" margin="normal"
-                  defaultValue={this.props.user.username}
+                  defaultValue={this.props.selected.username}
                   // value={this.state.title}  
                   onChange={this.titleChange} 
                   style={{
@@ -130,7 +126,7 @@ class AddTaskForm extends React.Component {
                 <TextField 
                   required multiline rowsMax="7"
                   id="description" label="Description" margin="normal" 
-                  defaultValue={this.props.user.description} 
+                  defaultValue={this.props.selected.description} 
                   onChange={this.descriptionChange} 
                   style={{
                     marginLeft: "10px",

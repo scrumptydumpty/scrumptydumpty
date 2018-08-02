@@ -10,13 +10,12 @@ router.post('/', (req, res) => {
     .catch((err) => { console.log(err); return res.send(false); });
 });
 
-// unused
-// router.get('/', (req, res) => {
-//   console.log('fetching blockers');
-//   controller.getBlockers(req.query.id)
-//     .then((result) => { console.log('success'); return res.send(result); })
-//     .catch((err) => { console.log(err); return res.send(false); });
-// });
+router.get('/', (req, res) => {
+  console.log('fetching blockers');
+  controller.getBlockers(req.query.id)
+    .then((result) => { console.log('success'); return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
 
 router.put('/', (req, res) => {
   console.log('updating blocker', req.body);

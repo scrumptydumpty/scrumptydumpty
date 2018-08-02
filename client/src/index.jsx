@@ -1,4 +1,3 @@
-
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
@@ -7,8 +6,7 @@ import Login from "./Components/Login.jsx";
 import Logout from "./Components/Logout.jsx";
 import Register from "./Components/Register.jsx";
 import Sprint from "./Components/Sprint.jsx";
-import Home from "./Components/Home.jsx";
-import AddSprint from "./Components/AddSprint.jsx";
+//import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
 import socketIOClient from "socket.io-client";
@@ -85,12 +83,12 @@ class App extends React.Component {
             path="/"  
             render={() => this.state.user && this.state.sprint ? <Redirect to={this.state.sprint} /> : <Login history={history} updateUser={this.updateUser} />}
           />
-          <Route
+          {/*<Route
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
             )}
-          />
+          />*/}
           <Route
             path="/logout"
             render={({ history }) => (
@@ -109,7 +107,7 @@ class App extends React.Component {
               <Register history={history} updateUser={this.updateUser} setSprint={this.setSprint} />
             )}
           />
-          <Route
+          {/* <Route
             path="/addsprint"
             render={({ history }) => (
               <AddSprint
@@ -117,7 +115,7 @@ class App extends React.Component {
                 updateSprintList={this.updateSprintList}
               />
             )}
-          />
+          /> */}
           <Route
             path="/sprint/:id"
             render={routeprops => (
@@ -129,4 +127,4 @@ class App extends React.Component {
     );
   }
 }
-render(<App />, document.getElementById("app"));
+render(<App />, document.getElementById('app'));

@@ -66,4 +66,31 @@ router.put('/removeUser', (req, res) => {
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
 });
+
+//adds a user to the reject pool
+router.post('/reject', (req, res) => {
+  console.log('adding user to reject pool');
+  const { user_id, sprint_id } = req.body;
+  
+  controller.addUserToRejectPool({ user_id, sprint_id })
+    .then((result) => {console.log('success'); return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
+
+//get reject pool for logged in user
+router.get('/reject', (req, res) => {
+  const { sprint_id } = req.query;
+  console.log('gathering rejects for pool: ', sprint_id);
+
+  controller.getRejects(sprint_id)
+    .then( result => {
+      const ids = [];
+      result.forEach( noShow => {
+        ids.push(noShow.user_id);
+      });
+      return res.send(ids);
+    })
+    .catch((err) => { console.log(err); return res.send([]); });
+})
+
 module.exports = router;

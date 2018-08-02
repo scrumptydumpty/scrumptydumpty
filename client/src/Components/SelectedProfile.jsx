@@ -10,7 +10,8 @@ class SelectedProfile extends React.Component {
   render() {
     const styles = {
       card: {
-        maxWidth: 345
+        maxWidth: 345,
+        margin: "0 auto"
       },
       media: {
         height: 0,
@@ -37,7 +38,7 @@ class SelectedProfile extends React.Component {
             <AddTaskForm
               sprint_id={this.props.sprint_id}
               reload={this.props.reload}
-              user={this.props.selectedProfile}
+              selected={this.props.selectedProfile}
             />
             <Chat
               

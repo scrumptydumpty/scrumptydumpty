@@ -8,7 +8,13 @@ class Tasks extends React.Component {
 
     return (
       <div>
-        {tasks.map(task => <Task sprint_id={this.props.sprint_id} reload={this.props.reload} key={`task:${task.id}`} task={task} />)}
+        {tasks.map(task => 
+          <Task 
+            sprint_id={this.props.sprint_id} 
+            reload={this.props.reload} 
+            key={`task:${task.id}`} 
+            task={task}
+            getNewSelectedProfile={this.props.getNewSelectedProfile} />)}
       </div>
     );
   }
