@@ -144,7 +144,7 @@ class EditTaskForm extends React.Component {
               <Button onClick={this.onDelete}>Delete Task</Button>
             </div>
           </form>
-          <AddBlockerForm task_id={this.state.id} />
+          <AddBlockerForm task_id={this.state.id} reload={this.props.reload}/>
         </CardContent>
       </div>
     );
