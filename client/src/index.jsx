@@ -1,4 +1,3 @@
-
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
@@ -7,8 +6,7 @@ import Login from "./Components/Login.jsx";
 import Logout from "./Components/Logout.jsx";
 import Register from "./Components/Register.jsx";
 import Sprint from "./Components/Sprint.jsx";
-import Home from "./Components/Home.jsx";
-import AddSprint from "./Components/AddSprint.jsx";
+//import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
 
@@ -105,7 +103,7 @@ class App extends React.Component {
               <Register history={history} updateUser={this.updateUser} setSprint={this.setSprint} />
             )}
           />
-          <Route
+          {/* <Route
             path="/addsprint"
             render={({ history }) => (
               <AddSprint
@@ -113,7 +111,7 @@ class App extends React.Component {
                 updateSprintList={this.updateSprintList}
               />
             )}
-          />
+          /> */}
           <Route
             path="/sprint/:id"
             render={routeprops => {console.log(routeprops); return(
