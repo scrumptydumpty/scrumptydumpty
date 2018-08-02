@@ -100,7 +100,7 @@ const self = (module.exports = {
     .then(arr => knex('users')
       .where('id', arr[0].id)
       .update({ username, description, password })
-    })
+    )
     .then(() => knex('users')
       .where('username', username)
       .select())
