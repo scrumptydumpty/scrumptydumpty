@@ -136,4 +136,20 @@ module.exports = {
       console.log(err);
       return false;
     }),
+
+  rejectUser: ({ user_id, sprint_id }) => axios
+    .post('/sprints/reject', { user_id, sprint_id })
+    .then(resp => resp.data)
+    .catch((err) => {
+      console.log(err);
+      return false;
+    }),
+
+  getNoShowList: (sprint_id) => axios
+    .get('/sprints/reject', { params: { sprint_id } })
+    .then(resp => resp.data)
+    .catch((err) => {
+      console.log(err);
+      return false;
+    })
 };
