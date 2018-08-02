@@ -13,6 +13,7 @@ class Register extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
     this.history = props.history;
+    this.addSprint = api.addSprint.bind(this)
   }
 
   handleSubmit(e) {
@@ -29,7 +30,7 @@ class Register extends React.Component {
       }
 
       this.updateUser();
-      this.history.push('/');
+      this.addSprint(this.state.username)
     });
   }
 

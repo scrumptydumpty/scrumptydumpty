@@ -13,6 +13,7 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
     this.history = props.history;
+    this.fuh = props.fuh;
   }
 
   handleSubmit(e) {
@@ -29,8 +30,7 @@ class Login extends React.Component {
           }, 2000);
           return;
         }
-        this.updateUser();
-        this.history.push('/');
+        this.updateUser();;
       });
   }
 

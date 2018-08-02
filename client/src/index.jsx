@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import Navbar from "./Components/Navbar.jsx";
 import Login from "./Components/Login.jsx";
 import Logout from "./Components/Logout.jsx";
@@ -17,7 +17,7 @@ class App extends React.Component {
     this.state = {
       user: null,
       sprintList: [],
-      sprint_id: false
+      sprint_id: false,
     };
     this.updateUser = this.updateUser.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
@@ -44,7 +44,7 @@ class App extends React.Component {
       }
     });
   }
-
+  
   updateUser() {
     // Check for user credentials, then fetch sprints for user
     api.verify().then(user => {
@@ -68,7 +68,7 @@ class App extends React.Component {
           <Route
             exact
             path="/"
-            render={() => <Home user={this.state.user} />}
+            render={() => this.state.user ? <Redirect to="/sprint/:id" /> : <Login history={history} updateUser={this.updateUser} />}
           />
           <Route
             path="/login"
