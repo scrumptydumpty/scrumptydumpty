@@ -36,19 +36,19 @@ router.post('/', (req, res) => {
 });
 
 // NOT NEEDED
-// router.get('/', (req, res) => {
-//   console.log('fetching users');
-//   controller
-//     .getUsers()
-//     .then((result) => {
-//       console.log('success');
-//       return res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       return res.send(false);
-//     });
-// });
+router.get('/', (req, res) => {
+  console.log('fetching users');
+  controller
+    .getUsers()
+    .then((result) => {
+      console.log('success');
+      return res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.send(false);
+    });
+});
 
 router.put('/', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
