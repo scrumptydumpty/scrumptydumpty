@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import logo from './scrumlords.png';
 const api = require('../api');
@@ -30,7 +31,8 @@ class Login extends React.Component {
           }, 2000);
           return;
         }
-        this.updateUser();;
+        this.updateUser();
+        return (<Redirect to="/" />)
       });
   }
 

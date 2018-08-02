@@ -70,12 +70,8 @@ class App extends React.Component {
           <hr style={{ marginBottom: '3.5em' }} />
           <Route
             exact
-            path="/"
-<<<<<<< HEAD
-            render={() => this.state.user ? <Redirect to="/sprint/:id" /> : <Login history={history} updateUser={this.updateUser} />}
-=======
-            render={() => <Home user={user} />}
->>>>>>> 1a56826a36c245a54da4fe91b30fbd1c01be6a25
+            path="/"  
+            render={() => this.state.user ? <Home user={this.state.user} /> : <Login history={history} updateUser={this.updateUser} />}
           />
           <Route
             path="/login"
