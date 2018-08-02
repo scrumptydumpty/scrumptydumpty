@@ -17,8 +17,11 @@ class Sprint extends React.Component {
       sprint_id,
       isOwner: false,
       open: false,
-      tasks: []
+      tasks: [], 
+      selectedProfile: ""
     };
+    this.getDefaultSelectedProfile = this.getDefaultSelectedProfile.bind(this);
+    this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
@@ -34,6 +37,14 @@ class Sprint extends React.Component {
         this.reload()
       );
     }
+  }
+
+  getDefaultSelectedProfile(user) {
+    this.setState({ selectedProfile: user });
+  }
+
+  getNewSelectedProfile(user) {
+    this.setState({ selectedProfile: user });
   }
 
   handleClickOpen(e) {
@@ -96,6 +107,9 @@ class Sprint extends React.Component {
             user={this.props.user}
             isOwner={this.state.isOwner}
             sprint_id={this.state.sprint_id}
+            selectedProfile={this.state.selectedProfile}
+            getDefaultSelectedProfile={this.getDefaultSelectedProfile}
+            getNewSelectedProfile={this.getNewSelectedProfile}
           />
         </Drawer>
         {/* <Paper style={{ marginRight: "13.5em", marginLeft: "1em" }}> */}
@@ -112,7 +126,8 @@ class Sprint extends React.Component {
                 </Typography>
               <SelectedProfile
                 sprint_id={this.state.sprint_id}
-                reload={this.reload} />
+                reload={this.reload}
+                selectedProfile={this.state.selectedProfile} />
               </Paper>
             </Grid>
             <Grid item xs={3}>
