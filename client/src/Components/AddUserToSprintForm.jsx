@@ -152,6 +152,15 @@ class AddUserToSprintForm extends React.Component {
             </div>
           ))}
         </div>
+<<<<<<< HEAD
+        {/* keeping this form until we are able to render all usernames */}
+        {this.props.isOwner && (
+          <form style={{ width: "150px" }} onSubmit={this.onSubmit}>
+            {interior}
+          </form>
+        )}
+=======
+>>>>>>> 0e461deb7c77a5bfef7245324ea08059981dda6e
       </div>
     );
   }
