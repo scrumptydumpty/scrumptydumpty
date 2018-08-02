@@ -114,9 +114,11 @@ class App extends React.Component {
           /> */}
           <Route
             path="/sprint/:id"
-            render={routeprops => {console.log(routeprops); return(
-              <Sprint user={user} {...routeprops} />
-            )}}
+            render={routeprops => {
+              return(
+                <Sprint user={user} {...routeprops} />
+              )
+            }}
           />
         </div>
       </Router>

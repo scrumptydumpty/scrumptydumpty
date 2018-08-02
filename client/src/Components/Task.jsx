@@ -60,7 +60,7 @@ class Task extends React.Component {
       borderRadius: 3,
       boxShadow: "0 1px 0 #ccc",
       display: "block",
-      marginBottom: 8,
+      margin: "0 0 8px auto",
       maxWidth: 300,
       minHeight: 20,
       position: "relative",
