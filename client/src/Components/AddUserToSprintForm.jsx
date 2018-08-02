@@ -14,6 +14,7 @@ class AddUserToSprintForm extends React.Component {
       sprint_id: props.sprint_id,
       username: "",
       users: [],
+      noShows: [],
       status: 0 // display what when the menu is showing? 0 - not submitted, 1 - pending, 2 - success, 3 - failed
     };
     this.userChange = this.userChange.bind(this);
@@ -21,6 +22,7 @@ class AddUserToSprintForm extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.reload = this.reload.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+    this.reject = this.reject.bind(this);
   }
 
   deleteUser(user_id) {
@@ -39,6 +41,23 @@ class AddUserToSprintForm extends React.Component {
       .catch(err => console.log("err"));
   }
 
+  reject(user_id) {
+    const sprint_id = this.props.user.id;
+    api
+      .rejectUser({ user_id, sprint_id })
+      .then( res => {
+        if (!res) {
+          console.log('something went wrong');
+        }
+        const ids = [];
+        res.forEach( noShow => {
+          ids.push(noShow.user_id);
+        })
+        this.setState({ noShows: ids }, this.reload());
+      })
+      .catch(err => console.log("err"));
+  }
+
   componentWillUpdate(nextProps) {
     if (nextProps.sprint_id !== this.state.sprint_id) {
       this.setState({ sprint_id: nextProps.sprint_id, users: [] }, () =>
@@ -51,6 +70,15 @@ class AddUserToSprintForm extends React.Component {
     this.reload();
   }
 
+  componentDidMount() {
+    const sprint_id = this.state.sprint_id;
+    api
+      .getNoShowList(sprint_id)
+      .then((noShows) => {
+        this.setState({ noShows }, this.reload());
+      })
+  }
+
   //** need to refactor so getUsersInSprint returns list of users in dating pool **
 
   //uses sprint id to fetch all users authorized to access that sprint
@@ -60,7 +88,7 @@ class AddUserToSprintForm extends React.Component {
       .then((userArr) => {
         let users = [];
         userArr.data.forEach( user => {
-          if (this.props.user.id !== user.id) {
+          if (this.props.user.id !== user.id && !this.state.noShows.includes(user.id)) {
             users.push(user);
           }
         });
@@ -146,7 +174,7 @@ class AddUserToSprintForm extends React.Component {
                       </Avatar>
                     }
                     label={user.username}
-                    onDelete={() => this.deleteUser(user.id)}
+                    onDelete={() => this.reject(user.id)}
                   />
                 )}
             </div>

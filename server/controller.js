@@ -130,4 +130,14 @@ const self = (module.exports = {
   },
 
   getSprints: ({ user_id }) => db.getSprints(user_id),
+
+  addUserToRejectPool: ({ user_id, sprint_id }) => {
+    if (!user_id || user_id === '') throw 'No User Given';
+    if (!sprint_id) throw 'no sprint id given';
+
+    return db.addUserToRejectPool( user_id, sprint_id );
+  },
+
+  getRejects: (sprint_id) => db.getRejects(sprint_id)
+
 });
