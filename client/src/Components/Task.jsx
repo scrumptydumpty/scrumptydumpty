@@ -4,14 +4,15 @@ import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
 import { PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Eyeball from '@material-ui/icons/Visibility';
 class Task extends React.Component {
   constructor(props) {
     super(props);
     this.state = { active: false, editing: false };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
-    this.handleDoubleClick = this.handleDoubleClick.bind(this);
-
+    this.viewProfile = this.viewProfile.bind(this);
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -27,8 +28,22 @@ class Task extends React.Component {
     this.setState({ active: false });
   }
 
-  handleDoubleClick(e) {
-    this.setState({ editing: !this.state.editing }, () => this.props.reload());
+  viewProfile(e) {
+    // this.setState({ editing: !this.state.editing }, () => {
+    //   let user = {
+    //     description: this.props.task.description,
+    //     id: this.props.task["user_id"],
+    //     username: this.props.task.title
+    //   }
+    //   this.props.reload();
+    //   this.props.getNewSelectedProfile(user);
+    // });
+    let user = {
+      description: this.props.task.description,
+      id: this.props.task["user_id"],
+      username: this.props.task.title
+    }
+    this.props.getNewSelectedProfile(user);
   }
 
 
@@ -48,27 +63,36 @@ class Task extends React.Component {
       borderLeft: '8px solid',
       borderLeftColor: borderColor
     };
+    
     if (this.state.active === true) {
       style.backgroundColor = "#edeff0";
       style.borderBottomColor = "#d6dadc";
     }
 
-    if (this.state.editing) {
-      return (
-        <div>
-          <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-            <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
-          </Card>
-        </div>
-      );
-    }
+    // if (this.state.editing) {
+    //   return (
+    //     <div>
+    //       <Card 
+    //         onMouseOver={this.onMouseOver} 
+    //         onMouseOut={this.onMouseOut} 
+    //         onClick={this.handleClick}
+    //         style={style}>
+    //         <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
+    //       </Card>
+    //     </div>
+    //   );
+    // }
 
     return (
-      <div>
-        <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
-          <CardContent style={{ padding: '5px', textAlign: 'center' }}>
+      <div onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
+        <Card onClick={this.viewProfile} style={style}>
+          <CardContent style={{ padding: '5px' }}>
             <div>
-              {this.props.task.title}
+              <span style={{ paddingLeft: '10px' }}>{this.props.task.title}</span>
+              {this.state.active ? 
+                <span><Eyeball
+                  style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
+                  /></span> : null}
             </div>
             <div>
               <Blockers reload={this.props.reload} blockers={this.props.task.blockers} />

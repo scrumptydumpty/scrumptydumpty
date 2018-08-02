@@ -44,7 +44,7 @@ class Sprint extends React.Component {
   }
 
   getNewSelectedProfile(user) {
-    this.setState({ selectedProfile: user });
+    this.setState({ selectedProfile: user }, () => console.log(this.state.selectedProfile));
   }
 
   handleClickOpen(e) {
@@ -138,6 +138,7 @@ class Sprint extends React.Component {
                   sprint_id={this.state.sprint_id}
                   reload={this.reload}
                   tasks={notStarted}
+                  getNewSelectedProfile={this.getNewSelectedProfile}
                 />
               </Paper>
             </Grid>
