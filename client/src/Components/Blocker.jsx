@@ -53,9 +53,9 @@ class Blocker extends React.Component {
     return (
       <div>
         <Card style={style} onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
-          <CardContent style={{ padding: '5px' }}>
+          <CardContent style={{ padding: '10px' }}>
             <div>
-              <span style={{ paddingLeft: '10px' }}>{blocker.title}</span>
+              <span>{blocker.title}</span>
               {this.state.hovering ?
                 <span><DeleteIcon
                   style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
