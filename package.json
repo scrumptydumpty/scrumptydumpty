@@ -9,7 +9,7 @@
     "server": "nodemon ./server/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run react-dev\"",
     "start": "webpack && node ./server/server.js",
-    "resetdb": "./database/selectionScript.sh student student",
+    "resetdb": "./database/selectionScript.sh",
     "graphql-sandbox": "nodemon ./graphQL/graphqlServer.js"
   },
   "repository": {

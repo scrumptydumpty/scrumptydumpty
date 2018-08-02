@@ -83,7 +83,7 @@ const self = (module.exports = {
 
   getUsers: () => knex('users')
     .select()
-    .then(users => users.map(user => ({ id: user.id, username: user.username }))),
+    .then(users => users.map(user => ({ id: user.id, username: user.username, description: user.description }))),
 
   userExists: username => knex('users')
     .where('username', username)
