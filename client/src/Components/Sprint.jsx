@@ -44,7 +44,7 @@ class Sprint extends React.Component {
   }
 
   getNewSelectedProfile(user) {
-    this.setState({ selectedProfile: user }, () => console.log(this.state.selectedProfile));
+    this.setState({ selectedProfile: user });
   }
 
   handleClickOpen(e) {
@@ -64,7 +64,6 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    // console.log(this.state,'state of sprint')
     api.getTasks(this.state.sprint_id).then(tasks => {
       this.setState({ tasks });
     });

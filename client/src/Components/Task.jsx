@@ -13,6 +13,7 @@ class Task extends React.Component {
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.viewProfile = this.viewProfile.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -26,6 +27,10 @@ class Task extends React.Component {
 
   onMouseOut(e) {
     this.setState({ active: false });
+  }
+
+  toggleForm(e) {
+    this.setState({ editing: !this.state.editing });
   }
 
   viewProfile(e) {
@@ -64,24 +69,23 @@ class Task extends React.Component {
       borderLeftColor: borderColor
     };
     
-    if (this.state.active === true) {
+    if (this.state.active === true && this.state.editing === false) {
       style.backgroundColor = "#edeff0";
       style.borderBottomColor = "#d6dadc";
     }
 
-    // if (this.state.editing) {
-    //   return (
-    //     <div>
-    //       <Card 
-    //         onMouseOver={this.onMouseOver} 
-    //         onMouseOut={this.onMouseOut} 
-    //         onClick={this.handleClick}
-    //         style={style}>
-    //         <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
-    //       </Card>
-    //     </div>
-    //   );
-    // }
+    if (this.state.editing) {
+      return (
+        <div>
+          <Card 
+            onMouseOver={this.onMouseOver} 
+            onMouseOut={this.onMouseOut} 
+            style={style}>
+            <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
+          </Card>
+        </div>
+      );
+    }
 
     return (
       <div onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
@@ -92,7 +96,7 @@ class Task extends React.Component {
               {this.state.active ? 
                 <span><Eyeball
                   style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
-                  /></span> : null}
+                  onClick={this.toggleForm}/></span> : null}
             </div>
             <div>
               <Blockers reload={this.props.reload} blockers={this.props.task.blockers} />
