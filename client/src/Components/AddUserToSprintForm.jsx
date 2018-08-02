@@ -1,8 +1,7 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import CardContent from "@material-ui/core/CardContent";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 
 import api from "../api";
 
@@ -15,9 +14,7 @@ class AddUserToSprintForm extends React.Component {
       users: [],
       status: 0 // display what when the menu is showing? 0 - not submitted, 1 - pending, 2 - success, 3 - failed
     };
-    this.userChange = this.userChange.bind(this);
     // this.etaChange = this.etaChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
     this.reload = this.reload.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
   }
@@ -37,7 +34,7 @@ class AddUserToSprintForm extends React.Component {
       })
       .catch(err => console.log("err"));
   }
-
+  
   componentWillUpdate(nextProps) {
     if (nextProps.sprint_id !== this.state.sprint_id) {
       this.setState({ sprint_id: nextProps.sprint_id, users: [] }, () =>
@@ -50,67 +47,26 @@ class AddUserToSprintForm extends React.Component {
     this.reload();
   }
 
+  //** need to refactor so getUsersInSprint returns list of users in dating pool **
+
+  //uses sprint id to fetch all users authorized to access that sprint
   reload() {
     api
-      .getUsersInSprint(this.state.sprint_id)
-      .then(users => this.setState({ users }));
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-
-    // sprint id passed down via props
-    this.setState({ status: 1 });
-
-    api
-      .addUserToSprint({
-        username: this.state.username,
-        sprint_id: this.props.sprint_id
+      .getUsers()
+      .then((userArr) => {
+        let users = [];
+        userArr.data.forEach( user => {
+          if (this.props.user.id !== user.id) {
+            users.push(user);
+          }
+        });
+        this.setState({ users }, () => {
+          this.props.getDefaultSelectedProfile(this.state.users[0]);
+        });
       })
-      .then(res => {
-        if (!res) {
-          this.setState({ status: 3 });
-          return;
-        }
-        this.setState({ status: 2, username: "" }, this.reload());
-      });
-  }
-
-  userChange(e) {
-    e.preventDefault();
-    this.setState({ username: e.target.value });
   }
 
   render() {
-    let interior = (
-      <div>
-        <TextField
-          required
-          id="user"
-          label="Username"
-          value={this.state.username}
-          margin="normal"
-          onChange={this.userChange}
-        />
-        <Button type="submit">Add Team Member</Button>
-      </div>
-    );
-
-    if (this.state.status === 1) {
-      interior = <div>Saving...</div>;
-    }
-    if (this.state.status === 2) {
-      interior = <div>Success!</div>;
-      setTimeout(() => {
-        this.setState({ status: 0, title: "" });
-      }, 1000);
-    }
-    if (this.state.status === 3) {
-      interior = <div>Failed!</div>;
-      setTimeout(() => {
-        this.setState({ status: 0 });
-      }, 1000);
-    }
     return (
       <div
         style={{
@@ -118,31 +74,30 @@ class AddUserToSprintForm extends React.Component {
         }}
       >
         <div>
+          {/* change Team Members to something punny for title of dating pool (broken pieces? all the kings men/women?) */}
           <strong>Team Members</strong>
         </div>
         <hr />
         <div>
-          {this.state.users.map((user, i) => (
+        {this.state.users.map((user, i) => (
             <div key={i}>
-              {`${user.username}  `}
               {this.props.isOwner &&
                 user.id !== this.props.user.id && (
-                  <button
-                    style={{ float: "right" }}
-                    onClick={() => this.deleteUser(user.id)}
-                  >
-                    X
-                  </button>
+                  <Chip
+                    avatar={
+                      <Avatar>
+                        <FaceIcon />
+                      </Avatar>
+                    }
+                    label={user.username}
+                    style={{ marginBottom: "5px" }}
+                    onDelete={() => this.deleteUser(user.id)}
+                    onClick={() => this.props.getNewSelectedProfile(user)}
+                  />
                 )}
-              <hr />
             </div>
           ))}
         </div>
-        {this.props.isOwner && (
-          <form style={{ width: "150px" }} onSubmit={this.onSubmit}>
-            {interior}
-          </form>
-        )}
       </div>
     );
   }

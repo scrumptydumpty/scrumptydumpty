@@ -4,25 +4,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
 import { PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
-
-
-const TaskInfo = ({ task, reload }) => (
-  <div>
-    <CardContent style={{ padding: '5px', textAlign: 'center' }}>
-      <div>
-        {task.title}
-      </div>
-      <div>
-        <Blockers reload={reload} blockers={task.blockers} />
-      </div>
-    </CardContent>
-  </div>
-);
-
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { shadow: 1, editing: false };
+    this.state = { active: false, editing: false };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
@@ -35,11 +20,11 @@ class Task extends React.Component {
   }
 
   onMouseOver(e) {
-    this.setState({ shadow: 3 });
+    this.setState({ active: true });
   }
 
   onMouseOut(e) {
-    this.setState({ shadow: 1 });
+    this.setState({ active: false });
   }
 
   handleDoubleClick(e) {
@@ -48,18 +33,24 @@ class Task extends React.Component {
 
 
   render() {
-    const { task } = this.props;
-    const borderColor = PRIORITY_COLOR[task.priority_code];
+    const borderColor = PRIORITY_COLOR[this.props.task.priority_code];
 
     const style = {
-      borderRadius: '10px',
-      margin: '10px',
-      borderLeft: '2px solid',
-      borderLeftColor: borderColor,
-
+      backgroundColor: "#fff",
+      borderRadius: 3,
+      boxShadow: "0 1px 0 #ccc",
+      display: "block",
+      marginBottom: 8,
+      maxWidth: 300,
+      minHeight: 20,
+      position: "relative",
+      textDecoration: "none",
+      borderLeft: '8px solid',
+      borderLeftColor: borderColor
     };
-    if (this.state.shadow === 3) {
-      style.boxShadow = '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)';
+    if (this.state.active === true) {
+      style.backgroundColor = "#edeff0";
+      style.borderBottomColor = "#d6dadc";
     }
 
     if (this.state.editing) {
@@ -74,13 +65,15 @@ class Task extends React.Component {
 
     return (
       <div>
-        <Card
-          onMouseOver={this.onMouseOver}
-          onMouseOut={this.onMouseOut}
-          onDoubleClick={this.handleDoubleClick}
-          style={style}
-        >
-          <TaskInfo task={this.props.task} reload={this.props.reload} />
+        <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
+          <CardContent style={{ padding: '5px', textAlign: 'center' }}>
+            <div>
+              {this.props.task.title}
+            </div>
+            <div>
+              <Blockers reload={this.props.reload} blockers={this.props.task.blockers} />
+            </div>
+          </CardContent>
         </Card>
       </div>
     );

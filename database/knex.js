@@ -1,8 +1,8 @@
 require('mysql2');
 
 const host = process.env.DBHOST || 'localhost';
-const user = process.env.DBUSERNAME || 'student';
-const password = process.env.DBPASSWORD || 'student';
+const user = process.env.DBUSERNAME || 'root';
+const password = process.env.DBPASSWORD || 'password';
 const db = process.env.DBNAME || 'sprints';
 
 

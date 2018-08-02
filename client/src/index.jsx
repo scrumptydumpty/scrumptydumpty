@@ -1,3 +1,4 @@
+
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
@@ -10,6 +11,7 @@ import Home from "./Components/Home.jsx";
 import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -31,14 +33,14 @@ class App extends React.Component {
 
   updateSprintList() {
     // Fetch sprints for user
-    return api.getSprints().then(sprintList => {
+    return api.getSprints().then((sprintList) => {
       this.setState({ sprintList });
     });
   }
 
   logout() {
     // Destroy user session
-    api.logout().then(res => {
+    api.logout().then((res) => {
       if (res) {
         this.setState({ user: null, sprintList: [] });
       }
@@ -47,7 +49,7 @@ class App extends React.Component {
   
   updateUser() {
     // Check for user credentials, then fetch sprints for user
-    api.verify().then(user => {
+    api.verify().then((user) => {
       if (user) {
         this.setState({ user });
         this.updateSprintList();
@@ -56,19 +58,24 @@ class App extends React.Component {
   }
 
   render() {
+    const { user, sprintList } = this.state;
     return (
       <Router>
-        <div style={{ fontFamily: "Roboto" }}>
+        <div style={{ fontFamily: 'Roboto' }}>
           <Navbar
-            user={this.state.user}
+            user={user}
             logout={this.logout}
-            sprintList={this.state.sprintList}
+            sprintList={sprintList}
           />
-          <hr style={{ marginBottom: "3.5em" }} />
+          <hr style={{ marginBottom: '3.5em' }} />
           <Route
             exact
             path="/"
+<<<<<<< HEAD
             render={() => this.state.user ? <Redirect to="/sprint/:id" /> : <Login history={history} updateUser={this.updateUser} />}
+=======
+            render={() => <Home user={user} />}
+>>>>>>> 1a56826a36c245a54da4fe91b30fbd1c01be6a25
           />
           <Route
             path="/login"
@@ -85,7 +92,7 @@ class App extends React.Component {
           <Route
             path="/updateuser"
             render={({ history }) => (
-              <UpdateUserForm history={history} user={this.state.user} />
+              <UpdateUserForm history={history} user={user} />
             )}
           />
           <Route
@@ -106,7 +113,7 @@ class App extends React.Component {
           <Route
             path="/sprint/:id"
             render={routeprops => (
-              <Sprint user={this.state.user} {...routeprops} />
+              <Sprint user={user} {...routeprops} />
             )}
           />
         </div>
