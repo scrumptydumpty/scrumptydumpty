@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 
 import api from "../api";
 
@@ -124,20 +125,22 @@ class AddUserToSprintForm extends React.Component {
         <div>
           {this.state.users.map((user, i) => (
             <div key={i}>
-              {`${user.username}  `}
               {this.props.isOwner &&
                 user.id !== this.props.user.id && (
-                  <button
-                    style={{ float: "right" }}
-                    onClick={() => this.deleteUser(user.id)}
-                  >
-                    X
-                  </button>
+                  <Chip
+                    avatar={
+                      <Avatar>
+                        <FaceIcon />
+                      </Avatar>
+                    }
+                    label={user.username}
+                    onDelete={() => this.deleteUser(user.id)}
+                  />
                 )}
-              <hr />
             </div>
           ))}
         </div>
+        {/* keeping this form until we are able to render all usernames */}
         {this.props.isOwner && (
           <form style={{ width: "150px" }} onSubmit={this.onSubmit}>
             {interior}
