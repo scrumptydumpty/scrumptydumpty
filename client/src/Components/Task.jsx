@@ -34,15 +34,6 @@ class Task extends React.Component {
   }
 
   viewProfile(e) {
-    // this.setState({ editing: !this.state.editing }, () => {
-    //   let user = {
-    //     description: this.props.task.description,
-    //     id: this.props.task["user_id"],
-    //     username: this.props.task.title
-    //   }
-    //   this.props.reload();
-    //   this.props.getNewSelectedProfile(user);
-    // });
     let user = {
       description: this.props.task.description,
       id: this.props.task["user_id"],

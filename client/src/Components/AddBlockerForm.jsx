@@ -2,8 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import api from '../api';
-
-
 class AddBlockerForm extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +32,7 @@ class AddBlockerForm extends React.Component {
         this.setState({ status: 3 }); return;
       }
       this.setState({ status: 2 });
+      this.props.reload();
     });
   }
 
@@ -57,7 +56,7 @@ class AddBlockerForm extends React.Component {
       <div>
         <TextField required id="title" label="Blocker" value={this.state.title} margin="normal" onChange={this.titleChange} />
         <Button type="submit">
-        Save
+          Save
         </Button>
 
       </div>
@@ -66,14 +65,14 @@ class AddBlockerForm extends React.Component {
     if (this.state.status === 1) {
       interior = (
         <div>
-Saving...
+          Saving...
         </div>
       );
     }
     if (this.state.status === 2) {
       interior = (
         <div>
-Success!
+          Success!
         </div>
       );
       setTimeout(() => {
@@ -83,7 +82,7 @@ Success!
     if (this.state.status === 3) {
       interior = (
         <div>
-Failed to Save!
+          Failed to Save!
         </div>
       );
       setTimeout(() => {
