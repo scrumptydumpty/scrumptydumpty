@@ -22,18 +22,19 @@ class App extends React.Component {
       sprintList: [],
       sprint_id: false,
       sprint: ``,
+      loggedIn: null
     };
     this.updateUser = this.updateUser.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
-    const socket = socketIOClient("http://127.0.0.1:1337")
+    
+    this.socket = socketIOClient("http://127.0.0.1:1337")
   }
 
   componentDidMount() {
     // Any time app re-renders, check for user session
     this.updateUser();
-    
   }
 
   updateSprintList() {
@@ -119,9 +120,9 @@ class App extends React.Component {
           />
           <Route
             path="/sprint/:id"
-            render={routeprops => {console.log(routeprops); return(
-              <Sprint user={user} {...routeprops} />
-            )}}
+            render={routeprops => (
+              <Sprint user={user} {...routeprops} socket={this.socket}/>
+            )}
           />
         </div>
       </Router>

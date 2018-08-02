@@ -62,7 +62,7 @@ class Navbar extends Component {
             component={Link}
             to="/"
           >
-            Scrumpalicous.
+            Scrumpalicious.
           </Typography>
           {user === null ? (
             <div>

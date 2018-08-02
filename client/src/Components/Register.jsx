@@ -38,7 +38,6 @@ class Register extends React.Component {
       }
       this.updateUser();
       this.addSprint(this.state.username).then((res)=>{
-      this.setSprint(res.id);
       let sprint = `/sprint/${res.id}`
       this.history.push(sprint)
       })

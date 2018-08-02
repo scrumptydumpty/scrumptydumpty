@@ -65,6 +65,10 @@ app.get('*', (req, res) => {
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 const io = require('socket.io')(server)
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (client) {
   console.log('SOCKET 2 ME BB')
-});
+  
+  client.on('message', (message) => {
+    console.log(message)
+  })
+})

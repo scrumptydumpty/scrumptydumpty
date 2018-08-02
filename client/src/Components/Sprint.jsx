@@ -25,6 +25,7 @@ class Sprint extends React.Component {
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
+    this.socket = props.socket;
   }
 
   componentWillMount() {
@@ -99,7 +100,9 @@ class Sprint extends React.Component {
       whiteSpace: "normal",
       padding: "4px"
     }
+    
 
+    
     return (
       <div onClick={this.closeEdits}>
         <Drawer variant="permanent" anchor="right">
@@ -126,7 +129,8 @@ class Sprint extends React.Component {
               <SelectedProfile
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
-                selectedProfile={this.state.selectedProfile} />
+                selectedProfile={this.state.selectedProfile}
+                socket={this.socket} />
               </Paper>
             </Grid>
             <Grid item xs={3}>
