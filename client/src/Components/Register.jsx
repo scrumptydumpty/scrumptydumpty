@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
+import logo from './scrumlords.png';
+import { Redirect } from 'react-router-dom';
 const api = require('../api');
 
 class Register extends React.Component {
@@ -19,6 +20,8 @@ class Register extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
     this.history = props.history;
+    this.addSprint = api.addSprint.bind(this)
+    this.setSprint = props.setSprint;
   }
 
   handleSubmit(e) {
@@ -33,9 +36,12 @@ class Register extends React.Component {
         }, 2000);
         return;
       }
-
       this.updateUser();
-      this.history.push('/');
+      this.addSprint(this.state.username).then((res)=>{
+      this.setSprint(res.id);
+      let sprint = `/sprint/${res.id}`
+      this.history.push(sprint)
+      })
     });
   }
 
@@ -58,9 +64,9 @@ class Register extends React.Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ margin: 'auto', marginTop: '10%', textAlign: 'center', height: '600px', width: '400px', border: '1px solid red'}}>
+        <img src={logo} style={{width: '100%', padding: '50px 0'}} />
         <form onSubmit={this.handleSubmit}>
-
           <div>
             <TextField required id="username" label="Username" value={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
           </div>

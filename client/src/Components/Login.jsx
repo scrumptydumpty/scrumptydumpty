@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
-
+import logo from './scrumlords.png';
 const api = require('../api');
 
 class Login extends React.Component {
@@ -12,7 +13,7 @@ class Login extends React.Component {
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
-    this.history = props.history;
+    this.history = this.props.history;
   }
 
   handleSubmit(e) {
@@ -30,8 +31,8 @@ class Login extends React.Component {
           return;
         }
         this.updateUser();
-        this.history.push('/');
-      });
+        
+    })
   }
 
 
@@ -48,9 +49,9 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ margin: 'auto', marginTop: '10%', textAlign: 'center', height: '600px', width: '400px', border: '1px solid red'}}>
+        <img src={logo} style={{width: '100%', padding: '50px 0'}} />
         <form onSubmit={this.handleSubmit}>
-
           <div>
             <TextField required id="username" label="Username" value={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
           </div>
@@ -67,8 +68,6 @@ class Login extends React.Component {
             </Button>
           </div>
         </form>
-
-
       </div>
     );
   }

@@ -11,9 +11,18 @@ module.exports = {
         include: `${__dirname}/client/src`,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'env'],
-        },
+          presets: ['react', 'env']
+        }
       },
-    ],
-  },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {}
+          }
+        ]
+      }
+    ]
+  }
 };
