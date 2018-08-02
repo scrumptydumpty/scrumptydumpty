@@ -16,10 +16,6 @@ class AddTaskButton extends React.Component {
     this.closeTask = this.closeTask.bind(this);
   }
 
-  closeTask() {
-    this.setState({ editing: false });
-  }
-
   onMouseOver(e) {
     e.preventDefault();
     e.stopPropagation();

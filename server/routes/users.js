@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
   console.log('adding user');
   bcrypt.hash(req.body.password, 10)
     .then((hash) => {
-      controller.addUser({ username: req.body.username, password: hash })
+      controller.addUser({ username: req.body.username, password: hash, description: req.body.description })
         .then((result) => {
           console.log('success');
           passport.authenticate('local', (err, user, info) => {
@@ -63,7 +63,7 @@ router.put('/', (req, res, next) => {
     }
     // username, password was correct. now update based on newpassword.
     bcrypt.hash(req.body.newpassword, 10)
-      .then(hash => controller.updateUser({ username: req.body.username, password: hash }))
+      .then(hash => controller.updateUser({ username: req.body.username, desc: req.body.description, password: hash }))
       .then(user => res.send({ id: user.id, username: user.username }))
       .catch((err) => {
         console.log(err);

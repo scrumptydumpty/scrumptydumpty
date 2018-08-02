@@ -74,8 +74,8 @@ const self = (module.exports = {
       .select())
     .then(blockers => blockers[0]),
 
-  addUser: (username, password) => knex('users')
-    .insert({ username, password })
+  addUser: (username, password, description) => knex('users')
+    .insert({ username, password, description })
     .then(id => knex('users')
       .where('id', id)
       .select())
@@ -83,7 +83,7 @@ const self = (module.exports = {
 
   getUsers: () => knex('users')
     .select()
-    .then(users => users.map(user => ({ id: user.id, username: user.username }))),
+    .then(users => users.map(user => ({ id: user.id, username: user.username, description: user.description }))),
 
   userExists: username => knex('users')
     .where('username', username)
@@ -94,12 +94,13 @@ const self = (module.exports = {
     .select()
     .first(),
 
-  updateUser: (username, password) => knex('users')
+  updateUser: (username, description, password) => knex('users')
     .where('username', username)
     .select()
     .then(arr => knex('users')
       .where('id', arr[0].id)
-      .update({ username, password }))
+      .update({ username, description, password })
+    )
     .then(() => knex('users')
       .where('username', username)
       .select())

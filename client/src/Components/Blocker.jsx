@@ -37,7 +37,18 @@ class Blocker extends React.Component {
   render() {
     const blocker = this.state.blocker;
     const style = {
-      borderRadius: '10px', margin: 'auto', width: '80%', backgroundColor: COLOR.red, padding: '5px', textAlign: 'center', height: '20px',
+      borderRadius: 3,
+      boxShadow: "0 1px 0 #ccc",
+      display: "block",
+      margin: '0 auto 8px auto',
+      maxWidth: 300,
+      minHeight: 20,
+      position: "relative",
+      textDecoration: "none",
+      width: '80%', 
+      backgroundColor: COLOR.red, 
+      padding: '5px', 
+      textAlign: 'center'
     };
 
 

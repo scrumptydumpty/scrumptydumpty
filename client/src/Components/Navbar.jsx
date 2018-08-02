@@ -126,7 +126,7 @@ class Navbar extends Component {
                 onClick={this.handleAcctClick}
                 label="account"
               >
-                My Account
+                My Profile
                 <i className="fa fa-user-circle" style={{marginLeft: '8px'}} aria-hidden="true"></i>
               </Button>
               <Menu
@@ -137,12 +137,14 @@ class Navbar extends Component {
               >
                   <MenuItem
                     onClick={this.handleAcctClose}
-                    value={'Change Password'}
+                    // It doesn't appear this value is needed?
+                    // value={'Change Password'}
                     component={Link}
-                    label='Change Password'
+                    // It doesn't appear this label is needed?
+                    // label='Change Password'
                     to={`/updateuser`}
                   >
-                  Change Password
+                  Update Profile
 
                   </MenuItem>
               </Menu>
