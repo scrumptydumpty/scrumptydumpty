@@ -11,6 +11,7 @@ import Home from "./Components/Home.jsx";
 import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
+import socketIOClient from "socket.io-client";
 
 
 class App extends React.Component {
@@ -26,11 +27,13 @@ class App extends React.Component {
     this.updateSprintList = this.updateSprintList.bind(this);
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
+    const socket = socketIOClient("http://127.0.0.1:1337")
   }
 
   componentDidMount() {
     // Any time app re-renders, check for user session
     this.updateUser();
+    
   }
 
   updateSprintList() {
