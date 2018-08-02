@@ -42,7 +42,7 @@ class AddTaskForm extends React.Component {
     const {
       title, description, priority_code, difficulty,
     } = this.state;
-    
+
     api.addTask({
       title,
       description,
@@ -66,11 +66,6 @@ class AddTaskForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(e);
-    // const {
-    //   title, description, priority_code, difficulty,
-    // } = this.state;
-
     if (this.state.title === "" && this.state.description === "") {
       this.setState({
         title: this.props.user.username,
