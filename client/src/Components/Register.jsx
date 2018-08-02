@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import logo from './scrumlords.png';
+import { Redirect } from 'react-router-dom';
 const api = require('../api');
 
 class Register extends React.Component {
@@ -14,6 +15,7 @@ class Register extends React.Component {
     this.updateUser = props.updateUser;
     this.history = props.history;
     this.addSprint = api.addSprint.bind(this)
+    this.setSprint = props.setSprint;
   }
 
   handleSubmit(e) {
@@ -28,9 +30,12 @@ class Register extends React.Component {
         }, 2000);
         return;
       }
-
       this.updateUser();
-      this.addSprint(this.state.username)
+      this.addSprint(this.state.username).then((res)=>{
+      this.setSprint(res.id);
+      let sprint = `/sprint/${res.id}`
+      this.history.push(sprint)
+      })
     });
   }
 

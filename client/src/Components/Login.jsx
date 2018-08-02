@@ -13,8 +13,7 @@ class Login extends React.Component {
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateUser = props.updateUser;
-    this.history = props.history;
-    this.fuh = props.fuh;
+    this.history = this.props.history;
   }
 
   handleSubmit(e) {
@@ -32,8 +31,8 @@ class Login extends React.Component {
           return;
         }
         this.updateUser();
-        return (<Redirect to="/" />)
-      });
+        
+    })
   }
 
 
