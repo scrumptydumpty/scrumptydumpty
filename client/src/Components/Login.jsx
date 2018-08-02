@@ -20,7 +20,6 @@ class Login extends React.Component {
     e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
-
     api.login(username, password)
       .then((res) => {
         if (!res) {
