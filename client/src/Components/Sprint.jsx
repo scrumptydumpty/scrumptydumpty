@@ -18,7 +18,7 @@ class Sprint extends React.Component {
       sprint_id,
       isOwner: false,
       open: false,
-      tasks: [], 
+      tasks: [],
       selectedProfile: ""
     };
     this.getDefaultSelectedProfile = this.getDefaultSelectedProfile.bind(this);
@@ -27,6 +27,7 @@ class Sprint extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
+    console.log(props)
   }
 
   componentWillMount() {
@@ -100,9 +101,9 @@ class Sprint extends React.Component {
       whiteSpace: "normal",
       padding: "4px"
     }
-    
 
-    
+
+
     return (
       <div onClick={this.closeEdits}>
         <Drawer variant="permanent" anchor="right">
