@@ -1,7 +1,7 @@
 import React from 'react'
 
-const style = { 
-  height: "500px"
+const style = {
+  height: "500px",
   width: "375px",
   border: "1px solid black",
   position: "fixed",
@@ -25,12 +25,12 @@ class Messenger extends React.Component {
   handleChange(e) {
     this.setState({ message: e.target.value })
   }
-  
+
   sendMessage(e) {
     e.preventDefault();
-    this.socket.emit('message', this.state.message, (msg)=>{console.log('Message receieved!')}
+    this.socket.emit('message', this.state.message, (msg)=>{console.log('Message receieved!')})
   }
-  
+
   render() {
     return (
       <div style={style}>
@@ -42,3 +42,5 @@ class Messenger extends React.Component {
     )
   }
 }
+
+export default Messenger;
