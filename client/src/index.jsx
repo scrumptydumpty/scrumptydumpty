@@ -72,8 +72,7 @@ class App extends React.Component {
           <Route
             exact
             path="/"
-            render={({ history }) => (<Home user={this.state.user} history={history} updateUser={this.updateUser} />)}
-          />
+  render={() => this.state.user && this.state.sprint ? <Redirect to={this.state.sprint} /> : <Login history={history} updateUser={this.updateUser} />}          />
           <Route
             path="/login"
             render={({ history }) => (
