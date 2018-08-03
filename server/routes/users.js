@@ -50,6 +50,11 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/pic', (req, res, next) => {
+  console.log('the body of the request to PUT /users/ is: ', req.body);
+  console.log('the files in the req are: ', req.files);
+});
+
 router.put('/', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
