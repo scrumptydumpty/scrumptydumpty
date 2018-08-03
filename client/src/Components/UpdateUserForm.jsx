@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-
+const axios = require('axios');
 const api = require('../api');
 
 const styles = {
@@ -31,7 +31,6 @@ class UpdateUserForm extends React.Component {
     this.state = {
       currentPassword: '',
       newPassword: '',
-      newUsername: '',
       newDescription: '',
     };
     this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
@@ -40,10 +39,20 @@ class UpdateUserForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { currentPassword, newDescription, newPassword } = this.state;
-    const { user } = this.props;
+    const {
+      currentPassword,
+      newDescription,
+      newPassword,
+    } = this.state;
 
-    api.updateUser(currentPassword, newPassword, newDescription, user.username).then((res) => {
+    if (this.uploadInput) {
+      console.log('Looks like you\'re trying to update your profile pic!');
+      const fileData = new FormData();
+      fileData.append('file', this.uploadInput.files[0]);  
+      axios.post('/users/pic', fileData, { headers: { 'Content-Type': 'multipart/form-data' } });
+    }
+
+    api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
       if (!res) {
       // fire error snackbar
       } else {
@@ -51,7 +60,7 @@ class UpdateUserForm extends React.Component {
         // fire success snackbar
         setTimeout(() => {
           this.props.history.push('/');
-        }, 2000);
+        }, 1500);
       }
     });
   }
@@ -63,8 +72,12 @@ class UpdateUserForm extends React.Component {
 
   render() {
     const { classes, user } = this.props;
-    const { currentPassword, newDescription, newPassword } = this.state;
-    const submitDisabled = (newPassword === '') && (newDescription === '');
+    const {
+      currentPassword,
+      newDescription,
+      newPassword,
+    } = this.state;
+    const submitDisabled = (newPassword === '') && (newDescription === '') && (this.uploadInput !== undefined);
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -72,7 +85,7 @@ class UpdateUserForm extends React.Component {
           <CardContent>
             <Typography variant="headline" gutterBottom>
               Welcome, {user.username}!
-        </Typography>
+            </Typography>
           </CardContent>
         </Card>
         <Card className={classes.card}>
@@ -111,6 +124,7 @@ class UpdateUserForm extends React.Component {
               margin="normal"
               onChange={this.handleFieldUpdate}
             />
+            <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
           </CardContent>
         </Card>
         <Button variant="contained" disabled={submitDisabled} color="primary" type="submit" className={classes.button}>
