@@ -88,9 +88,7 @@ class AddUserToSprintForm extends React.Component {
             users.push(user);
           }
         });
-        this.setState({ users }, () => {
-          this.props.getDefaultSelectedProfile(this.state.users[0]);
-        });
+        this.setState({ users });
       })
   }
 
