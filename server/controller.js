@@ -1,7 +1,7 @@
 const db = require('../database/db');
 
 const self = (module.exports = {
-  addTask: ({ title, description, sprint_id }, user) => {
+  addTask: ({ title, description, sprint_id, user_id }, user) => {
     if (!title || title === '') throw 'No Title';
     if (!description || description === '') throw 'No description';
     if (!sprint_id) throw 'No sprint id';
@@ -9,7 +9,7 @@ const self = (module.exports = {
 
     return db
       .userCanAccessSprint(sprint_id, user.id)
-      .then(() => db.addTask(title, description, sprint_id));
+      .then(() => db.addTask(title, description, sprint_id, user_id));
   },
   getTasks: (sprint_id, user) => {
     if (!user || !user.id) throw 'user not logged in';

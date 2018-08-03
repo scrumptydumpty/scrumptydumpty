@@ -1,8 +1,8 @@
 const { knex } = require('./knex');
 
 const self = (module.exports = {
-  addTask: (title, description, sprint_id) => knex('tasks')
-    .insert({ title, description, sprint_id })
+  addTask: (title, description, sprint_id, user_id) => knex('tasks')
+    .insert({ title, description, sprint_id, user_id })
     .then(id => knex('tasks')
       .where('id', id)
       .select())
