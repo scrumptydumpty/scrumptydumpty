@@ -236,6 +236,11 @@ const self = (module.exports = {
       }
     }),
 
+  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
+    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
+    .then(() => knex('users').where('username', username).select())
+    .then(users => users[0]),
+
   addUserToRejectPool: (user_id, sprint_id) => {
     const pool_id = sprint_id;
     return knex('sprintusers').insert({ user_id, sprint_id }) //sprint_id = id of user's no-show pool. user_id = id of rejected user
