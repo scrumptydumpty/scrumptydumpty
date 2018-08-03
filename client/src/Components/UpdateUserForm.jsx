@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core/styles';
-
+const axios = require('axios');
 const api = require('../api');
 
 const styles = {
@@ -36,7 +36,6 @@ class UpdateUserForm extends React.Component {
     this.state = {
       currentPassword: '',
       newPassword: '',
-      newUsername: '',
       newDescription: '',
       open: false
     };
@@ -48,10 +47,20 @@ class UpdateUserForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { currentPassword, newDescription, newPassword } = this.state;
-    const { user } = this.props;
+    const {
+      currentPassword,
+      newDescription,
+      newPassword,
+    } = this.state;
 
-    api.updateUser(currentPassword, newPassword, newDescription, user.username).then((res) => {
+    if (this.uploadInput) {
+      console.log('Looks like you\'re trying to update your profile pic!');
+      const fileData = new FormData();
+      fileData.append('file', this.uploadInput.files[0]);  
+      axios.post('/users/pic', fileData, { headers: { 'Content-Type': 'multipart/form-data' } });
+    }
+
+    api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
       if (!res) {
       // fire error snackbar
       } else {
@@ -59,7 +68,7 @@ class UpdateUserForm extends React.Component {
         // fire success snackbar
         setTimeout(() => {
           this.props.history.push('/');
-        }, 2000);
+        }, 1500);
       }
     });
   }
@@ -81,6 +90,7 @@ class UpdateUserForm extends React.Component {
     const { classes, user } = this.props;
     const { currentPassword, newUsername, newDescription, newPassword } = this.state;
     const submitDisabled = (newPassword === '') && (newDescription === '');
+    //const submitDisabled = (newPassword === '') && (newDescription === '') && (this.uploadInput !== undefined);
 
     return (
       <div style={{ margin: 'auto', marginTop: '10%', height: '600px', width: '400px' }}>
@@ -104,6 +114,9 @@ class UpdateUserForm extends React.Component {
                 <Button 
                   onClick={this.handleClickOpen}
                   style={{ top: "1px" }}>EDIT</Button></span>
+            </div>
+            <div>
+              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
             </div>
           </CardContent>
         </Card>
