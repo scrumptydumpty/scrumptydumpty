@@ -26,9 +26,9 @@ module.exports = {
     }),
 
   addTask: ({
-    title, description, difficulty, priority_code, sprint_id
+    title, description, difficulty, priority_code, sprint_id, user_id
   }) => axios
-    .post('/tasks', { title, description, sprint_id })
+    .post('/tasks', { title, description, sprint_id, user_id })
     .then(result => result.data)
     .catch((err) => {
       console.log(err);

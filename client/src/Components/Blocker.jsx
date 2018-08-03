@@ -9,8 +9,8 @@ import api from '../api';
 class Blocker extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      blocker: props.blocker, 
+    this.state = {
+      blocker: props.blocker,
       hovering: false };
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
@@ -46,16 +46,16 @@ class Blocker extends React.Component {
       minHeight: 20,
       position: "relative",
       textDecoration: "none",
-      width: '80%', 
+      width: '80%',
       backgroundColor: COLOR.red
     };
 
     return (
       <div>
         <Card style={style} onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
-          <CardContent style={{ padding: '5px' }}>
+          <CardContent style={{ padding: '10px' }}>
             <div>
-              <span style={{ paddingLeft: '10px' }}>{blocker.title}</span>
+              <span>{blocker.title}</span>
               {this.state.hovering ?
                 <span><DeleteIcon
                   style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
