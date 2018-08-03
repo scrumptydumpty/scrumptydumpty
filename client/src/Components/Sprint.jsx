@@ -8,6 +8,7 @@ import Tasks from "./Tasks.jsx";
 import SelectedProfile from "./SelectedProfile.jsx";
 import api from "../api";
 import AddUserToSprintForm from "./AddUserToSprintForm.jsx";
+import Messenger from './Messaging.jsx'
 
 class Sprint extends React.Component {
   constructor(props) {
@@ -129,8 +130,9 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 selectedProfile={this.state.selectedProfile}
-                socket={this.socket} />
+              />
               </Paper>
+            <Messenger socket={this.socket} />
             </Grid>
             <Grid item xs={3}>
               <Paper style={paperStyle}>
