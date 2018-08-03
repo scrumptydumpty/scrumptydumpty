@@ -91,6 +91,10 @@ const self = (module.exports = {
     return db.updateUser(username, desc, password)
   },
 
+  updateUserProfilePic: ({ username, url }) => {
+    return db.updateUserProfilePic(username, url);
+  },
+
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
 
