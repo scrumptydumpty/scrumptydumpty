@@ -19,12 +19,20 @@ class SelectedProfile extends React.Component {
       },
     };
 
+    console.log(this.props.selectedProfile);
+
+    let { profile_image_url } = this.props.selectedProfile;
+
+    if (profile_image_url === 'NULL' || profile_image_url === undefined || profile_image_url === null) {
+      profile_image_url = 'https://www.rebornmasculinity.com/wp-content/uploads/2017/12/Russian-women.jpg';
+    };
+
     return (
       <div>
         <Card style={styles.card}>
           <CardMedia
             style={styles.media}
-            image="https://www.rebornmasculinity.com/wp-content/uploads/2017/12/Russian-women.jpg"
+            image={profile_image_url}
           />
           <CardContent>
             <Typography gutterBottom variant="headline" component="h2">
