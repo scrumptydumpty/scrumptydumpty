@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const { passport } = require('./passport');
 const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
@@ -20,6 +21,7 @@ const app = express();
 
 
 app.use(bodyParser.json());
+app.use(fileUpload());
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
 app.use(passport.initialize());
