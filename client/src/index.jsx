@@ -1,4 +1,3 @@
-
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
@@ -7,10 +6,10 @@ import Login from "./Components/Login.jsx";
 import Logout from "./Components/Logout.jsx";
 import Register from "./Components/Register.jsx";
 import Sprint from "./Components/Sprint.jsx";
-import Home from "./Components/Home.jsx";
-import AddSprint from "./Components/AddSprint.jsx";
+//import AddSprint from "./Components/AddSprint.jsx";
 import api from "./api";
 import UpdateUserForm from "./Components/UpdateUserForm.jsx";
+import socketIOClient from "socket.io-client";
 
 
 class App extends React.Component {
@@ -21,11 +20,14 @@ class App extends React.Component {
       sprintList: [],
       sprint_id: false,
       sprint: ``,
+      loggedIn: null
     };
     this.updateUser = this.updateUser.bind(this);
     this.updateSprintList = this.updateSprintList.bind(this);
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
+    
+    this.socket = socketIOClient("http://127.0.0.1:1337")
   }
 
   componentDidMount() {
@@ -79,14 +81,16 @@ class App extends React.Component {
           <Route
             exact
             path="/"  
-            render={() => this.state.user && this.state.sprint ? <Redirect to={this.state.sprint} /> : <Login history={history} updateUser={this.updateUser} />}
+            render={
+              () => this.state.user && this.state.sprint ? <Redirect to={this.state.sprint} /> : 
+                <Login history={history} updateUser={this.updateUser} />}
           />
-          <Route
+          {/*<Route
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
             )}
-          />
+          />*/}
           <Route
             path="/logout"
             render={({ history }) => (
@@ -105,7 +109,7 @@ class App extends React.Component {
               <Register history={history} updateUser={this.updateUser} setSprint={this.setSprint} />
             )}
           />
-          <Route
+          {/* <Route
             path="/addsprint"
             render={({ history }) => (
               <AddSprint
@@ -113,16 +117,16 @@ class App extends React.Component {
                 updateSprintList={this.updateSprintList}
               />
             )}
-          />
+          /> */}
           <Route
             path="/sprint/:id"
-            render={routeprops => {console.log(routeprops); return(
-              <Sprint user={user} {...routeprops} />
-            )}}
+            render={routeprops => (
+              <Sprint user={user} {...routeprops} socket={this.socket}/>
+            )}
           />
         </div>
       </Router>
     );
   }
 }
-render(<App />, document.getElementById("app"));
+render(<App />, document.getElementById('app'));

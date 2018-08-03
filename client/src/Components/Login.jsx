@@ -20,7 +20,6 @@ class Login extends React.Component {
     e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
-
     api.login(username, password)
       .then((res) => {
         if (!res) {
@@ -53,10 +52,16 @@ class Login extends React.Component {
         <img src={logo} style={{width: '100%', padding: '50px 0'}} />
         <form onSubmit={this.handleSubmit}>
           <div>
-            <TextField required id="username" label="Username" value={this.state.username} margin="normal" onChange={this.handleUsernameChange} />
+            <TextField required id="username" label="Username" 
+              value={this.state.username} margin="normal" 
+              onChange={this.handleUsernameChange}
+              style={{ width: "85%" }} />
           </div>
           <div>
-            <TextField required type="password" id="password" label="Password" value={this.state.password} margin="normal" onChange={this.handlePasswordChange} />
+            <TextField required type="password" id="password" 
+              label="Password" value={this.state.password} margin="normal" 
+              onChange={this.handlePasswordChange}
+              style={{ width: "85%" }} />
           </div>
           <div id="loginformmessage" style={{ height: '20px' }}>
             {this.state.errormessage}

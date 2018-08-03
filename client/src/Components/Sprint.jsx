@@ -25,6 +25,7 @@ class Sprint extends React.Component {
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
+    this.socket = props.socket;
   }
 
   componentWillMount() {
@@ -60,7 +61,6 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    // console.log(this.state,'state of sprint')
     api.getTasks(this.state.sprint_id).then(tasks => {
       this.setState({ tasks });
     });
@@ -95,7 +95,7 @@ class Sprint extends React.Component {
       whiteSpace: "normal",
       padding: "4px"
     }
-
+    
     let profile;
 
     if (this.state.selectedProfile) {

@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import api from '../api';
 
@@ -18,8 +16,6 @@ class Navbar extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.handleAcctClick = this.handleAcctClick.bind(this);
-    this.handleAcctClose = this.handleAcctClose.bind(this);
   }
 
   handleChange(event) {
@@ -32,17 +28,6 @@ class Navbar extends Component {
 
   handleClose() {
     this.setState({ anchorEl: null });
-  }
-
-  handleAcctClick(event) {
-    this.setState({accountEl: event.currentTarget});
-  }
-
-  handleAcctClose() {
-    this.setState({accountEl: null});
-  }
-
-  handleGraphiQL() {
   }
 
   render() {
@@ -62,20 +47,10 @@ class Navbar extends Component {
             component={Link}
             to="/"
           >
-            Scrumpty.
+            Scrumpalicious.
           </Typography>
           {user === null ? (
             <div>
-              <Button
-                color="inherit"
-                aria-owns={anchorEl ? 'simple-menu' : null}
-                aria-haspopup="true"
-                component={Link}
-                label="login"
-                to="/login"
-              >
-                Log In
-              </Button>
               <Button
                 color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}
@@ -91,64 +66,16 @@ class Navbar extends Component {
             <div>
               <Button
                 color="inherit"
-                aria-owns={anchorEl ? 'simple-menu' : null}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-                label="sprints"
-              >
-                My Sprints 
-                <i className="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
-
-              </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={this.handleClose}
-              >
-                {sprintList && sprintList.map(sprint => (
-                  <MenuItem
-                    key={sprint.id}
-                    onClick={this.handleClose}
-                    value={sprint.id}
-                    component={Link}
-                    label={sprint.title}
-                    to={`/sprint/${sprint.id}`}
-                  >
-                    {sprint.title}
-                  </MenuItem>
-                ))}
-              </Menu>
-              <Button
-                color="inherit"
                 aria-owns={accountEl ? 'simple-menu' : null}
                 aria-haspopup="true"
-                onClick={this.handleAcctClick}
+                component={Link}
+                to={"/updateuser"}
                 label="account"
               >
                 My Profile
                 <i className="fa fa-user-circle" style={{marginLeft: '8px'}} aria-hidden="true"></i>
               </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={accountEl}
-                open={Boolean(accountEl)}
-                onClose={this.handleAcctClose}
-              >
-                  <MenuItem
-                    onClick={this.handleAcctClose}
-                    // It doesn't appear this value is needed?
-                    // value={'Change Password'}
-                    component={Link}
-                    // It doesn't appear this label is needed?
-                    // label='Change Password'
-                    to={`/updateuser`}
-                  >
-                  Update Profile
-
-                  </MenuItem>
-              </Menu>
-              <Button
+              {/* <Button
                 color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}
                 aria-haspopup="true"
@@ -156,7 +83,7 @@ class Navbar extends Component {
                 label="graphql"
               >
                 GraphQL
-              </Button>
+              </Button> */}
               <Button
                 color="inherit"
                 aria-owns={anchorEl ? 'simple-menu' : null}

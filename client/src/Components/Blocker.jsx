@@ -9,7 +9,9 @@ import api from '../api';
 class Blocker extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { blocker: props.blocker, hovering: false };
+    this.state = { 
+      blocker: props.blocker, 
+      hovering: false };
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -19,7 +21,6 @@ class Blocker extends React.Component {
   componentWillReceiveProps({ blocker }) {
     this.setState({ blocker });
   }
-
 
   onMouseOver(e) {
     this.setState({ hovering: true });
@@ -40,50 +41,26 @@ class Blocker extends React.Component {
       borderRadius: 3,
       boxShadow: "0 1px 0 #ccc",
       display: "block",
-      margin: '0 auto 8px auto',
+      margin: '10px auto 8px auto',
       maxWidth: 300,
       minHeight: 20,
       position: "relative",
       textDecoration: "none",
       width: '80%', 
-      backgroundColor: COLOR.red, 
-      padding: '5px', 
-      textAlign: 'center'
+      backgroundColor: COLOR.red
     };
-
-
-    if (this.state.hovering) {
-      return (
-        <div onMouseLeave={this.onMouseOut}>
-          <Card style={style}>
-            <CardContent style={{
-              height: '20px', padding: '0px', display: 'inline-block', width: '100%',
-            }}
-            >
-              <div sytle={{ position: 'fixed' }}>
-                {blocker.title}
-              </div>
-              <Button
-                id={this.state.blocker.id}
-                style={{
-                  position: 'relative', float: 'right', top: '-20px', height: '5px', padding: '0', display: 'inline-block',
-                }}
-                onClick={this.onClickHandler}
-              >
-                <DeleteIcon />
-              </Button>
-            </CardContent>
-
-          </Card>
-        </div>
-      );
-    }
 
     return (
       <div>
-        <Card style={style} onMouseEnter={this.onMouseOver}>
-          <CardContent style={{ height: '20px', padding: '0px' }}>
-            {blocker.title}
+        <Card style={style} onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
+          <CardContent style={{ padding: '10px' }}>
+            <div>
+              <span>{blocker.title}</span>
+              {this.state.hovering ?
+                <span><DeleteIcon
+                  style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
+                  onClick={this.onClickHandler} /></span> : null}
+            </div>
           </CardContent>
         </Card>
       </div>

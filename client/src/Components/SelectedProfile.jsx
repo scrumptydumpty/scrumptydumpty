@@ -5,12 +5,13 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-
+import Chat from './Chat.jsx'
 class SelectedProfile extends React.Component {
   render() {
     const styles = {
       card: {
-        maxWidth: 345
+        maxWidth: 345,
+        margin: "0 auto"
       },
       media: {
         height: 0,
@@ -37,7 +38,10 @@ class SelectedProfile extends React.Component {
             <AddTaskForm
               sprint_id={this.props.sprint_id}
               reload={this.props.reload}
-              user={this.props.selectedProfile}
+              selected={this.props.selectedProfile}
+            />
+            <Chat
+              
             />
           </CardActions>
         </Card>
