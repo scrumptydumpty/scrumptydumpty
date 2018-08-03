@@ -1,5 +1,6 @@
 const passport = require('passport');
 const { Strategy } = require('passport-local');
+const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcrypt');
 const controller = require('./controller');
 
@@ -18,6 +19,35 @@ passport.use(
       .catch(err => console.log(err));
   })
 );
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FBAPPID,
+  clientSecret: process.env.FBAPPSECRET,
+  callbackURL: "/auth/facebook/callback",
+  profileFields: ['id', 'username', 'photos']
+}, (accessToken, refreshToken, profile, done) => {
+  User.findOrCreate({ facebookId: profile.id }, (err, user) => {
+    if (err) {
+      return done(err);
+    } else {
+      done(null, user);
+    }
+  });
+}));
+
+
+// passport.use(new FacebookStrategy({
+//   clientID: process.env.FBAPPID,
+//   clientSecret: process.env.FBAPPSECRET,
+//   callbackURL: "/auth/facebook/callback"
+// },
+//   function (accessToken, refreshToken, profile, done) {
+//     User.findOrCreate(..., function (err, user) {
+//       if (err) { return done(err); }
+//       done(null, user);
+//     });
+//   }
+// ));
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id);

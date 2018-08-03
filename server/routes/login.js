@@ -15,11 +15,12 @@ router.post('/', (req, res, next) => {
       return res.send(false);
     }
     req.logIn(user, (err) => {
-            if (err) { 
-                console.log(err);
-                return next(err); }
-            return res.send({id:user.id, username:user.username});
-        });
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      return res.send({ id: user.id, username: user.username });
+    });
   })(req, res, next);
 });
 
