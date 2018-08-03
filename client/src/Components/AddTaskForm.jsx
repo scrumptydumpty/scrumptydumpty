@@ -27,6 +27,7 @@ class AddTaskForm extends React.Component {
       open: false
     };
 
+    this.addTask = this.addTask.bind(this);
     this.titleChange = this.titleChange.bind(this);
     this.descriptionChange = this.descriptionChange.bind(this);
     this.priorityChange = this.priorityChange.bind(this);
@@ -35,6 +36,24 @@ class AddTaskForm extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  addTask() {
+    const {
+      title, description, priority_code, difficulty,
+    } = this.state;
+
+    api.addTask({
+      title,
+      description,
+      priority_code,
+      difficulty,
+      sprint_id: this.props.sprint_id
+    }).then((res) => {
+      this.props.reload();
+      //this.props.getNewUserTask(res);
+      this.handleClose();
+    });
   }
 
   handleClickOpen() {
@@ -47,18 +66,10 @@ class AddTaskForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-
-    const {
-      title, description, priority_code, difficulty,
-    } = this.state;
-
-    api.addTask({
-      title, 
-      description, 
-      priority_code, 
-      difficulty, 
-      sprint_id: this.props.sprint_id
-    }).then((res) => { this.props.reload(); this.props.closeTask(); });
+    this.setState({
+      title: this.props.selected.username,
+      description: this.props.selected.description
+    }, () => this.addTask());
   }
 
   titleChange(e) {
@@ -102,7 +113,8 @@ class AddTaskForm extends React.Component {
               <FormControl>
                 <TextField 
                   required id="title" label="Title" margin="normal"
-                  value={this.state.title}  
+                  defaultValue={this.props.selected.username}
+                  // value={this.state.title}  
                   onChange={this.titleChange} 
                   style={{
                     marginLeft: "10px",
@@ -114,7 +126,7 @@ class AddTaskForm extends React.Component {
                 <TextField 
                   required multiline rowsMax="7"
                   id="description" label="Description" margin="normal" 
-                  defaultValue={this.state.description} 
+                  defaultValue={this.props.selected.description} 
                   onChange={this.descriptionChange} 
                   style={{
                     marginLeft: "10px",

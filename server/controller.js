@@ -67,14 +67,14 @@ const self = (module.exports = {
       .then(() => db.updateBlocker(newVersion));
   },
 
-  addUser: ({ username, password }) => {
+  addUser: ({ username, password, description }) => {
     if (!password || password === '') throw 'No Password Given';
     if (!username || username === '') throw 'No Username Given';
     return db.userExists(username).then((exists) => {
       if (exists) {
         throw 'User already exists';
       }
-      return db.addUser(username, password);
+      return db.addUser(username, password, description);
     });
   },
   getUsers: () => db.getUsers(),
@@ -133,4 +133,14 @@ const self = (module.exports = {
   },
 
   getSprints: ({ user_id }) => db.getSprints(user_id),
+
+  addUserToRejectPool: ({ user_id, sprint_id }) => {
+    if (!user_id || user_id === '') throw 'No User Given';
+    if (!sprint_id) throw 'no sprint id given';
+
+    return db.addUserToRejectPool( user_id, sprint_id );
+  },
+
+  getRejects: (sprint_id) => db.getRejects(sprint_id)
+
 });

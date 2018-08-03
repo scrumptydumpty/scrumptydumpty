@@ -74,8 +74,8 @@ const self = (module.exports = {
       .select())
     .then(blockers => blockers[0]),
 
-  addUser: (username, password) => knex('users')
-    .insert({ username, password })
+  addUser: (username, password, description) => knex('users')
+    .insert({ username, password, description })
     .then(id => knex('users')
       .where('id', id)
       .select())
@@ -83,7 +83,7 @@ const self = (module.exports = {
 
   getUsers: () => knex('users')
     .select()
-    .then(users => users.map(user => ({ id: user.id, username: user.username }))),
+    .then(users => users.map(user => ({ id: user.id, username: user.username, description: user.description }))),
 
   userExists: username => knex('users')
     .where('username', username)
@@ -235,4 +235,13 @@ const self = (module.exports = {
         throw ('User does not have access to the sprint for the specified task');
       }
     }),
+
+  addUserToRejectPool: (user_id, sprint_id) => {
+    const pool_id = sprint_id;
+    return knex('sprintusers').insert({ user_id, sprint_id }) //sprint_id = id of user's no-show pool. user_id = id of rejected user
+      .then(() => knex('sprintusers').where({ sprint_id: pool_id }).select())
+  },
+
+  getRejects: (pool_id) => knex('sprintusers').where({ sprint_id: pool_id }).select()
+
 });

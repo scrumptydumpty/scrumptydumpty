@@ -62,7 +62,7 @@ class Navbar extends Component {
             component={Link}
             to="/"
           >
-            Scrumpty.
+            Scrumpalicious.
           </Typography>
           {user === null ? (
             <div>
@@ -91,42 +91,12 @@ class Navbar extends Component {
             <div>
               <Button
                 color="inherit"
-                aria-owns={anchorEl ? 'simple-menu' : null}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-                label="sprints"
-              >
-                My Sprints 
-                <i className="fa fa-chevron-circle-down" style={{marginLeft: '8px'}} aria-hidden="true"></i>
-
-              </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={this.handleClose}
-              >
-                {sprintList && sprintList.map(sprint => (
-                  <MenuItem
-                    key={sprint.id}
-                    onClick={this.handleClose}
-                    value={sprint.id}
-                    component={Link}
-                    label={sprint.title}
-                    to={`/sprint/${sprint.id}`}
-                  >
-                    {sprint.title}
-                  </MenuItem>
-                ))}
-              </Menu>
-              <Button
-                color="inherit"
                 aria-owns={accountEl ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onClick={this.handleAcctClick}
                 label="account"
               >
-                My Account
+                My Profile
                 <i className="fa fa-user-circle" style={{marginLeft: '8px'}} aria-hidden="true"></i>
               </Button>
               <Menu
@@ -137,12 +107,14 @@ class Navbar extends Component {
               >
                   <MenuItem
                     onClick={this.handleAcctClose}
-                    value={'Change Password'}
+                    // It doesn't appear this value is needed?
+                    // value={'Change Password'}
                     component={Link}
-                    label='Change Password'
+                    // It doesn't appear this label is needed?
+                    // label='Change Password'
                     to={`/updateuser`}
                   >
-                  Change Password
+                  Update Profile
 
                   </MenuItem>
               </Menu>
