@@ -1,6 +1,15 @@
 const { knex } = require('./knex');
 
 const self = (module.exports = {
+  addMessage: (user, message) => knex('chathistory')
+    .insert({user, message})
+    .then(() => knex('chathistory')
+    .select()),
+
+  // initializeChat: (user, target) => knex('chatHistory')
+  //   .insert({user, target})
+  //   .then(())
+
   addTask: (title, description, sprint_id, user_id) => knex('tasks')
     .insert({ title, description, sprint_id, user_id })
     .then(id => knex('tasks')
@@ -83,7 +92,12 @@ const self = (module.exports = {
 
   getUsers: () => knex('users')
     .select()
-    .then(users => users.map(user => ({ id: user.id, username: user.username, description: user.description }))),
+    .then(users => users.map(user => ({
+      id: user.id,
+      username: user.username,
+      description: user.description,
+      profile_image_url: user.profile_image_url
+    }))),
 
   userExists: username => knex('users')
     .where('username', username)

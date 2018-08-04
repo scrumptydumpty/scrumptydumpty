@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import Chat from './Chat.jsx'
+import Messenger from './Messaging.jsx'
 class SelectedProfile extends React.Component {
   render() {
     const styles = {
@@ -19,12 +19,18 @@ class SelectedProfile extends React.Component {
       },
     };
 
+    let { profile_image_url } = this.props.selectedProfile;
+
+    if (profile_image_url === 'NULL' || profile_image_url === undefined || profile_image_url === null) {
+      profile_image_url = 'https://www.rebornmasculinity.com/wp-content/uploads/2017/12/Russian-women.jpg';
+    };
+
     return (
       <div>
         <Card style={styles.card}>
           <CardMedia
             style={styles.media}
-            image="https://www.rebornmasculinity.com/wp-content/uploads/2017/12/Russian-women.jpg"
+            image={profile_image_url}
           />
           <CardContent>
             <Typography gutterBottom variant="headline" component="h2">
@@ -40,8 +46,8 @@ class SelectedProfile extends React.Component {
               reload={this.props.reload}
               selected={this.props.selectedProfile}
             />
-            <Chat
-              
+            <Messenger toUser={this.props.selectProfile.username}
+
             />
           </CardActions>
         </Card>
