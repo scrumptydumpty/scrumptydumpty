@@ -27,7 +27,7 @@ class App extends React.Component {
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
 
-    this.socket = socketIOClient("http://127.0.0.1:1337", {'forceNew': true})
+    this.socket = socketIOClient("http://127.0.0.1:1337")
   }
 
   componentDidMount() {
@@ -89,7 +89,7 @@ class App extends React.Component {
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
-            )}s
+            )}
           />*/}
           <Route
             path="/logout"

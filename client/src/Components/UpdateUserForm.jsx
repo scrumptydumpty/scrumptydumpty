@@ -113,15 +113,21 @@ class UpdateUserForm extends React.Component {
   }
 
   handlePicSubmit(e) {
+    console.log('handle pic submitting is running');
     if (this.uploadInput) {
       const fileData = new FormData();
       fileData.append('username', this.props.user.username);
       fileData.append('file', this.uploadInput.files[0]);
+      console.log(this.uploadInput.files);
       axios.post(
         '/users/pic', // Axios URL
         fileData, // Axios data object, must be FormData object from above
-        { headers: { 'Content-Type': 'multipart/form-data' } }); // Axios config object
-    }
+        { headers: { 'Content-Type': 'multipart/form-data' } })
+        .then((res) => {
+          this.props.updateUser();
+          this.handlePicClose()
+        }); // Axios config object
+     }
   }
 
   handlePwOpen(e) {
@@ -202,6 +208,12 @@ class UpdateUserForm extends React.Component {
               <span style={labelStyle}>Profile Picture</span>
               <span>
                 <Button onClick={this.handlePicOpen}>EDIT</Button>
+                {/* <form onSubmit={this.handlePicSubmit}>
+                  <FormControl>
+                    <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                  </FormControl>
+                  <Button type="submit">Save Picture</Button>
+                </form> */}
               </span>
             </div>
           </CardContent>
@@ -308,20 +320,26 @@ class UpdateUserForm extends React.Component {
         >
           <DialogTitle id="form-dialog-title">Change profile picture</DialogTitle>
           <DialogContent>
-            <form>
+            <form onSubmit={this.handlePicSubmit}>
               <FormControl>
                 <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
               </FormControl>
+              <Button onClick={this.handlePicClose} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
+                Save
+              </Button>
             </form>
           </DialogContent>
-          <DialogActions>
+          {/* <DialogActions>
             <Button onClick={this.handlePicClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handlePicSubmit} color="primary">
+            <Button type="submit" color="primary">
               Save
             </Button>
-          </DialogActions>
+          </DialogActions> */}
         </Dialog>
       </div>
     );
