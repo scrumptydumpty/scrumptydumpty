@@ -146,6 +146,11 @@ const self = (module.exports = {
     .select()
     .then(users => users[0]),
 
+  getUserByFbId: id => knex('users')
+  .where('fb_id', id)
+  .select()
+  .then(users => users[0]),
+
   addSprint: (title, owner_id) => knex('sprints')
     .insert({ title, owner_id })
     .then(id => knex('sprints')
