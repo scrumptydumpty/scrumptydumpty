@@ -1,15 +1,17 @@
 const db = require('../database/db');
 
 const self = (module.exports = {
-  addTask: ({ title, description, sprint_id }, user) => {
+  addTask: ({ title, description, sprint_id, user_id }, user) => {
     if (!title || title === '') throw 'No Title';
-    if (!description || description === '') throw 'No description';
+    if (!description) {
+      description = '';
+    };
     if (!sprint_id) throw 'No sprint id';
     if (!user || !user.id) throw 'user not logged in';
 
     return db
       .userCanAccessSprint(sprint_id, user.id)
-      .then(() => db.addTask(title, description, sprint_id));
+      .then(() => db.addTask(title, description, sprint_id, user_id));
   },
   getTasks: (sprint_id, user) => {
     if (!user || !user.id) throw 'user not logged in';
@@ -67,16 +69,21 @@ const self = (module.exports = {
       .then(() => db.updateBlocker(newVersion));
   },
 
-  addUser: ({ username, password }) => {
+  addUser: ({ username, password, description }) => {
     if (!password || password === '') throw 'No Password Given';
     if (!username || username === '') throw 'No Username Given';
     return db.userExists(username).then((exists) => {
       if (exists) {
         throw 'User already exists';
       }
-      return db.addUser(username, password);
+      return db.addUser(username, password, description);
     });
   },
+
+  addFbUser: ({ username, fbId }) => {
+    return db.addFbUser(username, fbId);
+  },
+
   getUsers: () => db.getUsers(),
   // NOT NEEDED. USING PASSPORT NOW
   // loginCorrect: ({ username, password }) => {
@@ -84,11 +91,28 @@ const self = (module.exports = {
   //   if (username === '' || password === '') throw 'Invalid Credentials';
   //   return db.userHasPassword(username, password);
   // },
+  updateUser: ({ username, newUsername }) => {
+    return db.updateUser(username, newUsername);
+  },
 
+  updateUserName: ({ username, newUsername }) => {
+    return db.updateUserName(username, newUsername);
+  },
 
-  updateUser: ({ username, password }) => db.updateUser(username, password),
+  updateUserDesc: ({ username, description }) => {
+    return db.updateUserDesc(username, description);
+  },
+
+  updateUserPassword: ({ username, password }) => {
+    return db.updateUserPassword(username, password);
+  },
+
+  updateUserProfilePic: ({ username, url }) => {
+    return db.updateUserProfilePic(username, url);
+  },
 
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
+  getUserByFbId: id => db.getUserByFbId(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
 
   isLoggedIn: (req, res, next) => {
@@ -104,7 +128,6 @@ const self = (module.exports = {
     if (!owner_id) throw 'No owner_id';
 
     return db.addSprint(title, owner_id).then((sprint) => {
-      console.log(sprint);
       const user_id = owner_id;
       const sprint_id = sprint.id;
       return self.addUserToSprint({ owner_id, username, sprint_id });
@@ -130,4 +153,14 @@ const self = (module.exports = {
   },
 
   getSprints: ({ user_id }) => db.getSprints(user_id),
+
+  addUserToRejectPool: ({ user_id, sprint_id }) => {
+    if (!user_id || user_id === '') throw 'No User Given';
+    if (!sprint_id) throw 'no sprint id given';
+
+    return db.addUserToRejectPool( user_id, sprint_id );
+  },
+
+  getRejects: (sprint_id) => db.getRejects(sprint_id)
+
 });

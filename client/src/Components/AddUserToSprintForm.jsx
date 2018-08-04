@@ -1,8 +1,7 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import CardContent from "@material-ui/core/CardContent";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 
 import api from "../api";
 
@@ -13,13 +12,13 @@ class AddUserToSprintForm extends React.Component {
       sprint_id: props.sprint_id,
       username: "",
       users: [],
+      noShows: [],
       status: 0 // display what when the menu is showing? 0 - not submitted, 1 - pending, 2 - success, 3 - failed
     };
-    this.userChange = this.userChange.bind(this);
     // this.etaChange = this.etaChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
     this.reload = this.reload.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+    // this.reject = this.reject.bind(this);
   }
 
   deleteUser(user_id) {
@@ -38,6 +37,23 @@ class AddUserToSprintForm extends React.Component {
       .catch(err => console.log("err"));
   }
 
+  // reject(user_id) {
+  //   const sprint_id = this.props.user.id;
+  //   api
+  //     .rejectUser({ user_id, sprint_id })
+  //     .then( res => {
+  //       if (!res) {
+  //         console.log('something went wrong');
+  //       }
+  //       const ids = [];
+  //       res.forEach( noShow => {
+  //         ids.push(noShow.user_id);
+  //       })
+  //       this.setState({ noShows: ids }, this.reload());
+  //     })
+  //     .catch(err => console.log(err));
+  // }
+
   componentWillUpdate(nextProps) {
     if (nextProps.sprint_id !== this.state.sprint_id) {
       this.setState({ sprint_id: nextProps.sprint_id, users: [] }, () =>
@@ -46,71 +62,44 @@ class AddUserToSprintForm extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.noShows !== this.state.noShows) {
+      this.setState({ noShows: nextProps.noShows }, () => {this.reload()});
+    }
+  }
+
   componentWillMount() {
     this.reload();
   }
 
-  reload() {
+  componentDidMount() {
+    const sprint_id = this.state.sprint_id;
     api
-      .getUsersInSprint(this.state.sprint_id)
-      .then(users => this.setState({ users }));
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-
-    // sprint id passed down via props
-    this.setState({ status: 1 });
-
-    api
-      .addUserToSprint({
-        username: this.state.username,
-        sprint_id: this.props.sprint_id
+      .getNoShowList(sprint_id)
+      .then((noShows) => {
+        this.setState({ noShows }, this.reload());
       })
-      .then(res => {
-        if (!res) {
-          this.setState({ status: 3 });
-          return;
-        }
-        this.setState({ status: 2, username: "" }, this.reload());
-      });
   }
 
-  userChange(e) {
-    e.preventDefault();
-    this.setState({ username: e.target.value });
+  //** need to refactor so getUsersInSprint returns list of users in dating pool **
+
+  //uses sprint id to fetch all users authorized to access that sprint
+  reload() {
+    const context = this;
+    api
+      .getUsers()
+      .then((userArr) => {
+        let users = [];
+        userArr.data.forEach( user => {
+          if (context.props.user.id !== user.id && !context.state.noShows.includes(user.id)) {
+            users.push(user);
+          }
+        });
+        context.setState({ users });
+      })
   }
 
   render() {
-    let interior = (
-      <div>
-        <TextField
-          required
-          id="user"
-          label="Username"
-          value={this.state.username}
-          margin="normal"
-          onChange={this.userChange}
-        />
-        <Button type="submit">Add Team Member</Button>
-      </div>
-    );
-
-    if (this.state.status === 1) {
-      interior = <div>Saving...</div>;
-    }
-    if (this.state.status === 2) {
-      interior = <div>Success!</div>;
-      setTimeout(() => {
-        this.setState({ status: 0, title: "" });
-      }, 1000);
-    }
-    if (this.state.status === 3) {
-      interior = <div>Failed!</div>;
-      setTimeout(() => {
-        this.setState({ status: 0 });
-      }, 1000);
-    }
     return (
       <div
         style={{
@@ -118,31 +107,30 @@ class AddUserToSprintForm extends React.Component {
         }}
       >
         <div>
-          <strong>Team Members</strong>
+          {/* change Team Members to something punny for title of dating pool (broken pieces? all the kings men/women?) */}
+          <strong>Backlog</strong>
         </div>
         <hr />
         <div>
-          {this.state.users.map((user, i) => (
+        {this.state.users.map((user, i) => (
             <div key={i}>
-              {`${user.username}  `}
               {this.props.isOwner &&
                 user.id !== this.props.user.id && (
-                  <button
-                    style={{ float: "right" }}
-                    onClick={() => this.deleteUser(user.id)}
-                  >
-                    X
-                  </button>
+                  <Chip
+                    avatar={
+                      <Avatar>
+                        <FaceIcon />
+                      </Avatar>
+                    }
+                    label={user.username}
+                    style={{ marginBottom: "5px" }}
+                    onDelete={() => this.props.reject(user.id).then(() => this.setState({ noShows: this.props.noShows })).then(() => this.reload())}
+                    onClick={() => this.props.getNewSelectedProfile(user)}
+                  />
                 )}
-              <hr />
             </div>
           ))}
         </div>
-        {this.props.isOwner && (
-          <form style={{ width: "150px" }} onSubmit={this.onSubmit}>
-            {interior}
-          </form>
-        )}
       </div>
     );
   }
