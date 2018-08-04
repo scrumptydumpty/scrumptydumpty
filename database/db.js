@@ -96,6 +96,10 @@ const self = (module.exports = {
       'username': username,
       'fb_id': fbId
     })
+    .then(id => knex('users')
+      .where('id', id)
+      .select())
+    .then(users => users[0]),
 
   getUsers: () => knex('users')
     .select()
