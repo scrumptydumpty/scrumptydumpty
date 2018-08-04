@@ -46,9 +46,7 @@ class SelectedProfile extends React.Component {
               reload={this.props.reload}
               selected={this.props.selectedProfile}
             />
-            {/* <Messenger toUser={this.props.selectedProfile.username} */}
-
-            />
+            {/* <Messenger toUser={this.props.selectedProfile.username} />*/}
           </CardActions>
         </Card>
       </div>
