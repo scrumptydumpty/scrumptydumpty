@@ -27,7 +27,7 @@ class App extends React.Component {
     this.logout = this.logout.bind(this);
     this.setSprint = this.setSprint.bind(this);
 
-    this.socket = socketIOClient("http://127.0.0.1:1337")
+    this.socket = socketIOClient("http://127.0.0.1:1337", {'forceNew': true})
   }
 
   componentDidMount() {

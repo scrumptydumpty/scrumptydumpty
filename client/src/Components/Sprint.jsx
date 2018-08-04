@@ -32,9 +32,10 @@ class Sprint extends React.Component {
     this.reject = this.reject.bind(this);
     this.updateNoShows = this.updateNoShows.bind(this);
     console.log(props)
+    this.messenger = (<Messenger socket={this.socket} target={this.state.selectedProfile}/>)
   }
 
-  componentWillMount() {
+  componentDidMount () {
     this.reload();
   }
 
@@ -127,7 +128,7 @@ class Sprint extends React.Component {
     };
 
     let profile;
-
+    let messenger;
     if (this.state.selectedProfile) {
       profile = (
         <SelectedProfile
@@ -138,6 +139,10 @@ class Sprint extends React.Component {
           noShows={this.state.noShows}
         />
       );
+      messenger = (
+        <Messenger socket={this.socket} target={this.state.selectedProfile}/>
+      )
+
     } else {
       profile = (
         <Card>
@@ -146,6 +151,7 @@ class Sprint extends React.Component {
           </p>
         </Card>
       );
+
     }
 
     return (
@@ -216,7 +222,7 @@ class Sprint extends React.Component {
             </Paper>
           </Grid>
         </Grid>
-        <Messenger socket={this.socket} />
+          {messenger}
       </div>
     );
   }
