@@ -31,10 +31,10 @@ const styles = {
 
 class Messenger extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      user: '',
-      message: '',
+      user: "",
+      message: "",
       chatHistory: [],
     };
     this.socket = props.socket;
@@ -48,17 +48,21 @@ class Messenger extends React.Component {
     this.setUser();
   }
 
-  setUser() {
-    api.verify()
-      .then((user) => {
-        this.setState({ user });
-      });
+  componentWillReceiveProps(nextProps) {
+    this.socket.emit('getChats', {user: this.state.user.username, target: nextProps.target.username});
+    this.grabChat();
   }
 
-  grabChat() {
-    this.socket.on('chathistory', (chatHistory) => {
-      this.setState({ chatHistory });
+  setUser() {
+    api.verify().then((user) => {
+      this.setState({ user })
     });
+  }
+
+  grabChat(){
+    this.socket.on('chathistory', (history) => {
+      this.setState({ chatHistory: history });
+    })
   }
 
   handleChange(e) {
@@ -68,9 +72,9 @@ class Messenger extends React.Component {
   sendMessage(e) {
     e.preventDefault();
     const { message, user } = this.state;
-    this.socket.emit('message', { user: user.username, message }, );
-    this.grabChat();
-    this.setState({ message: '' });
+
+    this.socket.emit('message', {user: user.username, target: this.props.target.username, message})
+    this.grabChat()
   }
 
   render() {
@@ -79,20 +83,20 @@ class Messenger extends React.Component {
 
     return (
       <div className={classes.chatWindow}>
-        <form onSubmit={this.sendMessage}>
-          <input type="text" value={message} onChange={this.handleChange} />
-          <Button type="submit" disabled={sending} variant="contained" color="primary" className={classes.button}>
-            Send
-            {/* <Icon className={classes.rightIcon}>
-              send
-            </Icon> */}
-          </Button>
-          {/* <input type="submit" value="Send" /> */}
-        </form>
-        <ul className={classes.message}>
-          {chatHistory.map(msg => <ChatMessage message={msg} />)}
-        </ul>
-      </div>
+         <form onSubmit={this.sendMessage}>
+           <input type="text" value={message} onChange={this.handleChange} />
+           <Button type="submit" disabled={sending} variant="contained" color="primary" className={classes.button}>
+             Send
+             {/* <Icon className={classes.rightIcon}>
+               send
+             </Icon> */}
+           </Button>
+           {/* <input type="submit" value="Send" /> */}
+         </form>
+         <ul className={classes.message}>
+           {chatHistory.map(msg => <ChatMessage message={msg} />)}
+         </ul>
+       </div>
     );
   }
 }

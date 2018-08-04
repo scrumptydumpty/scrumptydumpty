@@ -16,7 +16,5 @@ const knex = require('knex')({
   },
 });
 
-
 knex('users').select().then(() => console.log('Database Connected!'));
-
 module.exports = { knex };
