@@ -106,6 +106,9 @@ class Sprint extends React.Component {
           selectedProfile={this.state.selectedProfile}
         />
       );
+      messenger = (
+        <Messenger socket={this.socket} target={this.state.selectedProfile}/>
+      )
 
     } else {
       profile = (
@@ -180,7 +183,7 @@ class Sprint extends React.Component {
             </Paper>
           </Grid>
         </Grid>
-        <Messenger socket={this.socket} target={this.state.selectedProfile}/>
+          {messenger}
       </div>
     );
   }
