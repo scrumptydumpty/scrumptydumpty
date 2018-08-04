@@ -133,8 +133,6 @@ class Sprint extends React.Component {
       height: '70%',
       padding: '3px',
       fontStyle: 'italic',
-      border: '0.2px gray',
-      borderStyle: 'dotted',
       margin: '1px auto',
     }
 
