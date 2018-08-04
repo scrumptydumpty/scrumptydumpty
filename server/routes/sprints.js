@@ -9,6 +9,8 @@ router.post('/', (req, res) => {
   const title = req.body.title;
   const owner_id = req.user.id;
   const username = req.user.username;
+  console.log(req.user);
+  console.log(title);
   controller.addSprint(title, owner_id, username)
     .then((result) => { console.log('success'); return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });

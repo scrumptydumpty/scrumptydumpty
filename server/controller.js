@@ -77,6 +77,11 @@ const self = (module.exports = {
       return db.addUser(username, password, description);
     });
   },
+
+  addFbUser: ({ username, fbId }) => {
+    return db.addFbUser(username, fbId);
+  },
+
   getUsers: () => db.getUsers(),
   // NOT NEEDED. USING PASSPORT NOW
   // loginCorrect: ({ username, password }) => {
@@ -92,6 +97,7 @@ const self = (module.exports = {
   },
 
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
+  getUserByFbId: id => db.getUserByFbId(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
 
   isLoggedIn: (req, res, next) => {
@@ -105,6 +111,10 @@ const self = (module.exports = {
   addSprint: (title, owner_id, username) => {
     if (!title || title === '') throw 'No Title';
     if (!owner_id) throw 'No owner_id';
+    console.log('running controller addsprint');
+    console.log(title);
+    console.log(owner_id);
+    console.log(username);
 
     return db.addSprint(title, owner_id).then((sprint) => {
       console.log(sprint);

@@ -71,6 +71,9 @@ class Login extends React.Component {
             <Button type="submit">
               Login
             </Button>
+            <Button>
+              <a href="/auth/facebook">Login with Facebook</a>
+            </Button>
           </div>
         </form>
       </div>

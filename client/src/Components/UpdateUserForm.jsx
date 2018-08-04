@@ -94,7 +94,7 @@ class UpdateUserForm extends React.Component {
 
     return (
       <div style={{ margin: 'auto', marginTop: '10%', height: '600px', width: '400px' }}>
-        <Card className={classes.card}>
+        {/* <Card className={classes.card}>
           <CardContent>
             <Typography variant="headline" gutterBottom={true}>
               Welcome, {user.username}!
@@ -148,9 +148,9 @@ class UpdateUserForm extends React.Component {
               Save
             </Button>
           </DialogActions>
-        </Dialog>
+          </Dialog> */}
         <form onSubmit={this.handleSubmit}>
-          {/* <Card className={classes.card}>
+          <Card className={classes.card}>
             <CardContent>
               <Typography variant="headline" gutterBottom>
                 Welcome, {user.username}!
@@ -193,12 +193,13 @@ class UpdateUserForm extends React.Component {
                 margin="normal"
                 onChange={this.handleFieldUpdate}
               />
+              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
             </CardContent>
           </Card>
           <Button variant="contained" disabled={submitDisabled} color="primary" type="submit" className={classes.button}>
             <SaveIcon className={classes.leftIcon} />
             Save Changes
-          </Button> */}
+          </Button>
         </form>
       </div>
     );

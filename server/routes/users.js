@@ -9,9 +9,9 @@ router.post('/', (req, res) => {
   console.log('adding user');
   bcrypt.hash(req.body.password, 10)
     .then((hash) => {
-      controller.addUser({ username: req.body.username, password: hash, description: req.body.description })
+      controller.addUser({ username: req.body.username, password: hash })
         .then((result) => {
-          console.log('success');
+          console.log('success - signed up user via local');
           passport.authenticate('local', (err, user, info) => {
             if (err) {
               console.log(err);
