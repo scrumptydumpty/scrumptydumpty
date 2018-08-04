@@ -1,10 +1,10 @@
 const { knex } = require('./knex');
 
 const self = (module.exports = {
-  addMessage: (user, message) => knex('chathistory')
-    .insert({user, message})
+  addMessage: (user, target, message) => knex('chathistory')
+    .insert({user, target, message})
     .then(() => knex('chathistory')
-    .select()),
+    .select(['name', 'message']).where(({user, target, message}) OR ({user: target, target: user, message})),
 
   // initializeChat: (user, target) => knex('chatHistory')
   //   .insert({user, target})

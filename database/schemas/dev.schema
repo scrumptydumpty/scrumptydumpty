@@ -1,5 +1,5 @@
 -- ---
--- HOW TO USE 
+-- HOW TO USE
 -- PIPE THIS FILE INTO YOUR MYSQL DATABASE TO CLEAN THE DB AND TABLES
 --
 --
@@ -17,14 +17,14 @@
 
 -- ---
 -- Table 'users'
--- 
+--
 -- ---
 
 USE heroku_7b21f428fffd31e;
 
 
 DROP TABLE IF EXISTS `blockers`;
-		
+
 CREATE TABLE `blockers` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `created_at` TIMESTAMP NULL DEFAULT NULL,
@@ -56,7 +56,6 @@ CREATE TABLE `tasks` (
 );
 
 ALTER TABLE tasks AUTO_INCREMENT = 1000;
-		
 
 DROP TABLE IF EXISTS `users`;
 
@@ -67,6 +66,7 @@ CREATE TABLE `users` (
   `username` TEXT NOT NULL,
   `password` TEXT NOT NULL,
   `description` TEXT,
+  `profile_image_url` VARCHAR(500),
   PRIMARY KEY (`id`)
 );
 
@@ -98,6 +98,20 @@ CREATE TABLE `sprinttasks` (
 
 ALTER TABLE sprinttasks AUTO_INCREMENT = 1000;
 
+DROP TABLE IF EXISTS `chathistory`;
+
+CREATE TABLE `chathistory` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user` VARCHAR(100),
+  `target` VARCHAR(100),
+  `message` VARCHAR(500),
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE chathistory AUTO_INCREMENT = 1000;
+
 DROP TABLE IF EXISTS `sprintusers`;
 
 CREATE TABLE `sprintusers` (
@@ -113,21 +127,21 @@ ALTER TABLE sprintusers AUTO_INCREMENT = 1000;
 
 -- ---
 -- Table 'tasks'
--- 
+--
 -- ---
 
 
 
 -- ---
 -- Table 'blockers'
--- 
+--
 -- ---
 
 
 
 
 -- ---
--- Foreign Keys 
+-- Foreign Keys
 -- ---
 
 -- ALTER TABLE `tasks` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);

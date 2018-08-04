@@ -71,8 +71,8 @@ const io = require('socket.io')(server);
 io.on('connection', function (client) {
   console.log('SOCKET 2 ME BB')
 
-  client.on('message', (data) => {
-    db.addMessage(data.user, data.message).then((history)=>{client.emit('chathistory', history)})
+  client.on('message', ({ data }) => {
+    db.addMessage(user, target, message).then((history)=>{client.emit('chathistory', history)})
     console.log(data)
   })
 })

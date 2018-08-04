@@ -18,7 +18,7 @@ const windowStyle = {
 const messageStyle = {
   listStyleType: "none",
   fontName: "Roboto",
-  overflow: "hidden"
+  overflow: "scroll"
 }
 
 class Messenger extends React.Component {
@@ -28,7 +28,7 @@ class Messenger extends React.Component {
       user: "",
       message: "",
       chatHistory: [],
-      roomID: ""
+      target: props.target
     }
     this.socket = props.socket;
     this.sendMessage = this.sendMessage.bind(this)
@@ -62,7 +62,7 @@ class Messenger extends React.Component {
 
   sendMessage(e) {
     e.preventDefault();
-    this.socket.emit('message', {user: this.state.user.username, message: this.state.message})
+    this.socket.emit('message', {user: this.state.user.username, target: this.state.target, message: this.state.message})
     this.grabChat()
   }
 
@@ -73,9 +73,11 @@ class Messenger extends React.Component {
         <input type="text" value={this.state.message} onChange={this.handleChange} />
         <input type="submit" value="Submit" />
       </form>
+      <div style={messageStyle}>
         <ul style={messageStyle}>
         {this.state.chatHistory.map((message)=><ChatMessage message={message} />)}
       </ul>
+    </div>
       </div>
     )
   }

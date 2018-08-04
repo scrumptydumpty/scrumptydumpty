@@ -173,7 +173,7 @@ class Sprint extends React.Component {
             </Paper>
           </Grid>
         </Grid>
-        <Messenger socket={this.socket} />
+        <Messenger socket={this.socket} target={this.state.selectedProfile}/>
       </div>
     );
   }
