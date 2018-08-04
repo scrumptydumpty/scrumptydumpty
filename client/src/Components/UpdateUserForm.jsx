@@ -54,7 +54,6 @@ class UpdateUserForm extends React.Component {
     } = this.state;
 
     if (this.uploadInput) {
-      // console.log('Looks like you\'re trying to update your profile pic!');
       const fileData = new FormData();
       fileData.append('username', this.props.user.username);
       fileData.append('file', this.uploadInput.files[0]);  

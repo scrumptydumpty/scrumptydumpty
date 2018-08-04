@@ -9,12 +9,10 @@ const apiVersion = { apiVersion: '2006-03-01' };
 const bucketName = 'node-sdk-sample-f69979b6-f2e2-4af3-aea6-40e160502a21';
 
 router.post('/', (req, res) => {
-  console.log('adding user');
   bcrypt.hash(req.body.password, 10)
     .then((hash) => {
       controller.addUser({ username: req.body.username, password: hash })
         .then((result) => {
-          console.log('success - signed up user via local');
           passport.authenticate('local', (err, user, info) => {
             if (err) {
               console.log(err);
@@ -40,11 +38,9 @@ router.post('/', (req, res) => {
 
 // NOT NEEDED
 router.get('/', (req, res) => {
-  console.log('fetching users');
   controller
     .getUsers()
     .then((result) => {
-      console.log('success');
       return res.send(result);
     })
     .catch((err) => {
@@ -66,7 +62,6 @@ router.post('/pic', (req, res, next) => {
 
   new aws.S3(apiVersion).putObject(objectParams).promise()
     .then((data) => {
-      //console.log(`Successfully uploaded data to ${bucketName}/${name}`);
       controller.updateUserProfilePic({ username: req.body.username, url: `https://s3.amazonaws.com/${bucketName}/${name}` });
       res.status(201).send();
     })
@@ -99,19 +94,16 @@ router.put('/', (req, res, next) => {
 });
 
 router.put('/', (req, res) => {
-  console.log('updating user');
   controller.updateUser(req.body)
-    .then((result) => { console.log('success'); return res.send(result); })
+    .then((result) => { return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
 });
 
 router.get('/sprint', (req, res) => {
 // needs AUTH
-  console.log('getting all users in sprint', req.query.sprint_id);
   controller
     .getUsersInSprint(req.query.sprint_id, req.user)
     .then((result) => {
-      console.log('success');
       return res.send(result);
     })
     .catch((err) => {

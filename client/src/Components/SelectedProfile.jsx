@@ -19,8 +19,6 @@ class SelectedProfile extends React.Component {
       },
     };
 
-    console.log(this.props.selectedProfile);
-
     let { profile_image_url } = this.props.selectedProfile;
 
     if (profile_image_url === 'NULL' || profile_image_url === undefined || profile_image_url === null) {

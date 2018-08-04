@@ -32,51 +32,31 @@ fbStrategy = (passport) => {
       //check database for user matching the fbid
       controller.getUserByFbId(profile.id)
         .then((user) => {
-          console.log(`user: ${JSON.stringify(user)}`);
           if (user) {
             return done(null, user);
           } else {
             //if user does not exist in database, add them to the database
             controller.addFbUser({ username: profile.displayName, fbId: profile.id })
               .then((result) => {
-                console.log('success - signed up user via facebook');
                 //after adding to the database, search it for this fb user
                 controller.getUserByFbId(result['fb_id'])
                   .then((user) => {
-                    console.log('user inside getuserbyfbid');
-                    console.log(user);
                     //if the user is found, send callback to serializeUser
                     if (user) {
-                      console.log('user is defined');
                       return done(null, user);
                     } else {
-                      console.log('user is not defined');
                       return done(null, false);
                     }
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                    return done(null, false);
-                  });
-                  
+                  })  
                 const title = result.username;
                 const owner_id = result.id;
                 const username = result.username;
                 //add sprint to user (for local strategy, this part is done client-side)
                 controller.addSprint(title, owner_id, username)
                   .then((result) => { 
-                    console.log('successfully added sprint'); 
                     return res.send(result); 
                   })
-                  .catch((err) => { 
-                    console.log(err); 
-                    return res.send(false); 
-                  });
               })
-              .catch((err) => {
-                console.error(err);
-                return done(null, false);
-              });
           }
         })
         .catch((err) => {
@@ -88,8 +68,6 @@ fbStrategy = (passport) => {
 };
 
 passport.serializeUser((user, cb) => {
-  console.log('serializing user');
-  console.log(user);
   cb(null, user.id);
 });
 

@@ -38,14 +38,11 @@ app.use('/logout', logout);
 
 
 app.get('/test', (req, res) => {
-  console.log(req);
   res.send();
 });
 
 // sends a user object to the requester if one exists
 app.get('/verify', (req, res) => {
-  console.log(`req.user`);
-  console.log(req.user);
   if (req.user) {
     res.send({ id: req.user.id, username: req.user.username, description: req.user.description });
   } else {
@@ -60,7 +57,6 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    // successRedirect: '/',
     failureRedirect: '/'
   }));
 
