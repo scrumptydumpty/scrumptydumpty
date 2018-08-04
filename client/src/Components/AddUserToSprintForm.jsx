@@ -62,6 +62,12 @@ class AddUserToSprintForm extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.noShows !== this.state.noShows) {
+      this.setState({ noShows: nextProps.noShows }, () => {this.reload()});
+    }
+  }
+
   componentWillMount() {
     this.reload();
   }
@@ -102,7 +108,7 @@ class AddUserToSprintForm extends React.Component {
       >
         <div>
           {/* change Team Members to something punny for title of dating pool (broken pieces? all the kings men/women?) */}
-          <strong>Team Members</strong>
+          <strong>Backlog</strong>
         </div>
         <hr />
         <div>
