@@ -1,15 +1,15 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Drawer from "@material-ui/core/Drawer";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
-import { StatusCode } from "../../../lib/shared";
-import Tasks from "./Tasks.jsx";
-import SelectedProfile from "./SelectedProfile.jsx";
-import api from "../api";
-import AddUserToSprintForm from "./AddUserToSprintForm.jsx";
 import Card from '@material-ui/core/Card';
+import { StatusCode } from '../../../lib/shared';
+import Tasks from './Tasks.jsx';
+import SelectedProfile from './SelectedProfile.jsx';
+import AddUserToSprintForm from './AddUserToSprintForm.jsx';
 import Messenger from './Messaging.jsx';
+import api from '../api';
 
 class Sprint extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Sprint extends React.Component {
       isOwner: false,
       open: false,
       tasks: [],
-      selectedProfile: ''
+      selectedProfile: '',
     };
     this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -36,9 +36,7 @@ class Sprint extends React.Component {
 
   componentWillUpdate(nextProps) {
     if (nextProps.match.params.id !== this.state.sprint_id) {
-      this.setState({ sprint_id: nextProps.match.params.id }, () =>
-        this.reload()
-      );
+      this.setState({ sprint_id: nextProps.match.params.id }, () => this.reload() );
     }
   }
 
@@ -49,13 +47,13 @@ class Sprint extends React.Component {
   handleClickOpen(e) {
     e.preventDefault();
     this.setState({
-      open: true
+      open: true,
     });
   }
 
   handleClose(shouldReload = false) {
     this.setState({
-      open: false
+      open: false,
     });
     if (shouldReload) {
       this.reload();
@@ -63,11 +61,11 @@ class Sprint extends React.Component {
   }
 
   reload() {
-    api.getTasks(this.state.sprint_id).then(tasks => {
+    api.getTasks(this.state.sprint_id).then((tasks) => {
       this.setState({ tasks });
     });
 
-    api.isOwner(this.state.sprint_id).then(res => {
+    api.isOwner(this.state.sprint_id).then((res) => {
       if (!res) {
         this.setState({ isOwner: false });
       } else {
@@ -79,36 +77,43 @@ class Sprint extends React.Component {
   render() {
     const tasks = this.state.tasks;
     const notStarted = tasks.filter(
-      x => x.status_code === StatusCode.NotStarted
+      x => x.status_code === StatusCode.NotStarted,
     );
     const inProgress = tasks.filter(
-      x => x.status_code === StatusCode.InProgress
+      x => x.status_code === StatusCode.InProgress,
     );
     const complete = tasks.filter(x => x.status_code === StatusCode.Complete);
 
     const paperStyle = {
-      background: "#e2e4e6",
+      background: '#e2e4e6',
       borderRadius: 3,
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column",
-      maxHeight: "100%",
-      position: "relative",
-      whiteSpace: "normal",
-      padding: "4px"
-    }
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      maxHeight: '100%',
+      position: 'relative',
+      whiteSpace: 'normal',
+      padding: '4px',
+    };
 
     let profile;
 
     if (this.state.selectedProfile) {
-      profile = <SelectedProfile
-        sprint_id={this.state.sprint_id}
-        reload={this.reload}
-        selectedProfile={this.state.selectedProfile} />;
+      profile = (
+        <SelectedProfile
+          sprint_id={this.state.sprint_id}
+          reload={this.reload}
+          selectedProfile={this.state.selectedProfile}
+        />
+      );
     } else {
-    profile = ( <Card>
-                  <p style={{textAlign: 'center'}}>Click on someone in your dating pool to view their profile</p>
-                </Card>);
+      profile = (
+        <Card>
+          <p style={{ textAlign: 'center' }}>
+            Click on someone in your dating pool to view their profile
+          </p>
+        </Card>
+      );
     }
 
     return (
@@ -123,7 +128,7 @@ class Sprint extends React.Component {
           />
         </Drawer>
         <Grid
-          style={{ padding: "1em", width: "85%" }}
+          style={{ padding: '1em', width: '85%' }}
           container
           spacing={24}
           justify="center"
@@ -132,15 +137,15 @@ class Sprint extends React.Component {
             <Paper style={paperStyle}>
               <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
                 Selected Profile
-                </Typography>
+              </Typography>
               {profile}
             </Paper>
           </Grid>
           <Grid item xs={3}>
             <Paper style={paperStyle}>
               <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
-                Todo
-                </Typography>
+                To Do
+              </Typography>
               <Tasks
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
@@ -153,7 +158,7 @@ class Sprint extends React.Component {
             <Paper style={paperStyle}>
               <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
                 In Progress
-                </Typography>
+              </Typography>
               <Tasks
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
@@ -166,7 +171,7 @@ class Sprint extends React.Component {
             <Paper style={paperStyle}>
               <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
                 Completed
-                </Typography>
+              </Typography>
               <Tasks
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
