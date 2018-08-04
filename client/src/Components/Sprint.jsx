@@ -30,7 +30,7 @@ class Sprint extends React.Component {
     this.messenger = (<Messenger socket={this.socket} target={this.state.selectedProfile}/>)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.reload();
   }
 
