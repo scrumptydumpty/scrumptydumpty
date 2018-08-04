@@ -23,12 +23,11 @@ const messageStyle = {
 
 class Messenger extends React.Component {
   constructor(props){
-    super()
+    super(props)
     this.state = {
       user: "",
       message: "",
       chatHistory: [],
-      target: props.target
     }
     this.socket = props.socket;
     this.sendMessage = this.sendMessage.bind(this)
@@ -37,16 +36,18 @@ class Messenger extends React.Component {
     this.grabChat = this.grabChat.bind(this)
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.setUser()
-
   }
 
-  setUser (){
+  componentWillReceiveProps(nextProps){
+    this.socket.emit('getChats', {user: this.state.user.username, target: nextProps.target.username})
+    this.grabChat();
+  }
+
+  setUser() {
     api.verify().then((user)=>{
-      this.setState({
-        user
-      })
+      this.setState({ user })
     })
   }
 
@@ -62,7 +63,7 @@ class Messenger extends React.Component {
 
   sendMessage(e) {
     e.preventDefault();
-    this.socket.emit('message', {user: this.state.user.username, target: this.state.target, message: this.state.message})
+    this.socket.emit('message', {user: this.state.user.username, target: this.props.target.username, message: this.state.message})
     this.grabChat()
   }
 

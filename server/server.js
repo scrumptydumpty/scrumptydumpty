@@ -79,8 +79,14 @@ const io = require('socket.io')(server);
 io.on('connection', function (client) {
   console.log('SOCKET 2 ME BB')
 
-  client.on('message', ({ data }) => {
+  client.on('message', ({ user, target, message }) => {
     db.addMessage(user, target, message).then((history)=>{client.emit('chathistory', history)})
-    console.log(data)
   })
+  client.on('getChats', ({ user, target }) => {
+    db.getChats(user, target).then((history)=>{console.log(history);client.emit('chathistory', history)})
+  })
+})
+
+io.on('disconnect', (client)=>{
+  console.log('disconnected')
 })
