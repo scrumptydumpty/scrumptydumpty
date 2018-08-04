@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import logo from './scrumlords.png';
 const api = require('../api');
@@ -68,12 +67,37 @@ class Login extends React.Component {
             {' '}
           </div>
           <div>
-            <Button type="submit">
-              Login
+            <Button type="submit"
+              style={{
+                fontFamily: "Helvetica,sans-serif",
+                fontWeight: 700,
+                color: "#fff",
+                cursor: "pointer",
+                display: "inline-block",
+                textDecoration: "none",
+                textTransform: "uppercase",
+                transition: "background-color .3s,border-color .3s",
+                backgroundColor: "rgb(237, 26, 92)",
+                padding: "10px",
+                marginBottom: "10px"
+              }}>
+              Login With Username
             </Button>
-            <Button>
-              <a href="/auth/facebook" style={{ textDecoration: "none" }}>Login with Facebook</a>
-            </Button>
+          </div>
+          <div>
+            <a href="/auth/facebook" style={{
+              fontFamily: "Helvetica,sans-serif",
+              fontWeight: 700,
+              fontSize: "14px",
+              color: "#fff",
+              cursor: "pointer",
+              display: "inline-block",
+              textDecoration: "none",
+              textTransform: "uppercase",
+              transition: "background-color .3s,border-color .3s",
+              backgroundColor: "#4c69ba",
+              padding: "10px",
+            }}>Login with Facebook</a>
           </div>
         </form>
       </div>
