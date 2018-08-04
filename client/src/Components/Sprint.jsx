@@ -9,6 +9,7 @@ import SelectedProfile from "./SelectedProfile.jsx";
 import api from "../api";
 import AddUserToSprintForm from "./AddUserToSprintForm.jsx";
 import Card from '@material-ui/core/Card';
+import Messenger from './Messaging.jsx';
 
 class Sprint extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class Sprint extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
+    console.log(props)
   }
 
   componentWillMount() {
@@ -95,7 +97,7 @@ class Sprint extends React.Component {
       whiteSpace: "normal",
       padding: "4px"
     }
-    
+
     let profile;
 
     if (this.state.selectedProfile) {
@@ -171,6 +173,7 @@ class Sprint extends React.Component {
             </Paper>
           </Grid>
         </Grid>
+        <Messenger socket={this.socket} />
       </div>
     );
   }
