@@ -18,7 +18,7 @@ class AddUserToSprintForm extends React.Component {
     // this.etaChange = this.etaChange.bind(this);
     this.reload = this.reload.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
-    this.reject = this.reject.bind(this);
+    // this.reject = this.reject.bind(this);
   }
 
   deleteUser(user_id) {
@@ -37,22 +37,22 @@ class AddUserToSprintForm extends React.Component {
       .catch(err => console.log("err"));
   }
 
-  reject(user_id) {
-    const sprint_id = this.props.user.id;
-    api
-      .rejectUser({ user_id, sprint_id })
-      .then( res => {
-        if (!res) {
-          console.log('something went wrong');
-        }
-        const ids = [];
-        res.forEach( noShow => {
-          ids.push(noShow.user_id);
-        })
-        this.setState({ noShows: ids }, this.reload());
-      })
-      .catch(err => console.log("err"));
-  }
+  // reject(user_id) {
+  //   const sprint_id = this.props.user.id;
+  //   api
+  //     .rejectUser({ user_id, sprint_id })
+  //     .then( res => {
+  //       if (!res) {
+  //         console.log('something went wrong');
+  //       }
+  //       const ids = [];
+  //       res.forEach( noShow => {
+  //         ids.push(noShow.user_id);
+  //       })
+  //       this.setState({ noShows: ids }, this.reload());
+  //     })
+  //     .catch(err => console.log(err));
+  // }
 
   componentWillUpdate(nextProps) {
     if (nextProps.sprint_id !== this.state.sprint_id) {
@@ -79,16 +79,17 @@ class AddUserToSprintForm extends React.Component {
 
   //uses sprint id to fetch all users authorized to access that sprint
   reload() {
+    const context = this;
     api
       .getUsers()
       .then((userArr) => {
         let users = [];
         userArr.data.forEach( user => {
-          if (this.props.user.id !== user.id && !this.state.noShows.includes(user.id)) {
+          if (context.props.user.id !== user.id && !context.state.noShows.includes(user.id)) {
             users.push(user);
           }
         });
-        this.setState({ users });
+        context.setState({ users });
       })
   }
 
@@ -117,7 +118,7 @@ class AddUserToSprintForm extends React.Component {
                     }
                     label={user.username}
                     style={{ marginBottom: "5px" }}
-                    onDelete={() => this.reject(user.id)}
+                    onDelete={() => this.props.reject(user.id).then(() => this.setState({ noShows: this.props.noShows })).then(() => this.reload())}
                     onClick={() => this.props.getNewSelectedProfile(user)}
                   />
                 )}
