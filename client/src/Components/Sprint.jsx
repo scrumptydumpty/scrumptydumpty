@@ -129,13 +129,13 @@ class Sprint extends React.Component {
       fontFamily: 'Roboto',
       fontSize: '1.3em',
       fontColor: 'D3D3D3',
-      width: '85%',
+      width: '95%',
       height: '70%',
-      padding: '5px',
+      padding: '3px',
       fontStyle: 'italic',
-      border: '0.1px gray',
+      border: '0.2px gray',
       borderStyle: 'dotted',
-      margin: '1px auto'
+      margin: '1px auto',
     }
 
     let profile;
