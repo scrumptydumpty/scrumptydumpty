@@ -8,6 +8,7 @@ import { StatusCode } from '../../../lib/shared';
 import Tasks from './Tasks.jsx';
 import SelectedProfile from './SelectedProfile.jsx';
 import AddUserToSprintForm from './AddUserToSprintForm.jsx';
+import Messenger from './Messaging.jsx';
 import api from '../api';
 
 class Sprint extends React.Component {
@@ -26,6 +27,7 @@ class Sprint extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
+    console.log(props)
   }
 
   componentWillMount() {
@@ -176,6 +178,7 @@ class Sprint extends React.Component {
             </Paper>
           </Grid>
         </Grid>
+        <Messenger socket={this.socket} />
       </div>
     );
   }
