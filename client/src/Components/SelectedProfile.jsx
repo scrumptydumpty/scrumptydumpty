@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import Chat from './Chat.jsx'
+import Messenger from './Messaging.jsx'
 class SelectedProfile extends React.Component {
   render() {
     const styles = {
@@ -46,8 +46,8 @@ class SelectedProfile extends React.Component {
               reload={this.props.reload}
               selected={this.props.selectedProfile}
             />
-            <Chat
-              
+            <Messenger toUser={this.props.selectProfile.username}
+
             />
           </CardActions>
         </Card>
