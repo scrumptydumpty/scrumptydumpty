@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const { passport } = require('./passport');
 const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
@@ -11,6 +12,7 @@ const sprints = require('./routes/sprints');
 const graphQLHTTP = require('express-graphql');
 const schema = require('./graphql/graphqlSchema');
 const logout = require('./routes/logout');
+const db = require('../database/db')
 
 const port = process.env.PORT || 1337;
 
@@ -20,6 +22,7 @@ const app = express();
 
 
 app.use(bodyParser.json());
+app.use(fileUpload());
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
 app.use(passport.initialize());
@@ -63,12 +66,13 @@ app.get('*', (req, res) => {
 });
 
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
-const io = require('socket.io')(server)
+const io = require('socket.io')(server);
 
 io.on('connection', function (client) {
   console.log('SOCKET 2 ME BB')
-  
-  client.on('message', (message) => {
-    console.log(message)
+
+  client.on('message', (data) => {
+    db.addMessage(data.user, data.message).then((history)=>{client.emit('chathistory', history)})
+    console.log(data)
   })
 })

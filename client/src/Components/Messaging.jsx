@@ -1,18 +1,31 @@
 import React from 'react'
+import api from '../api'
+import ChatMessage from './ChatHistory.jsx'
 
-const style = {
+const windowStyle = {
+  display: "inline-block",
   height: "500px",
   width: "375px",
   border: "1px solid black",
   position: "fixed",
-  bottom: "0px",
-  left: "0px"
+  verticalAlign: "bottom",
+  left: "0px",
+  backgroundColor: "white",
+  zIndex: "0",
+  overflow: "hidden",
+}
+
+const messageStyle = {
+  listStyleType: "none",
+  fontName: "Roboto",
+  overflow: "hidden"
 }
 
 class Messenger extends React.Component {
   constructor(props){
     super()
     this.state = {
+      user: "",
       message: "",
       chatHistory: [],
       roomID: ""
@@ -20,6 +33,27 @@ class Messenger extends React.Component {
     this.socket = props.socket;
     this.sendMessage = this.sendMessage.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.setUser = this.setUser.bind(this)
+    this.grabChat = this.grabChat.bind(this)
+  }
+
+  componentDidMount(){
+    this.setUser()
+
+  }
+
+  setUser (){
+    api.verify().then((user)=>{
+      this.setState({
+        user
+      })
+    })
+  }
+
+  grabChat(){
+    this.socket.on('chathistory', (history) => {
+      this.setState({ chatHistory: history })
+    })
   }
 
   handleChange(e) {
@@ -28,16 +62,20 @@ class Messenger extends React.Component {
 
   sendMessage(e) {
     e.preventDefault();
-    this.socket.emit('message', this.state.message, (msg)=>{console.log('Message receieved!')})
+    this.socket.emit('message', {user: this.state.user.username, message: this.state.message})
+    this.grabChat()
   }
 
   render() {
     return (
-      <div style={style}>
+      <div style={windowStyle}>
       <form onSubmit={this.sendMessage}>
         <input type="text" value={this.state.message} onChange={this.handleChange} />
         <input type="submit" value="Submit" />
       </form>
+        <ul style={messageStyle}>
+        {this.state.chatHistory.map((message)=><ChatMessage message={message} />)}
+      </ul>
       </div>
     )
   }

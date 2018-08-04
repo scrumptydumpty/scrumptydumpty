@@ -8,7 +8,8 @@ import Tasks from "./Tasks.jsx";
 import SelectedProfile from "./SelectedProfile.jsx";
 import api from "../api";
 import AddUserToSprintForm from "./AddUserToSprintForm.jsx";
-import Messenger from './Messaging.jsx'
+import Card from '@material-ui/core/Card';
+import Messenger from './Messaging.jsx';
 
 class Sprint extends React.Component {
   constructor(props) {
@@ -18,10 +19,9 @@ class Sprint extends React.Component {
       sprint_id,
       isOwner: false,
       open: false,
-      tasks: [], 
-      selectedProfile: ""
+      tasks: [],
+      selectedProfile: ''
     };
-    this.getDefaultSelectedProfile = this.getDefaultSelectedProfile.bind(this);
     this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -39,10 +39,6 @@ class Sprint extends React.Component {
         this.reload()
       );
     }
-  }
-
-  getDefaultSelectedProfile(user) {
-    this.setState({ selectedProfile: user });
   }
 
   getNewSelectedProfile(user) {
@@ -100,9 +96,20 @@ class Sprint extends React.Component {
       whiteSpace: "normal",
       padding: "4px"
     }
-    
 
-    
+    let profile;
+
+    if (this.state.selectedProfile) {
+      profile = <SelectedProfile
+        sprint_id={this.state.sprint_id}
+        reload={this.reload}
+        selectedProfile={this.state.selectedProfile} />;
+    } else {
+    profile = ( <Card>
+                  <p style={{textAlign: 'center'}}>Click on someone in your dating pool to view their profile</p>
+                </Card>);
+    }
+
     return (
       <div onClick={this.closeEdits}>
         <Drawer variant="permanent" anchor="right">
@@ -111,69 +118,61 @@ class Sprint extends React.Component {
             isOwner={this.state.isOwner}
             sprint_id={this.state.sprint_id}
             selectedProfile={this.state.selectedProfile}
-            getDefaultSelectedProfile={this.getDefaultSelectedProfile}
             getNewSelectedProfile={this.getNewSelectedProfile}
           />
         </Drawer>
-          <Grid
+        <Grid
           style={{ padding: "1em", width: "85%" }}
-            container
-            spacing={24}
-            justify="center"
-          >
-            <Grid item xs={3}>
-              <Paper style={paperStyle}>
-                <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
-                  Selected Profile
+          container
+          spacing={24}
+          justify="center"
+        >
+          <Grid item xs={3}>
+            <Paper style={paperStyle}>
+              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+                Selected Profile
                 </Typography>
-              <SelectedProfile
+              {profile}
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper style={paperStyle}>
+              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+                Todo
+                </Typography>
+              <Tasks
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
-                selectedProfile={this.state.selectedProfile}
+                tasks={notStarted}
               />
-              </Paper>
-            <Messenger socket={this.socket} />
-            </Grid>
-            <Grid item xs={3}>
-              <Paper style={paperStyle}>
-                <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
-                  Todo
-                </Typography>
-                <Tasks
-                  sprint_id={this.state.sprint_id}
-                  reload={this.reload}
-                  tasks={notStarted}
-                  getNewSelectedProfile={this.getNewSelectedProfile}
-                />
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper style={paperStyle}>
-                <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
-                  In Progress
-                </Typography>
-                <Tasks
-                  sprint_id={this.state.sprint_id}
-                  reload={this.reload}
-                  tasks={inProgress}
-                  getNewSelectedProfile={this.getNewSelectedProfile}
-                />
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper style={paperStyle}>
-                <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
-                  Completed
-                </Typography>
-                <Tasks
-                  sprint_id={this.state.sprint_id}
-                  reload={this.reload}
-                  tasks={complete}
-                  getNewSelectedProfile={this.getNewSelectedProfile}
-                />
-              </Paper>
-            </Grid>
+            </Paper>
           </Grid>
+          <Grid item xs={3}>
+            <Paper style={paperStyle}>
+              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+                In Progress
+                </Typography>
+              <Tasks
+                sprint_id={this.state.sprint_id}
+                reload={this.reload}
+                tasks={inProgress}
+              />
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper style={paperStyle}>
+              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+                Completed
+                </Typography>
+              <Tasks
+                sprint_id={this.state.sprint_id}
+                reload={this.reload}
+                tasks={complete}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+        <Messenger socket={this.socket} />
       </div>
     );
   }
