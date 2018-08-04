@@ -27,6 +27,7 @@ class Sprint extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
+    console.log(props)
   }
 
   componentWillMount() {
