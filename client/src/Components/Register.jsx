@@ -12,7 +12,7 @@ class Register extends React.Component {
     this.state = {
       username: '',
       password: '',
-      description: '',
+      //description: '',
       errormessage: ''
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -27,9 +27,9 @@ class Register extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { username, password, description } = this.state;
+    const { username, password } = this.state;
 
-    api.addUser(username, password, description).then((res) => {
+    api.addUser(username, password).then((res) => {
       if (!res) {
         this.setState({ errormessage: 'User Already Exists' });
         setTimeout(() => {
@@ -61,7 +61,6 @@ class Register extends React.Component {
     this.setState({ description: e.target.value });
   }
 
-
   render() {
     return (
       <div style={{
@@ -83,16 +82,16 @@ class Register extends React.Component {
               style={{ width: "85%" }} />
           </div>
           <div>
-            <TextField required type="password" id="password" label="Password"
+            <TextField type="password" id="password" label="Password"
               value={this.state.password} margin="normal" onChange={this.handlePasswordChange}
               style={{ width: "85%" }} />
           </div>
-          <div>
+          {/* <div>
             <TextField required multiline rowsMax="7" id="description"
               label="Description" value={this.state.description} margin="normal"
               onChange={this.handleDescriptionChange}
               style={{ width: "85%" }} />
-          </div>
+          </div> */}
           <div id="registerformmessage" style={{ height: '20px' }}>
             {this.state.errormessage}
             {' '}

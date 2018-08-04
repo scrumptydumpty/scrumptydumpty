@@ -3,7 +3,9 @@ const db = require('../database/db');
 const self = (module.exports = {
   addTask: ({ title, description, sprint_id, user_id }, user) => {
     if (!title || title === '') throw 'No Title';
-    if (!description || description === '') throw 'No description';
+    if (!description) {
+      description = '';
+    };
     if (!sprint_id) throw 'No sprint id';
     if (!user || !user.id) throw 'user not logged in';
 
@@ -77,6 +79,11 @@ const self = (module.exports = {
       return db.addUser(username, password, description);
     });
   },
+
+  addFbUser: ({ username, fbId }) => {
+    return db.addFbUser(username, fbId);
+  },
+
   getUsers: () => db.getUsers(),
   // NOT NEEDED. USING PASSPORT NOW
   // loginCorrect: ({ username, password }) => {
@@ -87,8 +94,7 @@ const self = (module.exports = {
 
 
   updateUser: ({ username, desc, password }) => {
-    // console.log(`\n[controller.js]--->\nusername: ${username}\ndescription: ${desc}\npassword: ${password}`);
-    return db.updateUser(username, desc, password)
+    return db.updateUser(username, desc, password);
   },
 
   updateUserProfilePic: ({ username, url }) => {
@@ -96,6 +102,7 @@ const self = (module.exports = {
   },
 
   getUserById: id => db.getUserById(id).then(user => (user !== undefined ? user : null)),
+  getUserByFbId: id => db.getUserByFbId(id).then(user => (user !== undefined ? user : null)),
   getUserByName: username => db.getUserByName(username).then(user => (user !== undefined ? user : null)),
 
   isLoggedIn: (req, res, next) => {
@@ -111,7 +118,6 @@ const self = (module.exports = {
     if (!owner_id) throw 'No owner_id';
 
     return db.addSprint(title, owner_id).then((sprint) => {
-      console.log(sprint);
       const user_id = owner_id;
       const sprint_id = sprint.id;
       return self.addUserToSprint({ owner_id, username, sprint_id });
