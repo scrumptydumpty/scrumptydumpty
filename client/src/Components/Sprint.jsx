@@ -143,6 +143,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={notStarted}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
@@ -155,6 +156,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={inProgress}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
@@ -167,6 +169,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={complete}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
