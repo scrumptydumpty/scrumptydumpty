@@ -71,7 +71,7 @@ router.post('/pic', (req, res, next) => {
     });
 });
 
-router.put('/', (req, res, next) => {
+router.put('/pw', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       console.log(err);
@@ -84,7 +84,7 @@ router.put('/', (req, res, next) => {
     }
     // username, password was correct. now update based on newpassword.
     bcrypt.hash(req.body.newpassword, 10)
-      .then(hash => controller.updateUser({ username: req.body.username, desc: req.body.description, password: hash }))
+      .then(hash => controller.updateUserPassword({ username: req.body.username, password: hash }))
       .then(user => res.send({ id: user.id, username: user.username }))
       .catch((err) => {
         console.log(err);
@@ -95,6 +95,18 @@ router.put('/', (req, res, next) => {
 
 router.put('/', (req, res) => {
   controller.updateUser(req.body)
+    .then((result) => { return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
+
+router.put('/name', (req, res) => {
+  controller.updateUserName(req.body)
+    .then((result) => { return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
+
+router.put('/desc', (req, res) => {
+  controller.updateUserDesc(req.body)
     .then((result) => { return res.send(result); })
     .catch((err) => { console.log(err); return res.send(false); });
 });

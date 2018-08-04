@@ -47,7 +47,7 @@ class Navbar extends Component {
             component={Link}
             to="/"
           >
-            Scrumpalicious.
+            Scrumpty Dumped Me.
           </Typography>
           {user === null ? (
             <div>

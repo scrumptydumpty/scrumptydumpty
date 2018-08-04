@@ -2,14 +2,14 @@ const { knex } = require('./knex');
 
 const self = (module.exports = {
   addMessage: (user, target, message) => knex('chathistory')
-    .insert({user, target, message})
+    .insert({ user, target, message })
     .then(() => knex('chathistory')
-    .select('user', 'message')
-    .where({user: user, target: target} || {user: target, target: user})),
+      .select('user', 'message')
+      .where({ user: user, target: target } || { user: target, target: user })),
 
   getChats: (user, target) => knex('chathistory')
     .select('user', 'message')
-    .where({user: user, target: target} || {user: target, target: user}),
+    .where({ user: user, target: target } || { user: target, target: user }),
 
   addTask: (title, description, sprint_id, user_id) => knex('tasks')
     .insert({ title, description, sprint_id, user_id })
@@ -84,7 +84,7 @@ const self = (module.exports = {
       .select())
     .then(blockers => blockers[0]),
 
-  addUser: (username, password ) => knex('users')
+  addUser: (username, password) => knex('users')
     .insert({ username, password })
     .then(id => knex('users')
       .where('id', id)
@@ -124,16 +124,65 @@ const self = (module.exports = {
     .select()
     .first(),
 
-  updateUser: (username, description, password) => knex('users')
+  updateUser: (username, description) => knex('users')
     .where('username', username)
     .select()
-    .then(arr => knex('users')
-      .where('id', arr[0].id)
-      .update({ username, description, password })
+    .then(arr => {
+      console.log(arr);
+      console.log('db update user');
+      console.log({
+        username: username,
+        description: description
+      });
+      knex('users')
+        .where('id', arr[0].id)
+        .update({ username, description });
+    }
     )
     .then(() => knex('users')
       .where('username', username)
       .select())
+    .then(users => users[0]),
+
+  updateUserName: (username, newUsername) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => knex('users')
+      .where('id', arr[0].id)
+      .update({ username: newUsername })
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserDesc: (username, description) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => knex('users')
+      .where('id', arr[0].id)
+      .update({ username, description })
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserPassword: (username, password) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => knex('users')
+      .where('id', arr[0].id)
+      .update({ username, password })
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
+    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
+    .then(() => knex('users').where('username', username).select())
     .then(users => users[0]),
 
   getUserByName: username => knex('users')
@@ -147,9 +196,9 @@ const self = (module.exports = {
     .then(users => users[0]),
 
   getUserByFbId: id => knex('users')
-  .where('fb_id', id)
-  .select()
-  .then(users => users[0]),
+    .where('fb_id', id)
+    .select()
+    .then(users => users[0]),
 
   addSprint: (title, owner_id) => knex('sprints')
     .insert({ title, owner_id })
@@ -270,11 +319,6 @@ const self = (module.exports = {
         throw ('User does not have access to the sprint for the specified task');
       }
     }),
-
-  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
-    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
-    .then(() => knex('users').where('username', username).select())
-    .then(users => users[0]),
 
   addUserToRejectPool: (user_id, sprint_id) => {
     const pool_id = sprint_id;
