@@ -9,24 +9,46 @@ const styles = {
   button: {
     margin: '6px',
   },
-  chatWindow: {
-    display: 'inline-block',
-    height: '50%',
-    width: '50%',
-    border: '1px solid black',
+  messenger: {
     position: 'fixed',
-    // verticalAlign: 'bottom',
-    // left: '0px',
+    bottom: '0px'
+  },
+  chatWindow: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '30%',
+    border: '1px solid black',
+    position: 'relative',
     backgroundColor: 'white',
-    // zIndex: '0',
     minWidth: '300px',
-    overflow: 'scroll',
+    marginTop: 'auto',
+    height: '100%'
   },
   message: {
+    padding: '0px',
     listStyleType: 'none',
+    float: 'left',
     fontName: 'Roboto',
-    overflow: 'hidden',
+    flex: '1',
+    height: '100%',
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '300px',
+    overflow: 'auto',
+    width: '100%',
+    padding: '5px',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
   },
+  input: {
+    position: 'relative',
+    display: 'inline-block',
+    width: '100%',
+    backgroundColor: 'white',
+    right: '0px'
+  }
 };
 
 class Messenger extends React.Component {
@@ -42,16 +64,25 @@ class Messenger extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.setUser = this.setUser.bind(this);
     this.grabChat = this.grabChat.bind(this);
+    this.target = this.props.target.username;
   }
 
   componentDidMount() {
     this.setUser();
+
+  }
+
+  componentDidUpdate() {
+    const div = document.getElementById('chatz')
+    div.scrollTop = div.scrollHeight
+    console.log(div.scrollTop)
   }
 
   componentWillReceiveProps(nextProps) {
     this.socket.emit('getChats', {user: this.state.user.username, target: nextProps.target.username});
     this.grabChat();
   }
+
 
   setUser() {
     api.verify().then((user) => {
@@ -61,7 +92,7 @@ class Messenger extends React.Component {
 
   grabChat(){
     this.socket.on('chathistory', (history) => {
-      this.setState({ chatHistory: history });
+      this.setState({ chatHistory: history })
     })
   }
 
@@ -72,9 +103,9 @@ class Messenger extends React.Component {
   sendMessage(e) {
     e.preventDefault();
     const { message, user } = this.state;
-
     this.socket.emit('message', {user: user.username, target: this.props.target.username, message})
     this.grabChat()
+    this.setState({ message: '' })
   }
 
   render() {
@@ -82,21 +113,23 @@ class Messenger extends React.Component {
     const { chatHistory, message, sending } = this.state;
 
     return (
+    <div className={classes.messenger}>
       <div className={classes.chatWindow}>
-         <form onSubmit={this.sendMessage}>
-           <input type="text" value={message} onChange={this.handleChange} />
-           <Button type="submit" disabled={sending} variant="contained" color="primary" className={classes.button}>
-             Send
-             {/* <Icon className={classes.rightIcon}>
-               send
-             </Icon> */}
-           </Button>
-           {/* <input type="submit" value="Send" /> */}
-         </form>
-         <ul className={classes.message}>
-           {chatHistory.map(msg => <ChatMessage message={msg} />)}
-         </ul>
+        <ul className={classes.message} id="chatz">
+          {chatHistory.map(msg => <ChatMessage message={msg} />)}
+        </ul>
        </div>
+       <form onSubmit={this.sendMessage} style={{position: "relative", zIndex: "1", float: 'right', width: '100%'}}>
+         <input type="text" value={message} onChange={this.handleChange} style={{width: '70%'}}/>
+         <Button type="submit" disabled={sending} variant="contained" color="primary" className={classes.button} style={{width: '20%'}}>
+           Send
+           {/* <Icon className={classes.rightIcon}>
+             send
+           </Icon> */}
+         </Button>
+         {/* <input type="submit" value="Send" /> */}
+       </form>
+     </div>
     );
   }
 }

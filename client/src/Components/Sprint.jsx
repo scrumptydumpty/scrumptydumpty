@@ -85,16 +85,27 @@ class Sprint extends React.Component {
     const complete = tasks.filter(x => x.status_code === StatusCode.Complete);
 
     const paperStyle = {
-      background: '#e2e4e6',
-      borderRadius: 3,
+      background: '#F3EAEE',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
       maxHeight: '100%',
       position: 'relative',
       whiteSpace: 'normal',
-      padding: '4px',
     };
+
+    const headerStyle = {
+      fontFamily: 'Roboto',
+      fontSize: '1.3em',
+      fontColor: 'D3D3D3',
+      width: '85%',
+      height: '70%',
+      padding: '5px',
+      fontStyle: 'italic',
+      border: '0.1px gray',
+      borderStyle: 'solid none solid none',
+      margin: '10px auto'
+    }
 
     let profile;
     let messenger;
@@ -140,7 +151,7 @@ class Sprint extends React.Component {
         >
           <Grid item xs={3}>
             <Paper style={paperStyle}>
-              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+              <Typography style={headerStyle} variant="headline" component="h4" align="center" gutterBottom={true}>
                 Selected Profile
               </Typography>
               {profile}
@@ -148,7 +159,7 @@ class Sprint extends React.Component {
           </Grid>
           <Grid item xs={3}>
             <Paper style={paperStyle}>
-              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+              <Typography style={headerStyle} variant="headline" component="h4" align="center" gutterBottom={true}>
                 To Do
               </Typography>
               <Tasks
@@ -160,7 +171,7 @@ class Sprint extends React.Component {
           </Grid>
           <Grid item xs={3}>
             <Paper style={paperStyle}>
-              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+            <Typography style={headerStyle} variant="headline" component="h4" align="center" gutterBottom={true}>
                 In Progress
               </Typography>
               <Tasks
@@ -172,7 +183,7 @@ class Sprint extends React.Component {
           </Grid>
           <Grid item xs={3}>
             <Paper style={paperStyle}>
-              <Typography variant="headline" component="h4" align="center" gutterBottom={true}>
+              <Typography style={headerStyle} variant="headline" component="h4" align="center" gutterBottom={true}>
                 Completed
               </Typography>
               <Tasks

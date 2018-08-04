@@ -5,11 +5,11 @@ const self = (module.exports = {
     .insert({user, target, message})
     .then(() => knex('chathistory')
     .select('user', 'message')
-    .where({user: user, target: target} || {user: target, target: user})),
+    .where({user: user, target: target}).orWhere({user: target, target: user})),
 
   getChats: (user, target) => knex('chathistory')
     .select('user', 'message')
-    .where({user: user, target: target} || {user: target, target: user}),
+    .where({user: user, target: target}, 'or', {user: target, target: user}),
 
   addTask: (title, description, sprint_id, user_id) => knex('tasks')
     .insert({ title, description, sprint_id, user_id })

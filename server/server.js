@@ -80,6 +80,7 @@ io.on('connection', function (client) {
   console.log('SOCKET 2 ME BB')
 
   client.on('message', ({ user, target, message }) => {
+    console.log(user, target, message)
     db.addMessage(user, target, message).then((history)=>{client.emit('chathistory', history)})
   })
   client.on('getChats', ({ user, target }) => {
