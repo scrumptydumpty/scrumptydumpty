@@ -83,8 +83,18 @@ const self = (module.exports = {
       .select())
     .then(blockers => blockers[0]),
 
-  addUser: (username, password, description) => knex('users')
-    .insert({ username, password, description })
+  addUser: (username, password ) => knex('users')
+    .insert({ username, password })
+    .then(id => knex('users')
+      .where('id', id)
+      .select())
+    .then(users => users[0]),
+  
+  addFbUser: (username, fbId) => knex('users')
+    .insert({ 
+      'username': username,
+      'fb_id': fbId
+    })
     .then(id => knex('users')
       .where('id', id)
       .select())
@@ -127,6 +137,11 @@ const self = (module.exports = {
 
   getUserById: id => knex('users')
     .where('id', id)
+    .select()
+    .then(users => users[0]),
+
+  getUserByFbId: id => knex('users')
+    .where('fb_id', id)
     .select()
     .then(users => users[0]),
 

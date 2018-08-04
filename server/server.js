@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
-const { passport } = require('./passport');
+const { passport, fbStrategy } = require('./passport');
 const tasks = require('./routes/tasks');
 const blockers = require('./routes/blockers');
 const users = require('./routes/users');
@@ -39,7 +39,6 @@ app.use('/logout', logout);
 
 
 app.get('/test', (req, res) => {
-  console.log(req);
   res.send();
 });
 
@@ -53,11 +52,20 @@ app.get('/verify', (req, res) => {
   }
 });
 
+//FB authentication
+fbStrategy(passport);
+app.get('/auth/facebook', passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    failureRedirect: '/'
+  }));
+
 //graphql
 app.use('/graphql', graphQLHTTP({
   schema,
   graphiql: true
-}))
+}));
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
