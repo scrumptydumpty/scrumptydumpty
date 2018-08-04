@@ -30,7 +30,7 @@ const styles = {
     float: 'left',
     fontName: 'Roboto',
     flex: '1',
-    height: '100%',
+    height: '300px',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',

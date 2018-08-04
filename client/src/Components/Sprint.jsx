@@ -85,7 +85,7 @@ class Sprint extends React.Component {
     const complete = tasks.filter(x => x.status_code === StatusCode.Complete);
 
     const paperStyle = {
-      background: '#F3EAEE',
+      background: 'white',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
@@ -103,8 +103,8 @@ class Sprint extends React.Component {
       padding: '5px',
       fontStyle: 'italic',
       border: '0.1px gray',
-      borderStyle: 'solid none solid none',
-      margin: '10px auto'
+      borderStyle: 'dotted',
+      margin: '1px auto'
     }
 
     let profile;
