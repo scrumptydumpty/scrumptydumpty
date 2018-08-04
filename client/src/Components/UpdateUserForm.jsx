@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core/styles';
+import { CardActions } from '../../../node_modules/@material-ui/core';
 const axios = require('axios');
 const api = require('../api');
 
@@ -35,14 +36,16 @@ class UpdateUserForm extends React.Component {
     super(props);
     this.state = {
       currentPassword: '',
+      newUsername: '',
       newPassword: '',
       newDescription: '',
       open: false
     };
     this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClickOpen = this.handleClickOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleDialogOpen = this.handleDialogOpen.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handlePwSubmit = this.handlePwSubmit.bind(this);
   }
 
   handleSubmit(e) {
@@ -63,30 +66,43 @@ class UpdateUserForm extends React.Component {
         { headers: { 'Content-Type': 'multipart/form-data' } }); // Axios config object
     }
 
-    api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
-      if (!res) {
-      // fire error snackbar
-      } else {
-        this.setState({ currentPassword: '', newPassword: '' });
-        // fire success snackbar
-        setTimeout(() => {
-          this.props.history.push('/');
-        }, 1500);
-      }
-    });
+    // api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
+    //   if (!res) {
+    //   // fire error snackbar
+    //   } else {
+    //     this.setState({ currentPassword: '', newPassword: '' });
+    //     // fire success snackbar
+    //     // setTimeout(() => {
+    //     //   this.props.history.push('/');
+    //     // }, 1500);
+    //   }
+    // });
   }
-  
-  handleClickOpen() {
-    this.setState({ open: true });
-  };
-
-  handleClose() {
-    this.setState({ open: false });
-  };
 
   handleFieldUpdate(e) {
     const { id, value } = e.target;
     this.setState({ [id]: value });
+  }
+
+  handleDialogOpen(e) {
+    this.setState({ open: true });
+  }
+
+  handleDialogClose(e) {
+    this.setState({ open: false });
+  }
+
+  handlePwSubmit(e) {
+    e.preventDefault();
+    const {
+      currentPassword,
+      newPassword,
+    } = this.state;
+
+    api.updateUserPassword(currentPassword, newPassword, this.props.user.username).then((res) => {
+      this.setState({ currentPassword: '', newPassword: '' });
+      this.handleDialogClose();
+    });
   }
 
   render() {
@@ -95,37 +111,72 @@ class UpdateUserForm extends React.Component {
     const submitDisabled = (newPassword === '') && (newDescription === '');
     //const submitDisabled = (newPassword === '') && (newDescription === '') && (this.uploadInput !== undefined);
 
+    const hrStyle = {
+      border: 0,
+      height: 0,
+      borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+      borderBottom: "1px solid rgba(255, 255, 255, 0.3)"
+    }
+
+    const rowStyle = {
+      alignItems: "center",
+      display: "flex",
+    }
+
+    const labelStyle = {
+      flexGrow: 1,
+      marginTop: "10px"
+    }
+
     return (
       <div style={{ margin: 'auto', marginTop: '10%', height: '600px', width: '400px' }}>
-        {/* <Card className={classes.card}>
+        <Card className={classes.card}>
           <CardContent>
             <Typography variant="headline" gutterBottom={true}>
               Welcome, {user.username}!
               </Typography>
-            <hr />
-            <Typography component="h4">
+            <hr style={hrStyle}/>
+            <Typography variant="subheading">
               Account Details
             </Typography>
-            <hr />
-            <div style={{
-              alignItems: "center",
-              display: "flex"
-            }}>
-              <span style={{ flexGrow: 1 }}>Username</span>
-              <span>{user.username}</span>
+            <hr style={hrStyle} />
+            <form onSubmit={this.handleSubmit}>
+              <div style={rowStyle}>
+                <span style={labelStyle}>Username</span>
+                <span>
+                  <TextField
+                    id="newUsername"
+                    placeholder={user.username}
+                    value={newUsername}
+                    margin="normal"
+                    onChange={this.handleFieldUpdate}
+                  />
+                </span>
+              </div>
+              <div style={rowStyle}>
+                <span style={labelStyle}>Profile Picture</span>
+                <span>
+                  <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                </span>
+              </div>
+            </form>
+            <div style={rowStyle}>
+              <span style={labelStyle}>Password</span>
               <span>
-                <Button 
-                  onClick={this.handleClickOpen}
-                  style={{ top: "1px" }}>EDIT</Button></span>
-            </div>
-            <div>
-              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                <Button onClick={this.handleDialogOpen}>EDIT</Button>
+              </span>
             </div>
           </CardContent>
+          <CardActions>
+            <Button variant="contained" disabled={submitDisabled} color="primary" type="submit" className={classes.button}>
+              <SaveIcon className={classes.leftIcon} />
+                Save Changes
+            </Button>
+          </CardActions>
         </Card>
         <Dialog
           open={this.state.open}
-          onClose={this.handleClose}
+          onClose={this.handleDialogClose}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Edit username</DialogTitle>
@@ -134,9 +185,19 @@ class UpdateUserForm extends React.Component {
               <FormControl>
                 <TextField
                   required
-                  id="username"
-                  label="username"
-                  value={newUsername}
+                  type="password"
+                  id="currentPassword"
+                  label="Current Password"
+                  value={currentPassword}
+                  margin="normal"
+                  onChange={this.handleFieldUpdate}
+                />
+                <TextField
+                  required
+                  type="password"
+                  id="newPassword"
+                  label="New Password"
+                  value={newPassword}
                   margin="normal"
                   onChange={this.handleFieldUpdate}
                 />
@@ -144,16 +205,16 @@ class UpdateUserForm extends React.Component {
             </form>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleDialogClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleSubmit} color="primary">
+            <Button onClick={this.handlePwSubmit} color="primary">
               Save
             </Button>
           </DialogActions>
-          </Dialog> */}
-        <form onSubmit={this.handleSubmit}>
-          <Card className={classes.card}>
+          </Dialog>
+        
+          {/* <Card className={classes.card}>
             <CardContent>
               <Typography variant="headline" gutterBottom>
                 Welcome, {user.username}!
@@ -198,12 +259,7 @@ class UpdateUserForm extends React.Component {
               />
               <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
             </CardContent>
-          </Card>
-          <Button variant="contained" disabled={submitDisabled} color="primary" type="submit" className={classes.button}>
-            <SaveIcon className={classes.leftIcon} />
-            Save Changes
-          </Button>
-        </form>
+          </Card> */}
       </div>
     );
   }

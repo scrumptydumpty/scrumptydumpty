@@ -4,7 +4,7 @@ const self = (module.exports = {
   addMessage: (user, message) => knex('chathistory')
     .insert({user, message})
     .then(() => knex('chathistory')
-    .select()),
+      .select()),
 
   // initializeChat: (user, target) => knex('chatHistory')
   //   .insert({user, target})
@@ -118,16 +118,33 @@ const self = (module.exports = {
     .select()
     .first(),
 
-  updateUser: (username, description, password) => knex('users')
+  updateUser: (username, description) => knex('users')
     .where('username', username)
     .select()
     .then(arr => knex('users')
       .where('id', arr[0].id)
-      .update({ username, description, password })
+      .update({ username, description })
     )
     .then(() => knex('users')
       .where('username', username)
       .select())
+    .then(users => users[0]),
+
+  updateUserPassword: (username, password) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => knex('users')
+      .where('id', arr[0].id)
+      .update({ username, password })
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
+    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
+    .then(() => knex('users').where('username', username).select())
     .then(users => users[0]),
 
   getUserByName: username => knex('users')
@@ -264,11 +281,6 @@ const self = (module.exports = {
         throw ('User does not have access to the sprint for the specified task');
       }
     }),
-
-  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
-    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
-    .then(() => knex('users').where('username', username).select())
-    .then(users => users[0]),
 
   addUserToRejectPool: (user_id, sprint_id) => {
     const pool_id = sprint_id;

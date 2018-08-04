@@ -93,8 +93,12 @@ const self = (module.exports = {
   // },
 
 
-  updateUser: ({ username, desc, password }) => {
-    return db.updateUser(username, desc, password);
+  updateUser: ({ username, desc }) => {
+    return db.updateUser(username, desc);
+  },
+
+  updateUserPassword: ({ username, password }) => {
+    return db.updateUserPassword(username, password);
   },
 
   updateUserProfilePic: ({ username, url }) => {
