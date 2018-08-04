@@ -25,6 +25,22 @@ class SelectedProfile extends React.Component {
       profile_image_url = 'https://www.rebornmasculinity.com/wp-content/uploads/2017/12/Russian-women.jpg';
     };
 
+    let addButton;
+
+    if (this.props.noShows.includes(this.props.selectedProfile.id)) {
+      addButton = <div />;
+    } else {
+      addButton = (
+        <CardActions>
+          <AddTaskForm
+            sprint_id={this.props.sprint_id}
+            reload={this.props.reload}
+            selected={this.props.selectedProfile}
+            updateNoShows={this.props.updateNoShows}
+          />
+        </CardActions>);
+    }
+
     return (
       <div>
         <Card style={styles.card}>
@@ -35,18 +51,12 @@ class SelectedProfile extends React.Component {
           <CardContent>
             <Typography gutterBottom variant="headline" component="h2">
               {this.props.selectedProfile.username}
-          </Typography>
+            </Typography>
             <Typography component="p">
               {this.props.selectedProfile.description}
-          </Typography>
+            </Typography>
           </CardContent>
-          <CardActions>
-            <AddTaskForm
-              sprint_id={this.props.sprint_id}
-              reload={this.props.reload}
-              selected={this.props.selectedProfile}
-            />
-          </CardActions>
+          {addButton}
         </Card>
       </div>
     );

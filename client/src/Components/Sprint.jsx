@@ -21,17 +21,31 @@ class Sprint extends React.Component {
       open: false,
       tasks: [],
       selectedProfile: '',
+      noShows: []
     };
+    this.updateNoShows();
     this.getNewSelectedProfile = this.getNewSelectedProfile.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
+    this.reject = this.reject.bind(this);
+    this.updateNoShows = this.updateNoShows.bind(this);
+    console.log(props)
     this.messenger = (<Messenger socket={this.socket} target={this.state.selectedProfile}/>)
   }
 
   componentDidMount () {
     this.reload();
+  }
+
+  updateNoShows() {
+    const sprint_id = this.state.sprint_id;
+    api
+      .getNoShowList(sprint_id)
+      .then((noShows) => {
+        this.setState({ noShows });
+      })
   }
 
   componentWillUpdate(nextProps) {
@@ -58,6 +72,23 @@ class Sprint extends React.Component {
     if (shouldReload) {
       this.reload();
     }
+  }
+
+  reject(user_id) {
+    const sprint_id = this.props.user.id;
+    return api
+      .rejectUser({ user_id, sprint_id })
+      .then( res => {
+        if (!res) {
+          console.log('something went wrong');
+        }
+        const ids = [];
+        res.forEach( noShow => {
+          ids.push(noShow.user_id);
+        })
+        this.setState({ noShows: ids });
+      })
+      .catch(err => console.log(err));
   }
 
   reload() {
@@ -104,6 +135,8 @@ class Sprint extends React.Component {
           sprint_id={this.state.sprint_id}
           reload={this.reload}
           selectedProfile={this.state.selectedProfile}
+          updateNoShows={this.updateNoShows}
+          noShows={this.state.noShows}
         />
       );
       messenger = (
@@ -130,6 +163,9 @@ class Sprint extends React.Component {
             sprint_id={this.state.sprint_id}
             selectedProfile={this.state.selectedProfile}
             getNewSelectedProfile={this.getNewSelectedProfile}
+            noShows={this.state.noShows || []}
+            updateNoShows={this.updateNoShows}
+            reject={this.reject}
           />
         </Drawer>
         <Grid
@@ -155,6 +191,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={notStarted}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
@@ -167,6 +204,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={inProgress}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
@@ -179,6 +217,7 @@ class Sprint extends React.Component {
                 sprint_id={this.state.sprint_id}
                 reload={this.reload}
                 tasks={complete}
+                getNewSelectedProfile={this.getNewSelectedProfile}
               />
             </Paper>
           </Grid>
