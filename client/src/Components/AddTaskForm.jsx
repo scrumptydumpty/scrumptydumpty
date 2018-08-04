@@ -56,6 +56,7 @@ class AddTaskForm extends React.Component {
     .then(res => api.rejectUser({ user_id, sprint_id }))
     .then((res) => {
       this.props.reload();
+      this.props.updateNoShows();
       //this.props.getNewUserTask(res);
       this.handleClose();
     });

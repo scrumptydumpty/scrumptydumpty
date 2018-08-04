@@ -30,6 +30,7 @@ class Sprint extends React.Component {
     this.reload = this.reload.bind(this);
     this.socket = props.socket;
     this.reject = this.reject.bind(this);
+    this.updateNoShows = this.updateNoShows.bind(this);
     console.log(props)
   }
 
@@ -133,6 +134,8 @@ class Sprint extends React.Component {
           sprint_id={this.state.sprint_id}
           reload={this.reload}
           selectedProfile={this.state.selectedProfile}
+          updateNoShows={this.updateNoShows}
+          noShows={this.state.noShows}
         />
       );
     } else {
