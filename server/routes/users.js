@@ -99,6 +99,18 @@ router.put('/', (req, res) => {
     .catch((err) => { console.log(err); return res.send(false); });
 });
 
+router.put('/name', (req, res) => {
+  controller.updateUserName(req.body)
+    .then((result) => { return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
+
+router.put('/desc', (req, res) => {
+  controller.updateUserDesc(req.body)
+    .then((result) => { return res.send(result); })
+    .catch((err) => { console.log(err); return res.send(false); });
+});
+
 router.get('/sprint', (req, res) => {
 // needs AUTH
   controller

@@ -89,7 +89,7 @@ class App extends React.Component {
             path="/login"
             render={({ history }) => (
               <Login history={history} updateUser={this.updateUser} />
-            )}
+            )}s
           />*/}
           <Route
             path="/logout"
@@ -100,7 +100,7 @@ class App extends React.Component {
           <Route
             path="/updateuser"
             render={({ history }) => (
-              <UpdateUserForm history={history} user={user} />
+              <UpdateUserForm history={history} user={user} updateUser={this.updateUser}/>
             )}
           />
           <Route

@@ -2,7 +2,7 @@ const { knex } = require('./knex');
 
 const self = (module.exports = {
   addMessage: (user, message) => knex('chathistory')
-    .insert({user, message})
+    .insert({ user, message })
     .then(() => knex('chathistory')
       .select()),
 
@@ -83,15 +83,15 @@ const self = (module.exports = {
       .select())
     .then(blockers => blockers[0]),
 
-  addUser: (username, password ) => knex('users')
+  addUser: (username, password) => knex('users')
     .insert({ username, password })
     .then(id => knex('users')
       .where('id', id)
       .select())
     .then(users => users[0]),
-  
+
   addFbUser: (username, fbId) => knex('users')
-    .insert({ 
+    .insert({
       'username': username,
       'fb_id': fbId
     })
@@ -119,6 +119,38 @@ const self = (module.exports = {
     .first(),
 
   updateUser: (username, description) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => {
+      console.log(arr);
+      console.log('db update user');
+      console.log({
+        username: username,
+        description: description
+      });
+      knex('users')
+        .where('id', arr[0].id)
+        .update({ username, description });
+    }
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserName: (username, newUsername) => knex('users')
+    .where('username', username)
+    .select()
+    .then(arr => knex('users')
+      .where('id', arr[0].id)
+      .update({ username: newUsername })
+    )
+    .then(() => knex('users')
+      .where('username', username)
+      .select())
+    .then(users => users[0]),
+
+  updateUserDesc: (username, description) => knex('users')
     .where('username', username)
     .select()
     .then(arr => knex('users')

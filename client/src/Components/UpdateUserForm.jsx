@@ -39,44 +39,30 @@ class UpdateUserForm extends React.Component {
       newUsername: '',
       newPassword: '',
       newDescription: '',
-      open: false
+      nameOpen: false,
+      nameClose: false,
+      descOpen: false,
+      descClose: false,
+      pwOpen: false,
+      picOpen: false
     };
     this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDialogOpen = this.handleDialogOpen.bind(this);
-    this.handleDialogClose = this.handleDialogClose.bind(this);
-    this.handlePwSubmit = this.handlePwSubmit.bind(this);
-  }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const {
-      currentPassword,
-      newDescription,
-      newPassword,
-    } = this.state;
+    this.handleNameOpen = this.handleNameOpen.bind(this);
+    this.handleNameClose = this.handleNameClose.bind(this);
+    this.handleNameSubmit = this.handleNameSubmit.bind(this);
 
-    if (this.uploadInput) {
-      const fileData = new FormData();
-      fileData.append('username', this.props.user.username);
-      fileData.append('file', this.uploadInput.files[0]);  
-      axios.post(
-        '/users/pic', // Axios URL
-        fileData, // Axios data object, must be FormData object from above
-        { headers: { 'Content-Type': 'multipart/form-data' } }); // Axios config object
-    }
+    this.handleDescOpen = this.handleDescOpen.bind(this);
+    this.handleDescClose = this.handleDescClose.bind(this);
+    this.handleDescSubmit = this.handleDescSubmit.bind(this);
 
-    // api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
-    //   if (!res) {
-    //   // fire error snackbar
-    //   } else {
-    //     this.setState({ currentPassword: '', newPassword: '' });
-    //     // fire success snackbar
-    //     // setTimeout(() => {
-    //     //   this.props.history.push('/');
-    //     // }, 1500);
-    //   }
-    // });
+    this.handlePicOpen = this.handlePicOpen.bind(this);
+    this.handlePicClose = this.handlePicClose.bind(this);
+    this.handlePicSubmit = this.handlePicSubmit.bind(this);
+
+    this.handlePwOpen = this.handlePwOpen.bind(this);
+    this.handlePwClose = this.handlePwClose.bind(this);
+    this.handlePwSubmit = this.handlePwSubmit.bind(this);    
   }
 
   handleFieldUpdate(e) {
@@ -84,12 +70,66 @@ class UpdateUserForm extends React.Component {
     this.setState({ [id]: value });
   }
 
-  handleDialogOpen(e) {
-    this.setState({ open: true });
+  handleNameOpen(e) {
+    this.setState({ nameOpen: true });
   }
 
-  handleDialogClose(e) {
-    this.setState({ open: false });
+  handleNameClose(e) {
+    this.setState({ nameOpen: false });
+  }
+
+  handleNameSubmit(e) {
+    e.preventDefault();
+    api.updateUserName(this.state.newUsername, this.props.user.username)
+      .then((res) => {
+        this.props.updateUser();
+        this.handleNameClose();
+      })
+  }
+
+  handleDescOpen(e) {
+    this.setState({ descOpen: true });
+  }
+
+  handleDescClose(e) {
+    this.setState({ descOpen: false });
+  }
+
+  handleDescSubmit(e) {
+    e.preventDefault();
+    api.updateUserDesc(this.state.newDescription, this.props.user.username)
+      .then((res) => {
+        this.props.updateUser();
+        this.handleDescClose();
+      })
+  }
+
+  handlePicOpen(e) {
+    this.setState({ picOpen: true });
+  }
+
+  handlePicClose(e) {
+    this.setState({ picOpen: false });
+  }
+
+  handlePicSubmit(e) {
+    if (this.uploadInput) {
+      const fileData = new FormData();
+      fileData.append('username', this.props.user.username);
+      fileData.append('file', this.uploadInput.files[0]);
+      axios.post(
+        '/users/pic', // Axios URL
+        fileData, // Axios data object, must be FormData object from above
+        { headers: { 'Content-Type': 'multipart/form-data' } }); // Axios config object
+    }
+  }
+
+  handlePwOpen(e) {
+    this.setState({ pwOpen: true });
+  }
+
+  handlePwClose(e) {
+    this.setState({ pwOpen: false });
   }
 
   handlePwSubmit(e) {
@@ -99,17 +139,17 @@ class UpdateUserForm extends React.Component {
       newPassword,
     } = this.state;
 
-    api.updateUserPassword(currentPassword, newPassword, this.props.user.username).then((res) => {
-      this.setState({ currentPassword: '', newPassword: '' });
-      this.handleDialogClose();
-    });
+    api.updateUserPassword(currentPassword, newPassword, this.props.user.username)
+      .then((res) => {
+        this.setState({ currentPassword: '', newPassword: '' });
+        this.props.updateUser();
+        this.handlePwClose();
+      });
   }
 
   render() {
     const { classes, user } = this.props;
     const { currentPassword, newUsername, newDescription, newPassword } = this.state;
-    const submitDisabled = (newPassword === '') && (newDescription === '');
-    //const submitDisabled = (newPassword === '') && (newDescription === '') && (this.uploadInput !== undefined);
 
     const hrStyle = {
       border: 0,
@@ -135,51 +175,99 @@ class UpdateUserForm extends React.Component {
             <Typography variant="headline" gutterBottom={true}>
               Welcome, {user.username}!
               </Typography>
-            <hr style={hrStyle}/>
+            <hr style={hrStyle} />
             <Typography variant="subheading">
-              Account Details
+              Account Settings
             </Typography>
             <hr style={hrStyle} />
-            <form onSubmit={this.handleSubmit}>
-              <div style={rowStyle}>
-                <span style={labelStyle}>Username</span>
-                <span>
-                  <TextField
-                    id="newUsername"
-                    placeholder={user.username}
-                    value={newUsername}
-                    margin="normal"
-                    onChange={this.handleFieldUpdate}
-                  />
-                </span>
-              </div>
-              <div style={rowStyle}>
-                <span style={labelStyle}>Profile Picture</span>
-                <span>
-                  <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-                </span>
-              </div>
-            </form>
+            <div style={rowStyle}>
+              <span style={labelStyle}>Username</span>
+              <span>
+                <Button onClick={this.handleNameOpen}>EDIT</Button>
+              </span>
+            </div>
             <div style={rowStyle}>
               <span style={labelStyle}>Password</span>
               <span>
-                <Button onClick={this.handleDialogOpen}>EDIT</Button>
+                <Button onClick={this.handlePwOpen}>EDIT</Button>
+              </span>
+            </div>
+            <div style={rowStyle}>
+              <span style={labelStyle}>Description</span>
+              <span>
+                <Button onClick={this.handleDescOpen}>EDIT</Button>
+              </span>
+            </div>
+            <div style={rowStyle}>
+              <span style={labelStyle}>Profile Picture</span>
+              <span>
+                <Button onClick={this.handlePicOpen}>EDIT</Button>
               </span>
             </div>
           </CardContent>
-          <CardActions>
-            <Button variant="contained" disabled={submitDisabled} color="primary" type="submit" className={classes.button}>
-              <SaveIcon className={classes.leftIcon} />
-                Save Changes
-            </Button>
-          </CardActions>
         </Card>
         <Dialog
-          open={this.state.open}
-          onClose={this.handleDialogClose}
+          open={this.state.nameOpen}
+          onClose={this.handleNameClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Edit username</DialogTitle>
+          <DialogTitle id="form-dialog-title">Change username</DialogTitle>
+          <DialogContent>
+            <form>
+              <FormControl>
+                <TextField
+                  id="newUsername"
+                  placeholder={user.username}
+                  value={newUsername}
+                  margin="normal"
+                  onChange={this.handleFieldUpdate}
+                />
+              </FormControl>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleNameClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleNameSubmit} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.descOpen}
+          onClose={this.handleDescClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Change description</DialogTitle>
+          <DialogContent>
+            <form>
+              <FormControl>
+                <TextField
+                  multiline rowsMax="7"
+                  id="newDescription" margin="normal"
+                  placeholder={user.description}
+                  value={newDescription}
+                  onChange={this.handleFieldUpdate}
+                />
+              </FormControl>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDescClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleDescSubmit} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.pwOpen}
+          onClose={this.handlePwClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Change password</DialogTitle>
           <DialogContent>
             <form>
               <FormControl>
@@ -205,61 +293,36 @@ class UpdateUserForm extends React.Component {
             </form>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleDialogClose} color="primary">
+            <Button onClick={this.handlePwClose} color="primary">
               Cancel
             </Button>
             <Button onClick={this.handlePwSubmit} color="primary">
               Save
             </Button>
           </DialogActions>
-          </Dialog>
-        
-          {/* <Card className={classes.card}>
-            <CardContent>
-              <Typography variant="headline" gutterBottom>
-                Welcome, {user.username}!
-          </Typography>
-            </CardContent>
-          </Card>
-          <Card className={classes.card}>
-            <CardContent>
-              <TextField
-                required
-                type="password"
-                id="currentPassword"
-                label="Current Password"
-                value={currentPassword}
-                margin="normal"
-                onChange={this.handleFieldUpdate}
-              />
-              <Tooltip title="We require your current password to make any changes to your profile because we're SUPER SECURE!">
-                <HelpIcon />
-              </Tooltip>
-            </CardContent>
-          </Card>
-          <Card className={classes.card}>
-            <CardContent>
-              <TextField
-                required
-                type="password"
-                id="newPassword"
-                label="New Password"
-                value={newPassword}
-                margin="normal"
-                onChange={this.handleFieldUpdate}
-              />
-              <TextField
-                id="newDescription"
-                label="New Description"
-                multiline
-                placeholder={user.description}
-                value={newDescription}
-                margin="normal"
-                onChange={this.handleFieldUpdate}
-              />
-              <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-            </CardContent>
-          </Card> */}
+        </Dialog>
+        <Dialog
+          open={this.state.picOpen}
+          onClose={this.handlePicClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Change profile picture</DialogTitle>
+          <DialogContent>
+            <form>
+              <FormControl>
+                <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+              </FormControl>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handlePicClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handlePicSubmit} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
