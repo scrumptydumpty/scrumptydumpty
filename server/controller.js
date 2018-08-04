@@ -91,10 +91,20 @@ const self = (module.exports = {
   //   if (username === '' || password === '') throw 'Invalid Credentials';
   //   return db.userHasPassword(username, password);
   // },
+  updateUser: ({ username, newUsername }) => {
+    return db.updateUser(username, newUsername);
+  },
 
+  updateUserName: ({ username, newUsername }) => {
+    return db.updateUserName(username, newUsername);
+  },
 
-  updateUser: ({ username, desc, password }) => {
-    return db.updateUser(username, desc, password);
+  updateUserDesc: ({ username, description }) => {
+    return db.updateUserDesc(username, description);
+  },
+
+  updateUserPassword: ({ username, password }) => {
+    return db.updateUserPassword(username, password);
   },
 
   updateUserProfilePic: ({ username, url }) => {

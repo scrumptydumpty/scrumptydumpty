@@ -69,8 +69,33 @@ module.exports = {
   //   const id = newVersion.id;
   // },
 
-  updateUser: (password, newpassword, description, username) => axios
-    .put('/users', { password, newpassword, description, username })
+  updateUser: (username, newUsername, description, newdesc) => {
+    axios.put('/users', { newUsername, username })
+      .then(resp => resp.data)
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
+  },
+
+  updateUserName: (newUsername, username) =>
+    axios.put('/users/name', { newUsername, username })
+      .then(resp => resp.data)
+      .catch((err) => {
+        console.log(err);
+        return false;
+      }),
+
+  updateUserDesc: (description, username) =>
+    axios.put('/users/desc', { description, username })
+      .then(resp => resp.data)
+      .catch((err) => {
+        console.log(err);
+        return false;
+      }),
+  
+  updateUserPassword: (password, newpassword, username) => axios
+    .put('/users/pw', { password, newpassword, username })
     .then(resp => resp.data)
     .catch((err) => {
       console.log(err);

@@ -45,7 +45,7 @@ app.get('/test', (req, res) => {
 // sends a user object to the requester if one exists
 app.get('/verify', (req, res) => {
   if (req.user) {
-    res.send({ id: req.user.id, username: req.user.username, description: req.user.description });
+    res.send({ id: req.user.id, username: req.user.username, description: req.user.description, profilePicture: req.user["profile_image_url"] });
   } else {
     console.log('user is not verified');
     res.send(false);
