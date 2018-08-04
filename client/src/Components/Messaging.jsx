@@ -11,7 +11,8 @@ const styles = {
   },
   messenger: {
     position: 'fixed',
-    bottom: '0px'
+    bottom: '0px',
+    right: '250px'
   },
   chatWindow: {
     display: 'flex',
