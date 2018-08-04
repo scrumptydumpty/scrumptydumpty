@@ -72,7 +72,7 @@ class Login extends React.Component {
               Login
             </Button>
             <Button>
-              <a href="/auth/facebook">Login with Facebook</a>
+              <a href="/auth/facebook" style={{ textDecoration: "none" }}>Login with Facebook</a>
             </Button>
           </div>
         </form>

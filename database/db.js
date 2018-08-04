@@ -1,8 +1,8 @@
 const { knex } = require('./knex');
 
 const self = (module.exports = {
-  addTask: (title, description, sprint_id) => knex('tasks')
-    .insert({ title, description, sprint_id })
+  addTask: (title, description, sprint_id, user_id) => knex('tasks')
+    .insert({ title, description, sprint_id, user_id })
     .then(id => knex('tasks')
       .where('id', id)
       .select())
@@ -93,7 +93,12 @@ const self = (module.exports = {
 
   getUsers: () => knex('users')
     .select()
-    .then(users => users.map(user => ({ id: user.id, username: user.username, description: user.description }))),
+    .then(users => users.map(user => ({
+      id: user.id,
+      username: user.username,
+      description: user.description,
+      profile_image_url: user.profile_image_url
+    }))),
 
   userExists: username => knex('users')
     .where('username', username)
@@ -250,6 +255,11 @@ const self = (module.exports = {
         throw ('User does not have access to the sprint for the specified task');
       }
     }),
+
+  updateUserProfilePic: (username, url) => knex('users').where('username', username).select()
+    .then(arr => knex('users').where('id', arr[0].id).update({ profile_image_url: url }))
+    .then(() => knex('users').where('username', username).select())
+    .then(users => users[0]),
 
   addUserToRejectPool: (user_id, sprint_id) => {
     const pool_id = sprint_id;

@@ -42,12 +42,14 @@ class AddTaskForm extends React.Component {
     const {
       title, description, priority_code, difficulty,
     } = this.state;
-
+    //this.props.selected.id = id of user to add to task
+    const user_id = this.props.selected.id;
     api.addTask({
       title,
       description,
       priority_code,
       difficulty,
+      user_id,
       sprint_id: this.props.sprint_id
     }).then((res) => {
       this.props.reload();

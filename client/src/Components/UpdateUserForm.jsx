@@ -54,10 +54,14 @@ class UpdateUserForm extends React.Component {
     } = this.state;
 
     if (this.uploadInput) {
-      console.log('Looks like you\'re trying to update your profile pic!');
+      // console.log('Looks like you\'re trying to update your profile pic!');
       const fileData = new FormData();
+      fileData.append('username', this.props.user.username);
       fileData.append('file', this.uploadInput.files[0]);  
-      axios.post('/users/pic', fileData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      axios.post(
+        '/users/pic', // Axios URL
+        fileData, // Axios data object, must be FormData object from above
+        { headers: { 'Content-Type': 'multipart/form-data' } }); // Axios config object
     }
 
     api.updateUser(currentPassword, newPassword, newDescription).then((res) => {
