@@ -4,29 +4,16 @@ import CardContent from '@material-ui/core/CardContent';
 import Blockers from './Blockers.jsx';
 import { PRIORITY_COLOR } from '../../../lib/shared';
 import EditTaskForm from './EditTaskForm.jsx';
-
-
-const TaskInfo = ({ task, reload }) => (
-  <div>
-    <CardContent style={{ padding: '5px', textAlign: 'center' }}>
-      <div>
-        {task.title}
-      </div>
-      <div>
-        <Blockers reload={reload} blockers={task.blockers} />
-      </div>
-    </CardContent>
-  </div>
-);
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import Eyeball from '@material-ui/icons/Visibility';
 class Task extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { shadow: 1, editing: false };
+    this.state = { active: false, editing: false };
     this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
-    this.handleDoubleClick = this.handleDoubleClick.bind(this);
-
+    this.viewProfile = this.viewProfile.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
     this.closeTask = this.closeTask.bind(this);
   }
 
@@ -35,37 +22,57 @@ class Task extends React.Component {
   }
 
   onMouseOver(e) {
-    this.setState({ shadow: 3 });
+    this.setState({ active: true });
   }
 
   onMouseOut(e) {
-    this.setState({ shadow: 1 });
+    this.setState({ active: false });
   }
 
-  handleDoubleClick(e) {
-    this.setState({ editing: !this.state.editing }, () => this.props.reload());
+  toggleForm(e) {
+    this.setState({ editing: !this.state.editing });
+  }
+
+  viewProfile(e) {
+    let user = {
+      description: this.props.task.description,
+      id: this.props.task["user_id"],
+      username: this.props.task.title
+    }
+    this.props.getNewSelectedProfile(user);
   }
 
 
   render() {
-    const { task } = this.props;
-    const borderColor = PRIORITY_COLOR[task.priority_code];
+    const borderColor = PRIORITY_COLOR[this.props.task.priority_code];
 
     const style = {
-      borderRadius: '10px',
-      margin: '10px',
-      borderLeft: '2px solid',
-      borderLeftColor: borderColor,
-
+      backgroundColor: "#fff",
+      borderRadius: 3,
+      boxShadow: "0 1px 0 #ccc",
+      display: "block",
+      margin: "0 auto",
+      marginBottom: "8px",
+      maxWidth: 300,
+      minHeight: 20,
+      position: "relative",
+      textDecoration: "none",
+      borderLeft: '8px solid',
+      borderLeftColor: borderColor
     };
-    if (this.state.shadow === 3) {
-      style.boxShadow = '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)';
+    
+    if (this.state.active === true && this.state.editing === false) {
+      style.backgroundColor = "#edeff0";
+      style.borderBottomColor = "#d6dadc";
     }
 
     if (this.state.editing) {
       return (
         <div>
-          <Card onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onDoubleClick={this.handleDoubleClick} style={style}>
+          <Card 
+            onMouseOver={this.onMouseOver} 
+            onMouseOut={this.onMouseOut} 
+            style={style}>
             <EditTaskForm sprint_id={this.props.sprint_id} reload={this.props.reload} closeTask={this.closeTask} task={this.props.task} />
           </Card>
         </div>
@@ -73,14 +80,20 @@ class Task extends React.Component {
     }
 
     return (
-      <div>
-        <Card
-          onMouseOver={this.onMouseOver}
-          onMouseOut={this.onMouseOut}
-          onDoubleClick={this.handleDoubleClick}
-          style={style}
-        >
-          <TaskInfo task={this.props.task} reload={this.props.reload} />
+      <div onMouseEnter={this.onMouseOver} onMouseLeave={this.onMouseOut}>
+        <Card onClick={this.viewProfile} style={style}>
+          <CardContent style={{ padding: '5px' }}>
+            <div>
+              <span style={{ paddingLeft: '10px' }}>{this.props.task.title}</span>
+              {this.state.active ? 
+                <span><Eyeball
+                  style={{ fontSize: "1.2em", float: "right", paddingRight: "5px" }}
+                  onClick={this.toggleForm}/></span> : null}
+            </div>
+            <div>
+              <Blockers reload={this.props.reload} blockers={this.props.task.blockers} />
+            </div>
+          </CardContent>
         </Card>
       </div>
     );
